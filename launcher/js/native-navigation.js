@@ -24,7 +24,7 @@
     function fail(reason) {
       if (settled) { return; }
       settled = true;
-      rearmWatcher();
+      // The caller owns the rearm and user-facing failure report.
       onFailure(reason);
     }
     try {
