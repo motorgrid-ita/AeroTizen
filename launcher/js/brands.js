@@ -90,6 +90,23 @@
     tile.appendChild(fallback);
     tile.onclick = onSelect;
 
+    if (rectangle) {
+      // A wide banner does not request any square Samsung/Tizen artwork.
+      if (banner) {
+        var photo = new Image();
+        photo.className = 'brand-custom-art';
+        photo.alt = '';
+        photo.onload = function () { fallback.hidden = true; };
+        photo.onerror = function () {
+          if (photo.parentNode) { photo.parentNode.removeChild(photo); }
+          fallback.hidden = false;
+        };
+        tile.appendChild(photo);
+        photo.src = 'assets/brands/' + banner[0];
+      }
+      return tile;
+    }
+
     var sources = A.artwork.sources(app), at = 0;
     function next() {
       if (at >= sources.length) { return; }
