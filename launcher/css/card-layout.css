@@ -90,3 +90,22 @@
   font-size: 38px; font-weight: 650;
 }
 .app-grid:not(.cards-rectangle) .rectangle-fire-label { display: none; }
+
+/* Explicit Square column counts: keep Samsung icon/artwork rendering intact. */
+.app-grid.cards-cols-4:not(.cards-rectangle),
+.app-grid.cards-cols-5:not(.cards-rectangle) {
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 20px !important;
+  width: 1792px;
+}
+.app-grid.cards-cols-4:not(.cards-rectangle) > .tile {
+  width: 433px !important; height: 433px !important;
+}
+.app-grid.cards-cols-5:not(.cards-rectangle) > .tile {
+  width: 342.4px !important; height: 342.4px !important;
+}
+.app-grid.cards-cols-3:not(.cards-rectangle) > .tile {
+  width: 420px !important; height: 420px !important;
+}
