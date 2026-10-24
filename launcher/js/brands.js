@@ -34,6 +34,30 @@
     return d ? svg('<path fill="' + fill + '" d="' + d + '"/>', 'logo') : '';
   }
 
+  // Bundled V992.56 original rectangular artwork.
+  var BANNERS = {
+    netflix: ['netflix-custom.png', '#000000'],
+    disney: ['disney-plus-official.png', '#052e43'],
+    xbox: ['xbox-official.png', '#057013'],
+    'amazon luna': ['luna-official.png', '#7431e6'],
+    luna: ['luna-official.png', '#7431e6'],
+    'amazon alexa': ['alexa-official.png', '#ffffff'],
+    alexa: ['alexa-official.png', '#ffffff'],
+    now: ['now-official.png', '#006d6f'],
+    'rakuten tv': ['rakuten-tv-official.png', '#bb0000'],
+    rakuten: ['rakuten-tv-official.png', '#bb0000'],
+    qvc: ['qvc-plus-official.png', '#29364f'],
+    raiplay: ['raiplay-official.png', '#05061e']
+  };
+  function referenceBanner(name) {
+    var nameLower = String(name || '').toLowerCase();
+    for (var key in BANNERS) {
+      if (Object.prototype.hasOwnProperty.call(BANNERS, key) &&
+          nameLower.indexOf(key) === 0) { return BANNERS[key]; }
+    }
+    return null;
+  }
+
   function appTile(app, extraClass, onSelect) {
     var b = brandFor(app), tile = A.el('div');
     tile.className = 'tile app-tile' + (extraClass ? ' ' + extraClass : '');
