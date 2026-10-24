@@ -156,6 +156,35 @@
     });
   }
 
+  function renderCardLayout() {
+    var modes = A.$('card-shapes'), cols = A.$('card-columns');
+    if (!modes || !cols) { return; }
+    modes.textContent = ''; cols.textContent = '';
+    [['square', 'Square'], ['rectangle', 'Rectangle']].forEach(function (choice) {
+      var key = 'card:mode:' + choice[0];
+      var selected = (S.homeCardMode || 'square') === choice[0];
+      var control = pill(key, choice[1], selected, function () {
+        S.homeCardMode = choice[0]; focusKey = key;
+        changed(A.homeScreen.render);
+      });
+      control.setAttribute('role', 'button');
+      control.setAttribute('aria-pressed', String(selected));
+      modes.appendChild(control);
+    });
+    [[null, 'Default'], [3, '3 per row'], [4, '4 per row'], [5, '5 per row']]
+      .forEach(function (choice) {
+        var key = 'card:cols:' + (choice[0] || 'default');
+        var selected = (S.homeCardColumns || null) === choice[0];
+        var control = pill(key, choice[1], selected, function () {
+          S.homeCardColumns = choice[0]; focusKey = key;
+          changed(A.homeScreen.render);
+        });
+        control.setAttribute('role', 'button');
+        control.setAttribute('aria-pressed', String(selected));
+        cols.appendChild(control);
+      });
+  }
+
   function renderCardSizes() {
     var box = A.$('card-sizes');
     box.textContent = '';
@@ -237,7 +266,7 @@
   function render() {
     renderBackgrounds(); renderWeather(); renderUnits(); renderDateTime();
     renderVisibility('network-visibility', 'showNetwork', ['Show', 'Hide'], A.network.updateVisibility);
-    renderCardSizes(); renderInputVisibility(); renderInputNames(); renderAppMenu();
+    renderCardLayout(); renderCardSizes(); renderInputVisibility(); renderInputNames(); renderAppMenu();
     focus();
   }
 
@@ -257,7 +286,7 @@
     return r.concat(A.chunk(kids('bg-still'), 8), [kids('weather-display')],
       [kids('weather-location')], results, [kids('weather-visibility')],
       [kids('units')], [kids('time-formats')], dateRows, [kids('network-visibility')],
-      [kids('live-tv-visibility')], [kids('card-sizes')], [kids('input-visibility')],
+      [kids('live-tv-visibility')], [kids('card-shapes')], [kids('card-columns')], [kids('card-sizes')], [kids('input-visibility')],
       [kids('input-names')], A.chunk(kids('all-apps'), 5), [[A.$('escape')]]).filter(function (row) { return row.length; });
   }
 
