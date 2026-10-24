@@ -17,7 +17,7 @@
     } catch (ignored) { /* Existing visibility reporting also rearms. */ }
   }
 
-  // Wait for the service's ACK before opening a Samsung system surface.
+  // Explicit Samsung Home escape waits for /leave before opening the native UI.
   // Otherwise HomeWatcher may immediately reclaim the launcher.
   function leaveBeforeLaunch(onReady, onFailure) {
     var xhr, settled = false;
@@ -41,6 +41,37 @@
         onReady();
       };
       xhr.onerror = xhr.ontimeout = function () { fail('HomeWatcher unavailable'); };
+      xhr.send();
+    } catch (error) { fail('HomeWatcher request failed'); }
+  }
+
+  // Live TV is a monitored native app, unlike the explicit Samsung Home
+  // escape. Arming /watch BEFORE the app launch preserves HomeWatcher so the
+  // physical Home key can be handled by its existing foreground detector.
+  function watchBeforeLaunch(id, onReady, onFailure) {
+    if (!tz) { onFailure('Tizen unavailable'); return; }
+    var settled = false, xhr;
+    function fail(reason) {
+      if (settled) { return; }
+      settled = true;
+      onFailure(reason);
+    }
+    try {
+      xhr = new XMLHttpRequest();
+      xhr.open('GET', cfg.SERVICE_URL + '/watch?id=' + encodeURIComponent(id), true);
+      xhr.timeout = 1500;
+      xhr.onload = function () {
+        if (settled) { return; }
+        if (xhr.status < 200 || xhr.status >= 300) {
+          fail('HomeWatcher HTTP ' + xhr.status);
+          return;
+        }
+        settled = true;
+        onReady();
+      };
+      xhr.onerror = xhr.ontimeout = function () {
+        fail('HomeWatcher unavailable');
+      };
       xhr.send();
     } catch (error) { fail('HomeWatcher request failed'); }
   }
@@ -146,7 +177,7 @@
         }, 'MAIN');
       } catch (error) { failed('TV tuner selection is unavailable'); }
     }
-    leaveBeforeLaunch(selectTuner, failed);
+    watchBeforeLaunch('org.tizen.tv-viewer', selectTuner, failed);
   }
 
   A.homewatch.openSamsungHome = openSamsungHome;
