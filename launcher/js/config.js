@@ -34,7 +34,10 @@ AeroTizen.config = {
   DEFAULTS: {
     home: null,  // null selects defaults on first launch; [] keeps an empty Home.
     cardSize: 'big',
+    homeCardMode: 'square',   // Square Samsung artwork remains the default.
+    homeCardColumns: null,    // null preserves the existing Big/Small column count.
     background: 'aurora',
+    weatherPhoto: false,  // Opt-in automatic photography using the existing forecast.
     speed: 1,
     showWeather: true,
     showTime: true,
@@ -43,9 +46,13 @@ AeroTizen.config = {
     weatherLocation: null,
     weatherShowLocation: true,
     dateFormat: 'short',
+    // Existing installs continue using the unchanged compact header.
+    clockLayout: 'classic',
+    aeroClockStyle: 'vertical',
     timeFormat: null,  // Detect 12/24-hour format when first loaded.
     showLiveTv: true,
     hideDisconnectedHdmi: false,
+    hdmiKeepVisible: {},  // Optional per-port exception for an unidentified device.
     inputNames: {}
   }
 };

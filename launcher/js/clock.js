@@ -20,7 +20,7 @@
 
   function localFormatter(options) {
     var nav = window.navigator || {};
-    return new window.Intl.DateTimeFormat(nav.languages || nav.language || undefined, options);
+    return new window.Intl.DateTimeFormat(A.i18n ? A.i18n.locale() : (nav.languages || nav.language || undefined), options);
   }
 
   function localFormat(d, options) {
@@ -117,7 +117,7 @@
 
   function timeLocaleKey(id) {
     var nav = window.navigator || {};
-    return id + ':' + String(nav.languages || nav.language || '');
+    return id + ':' + String(A.i18n ? A.i18n.locale() : (nav.languages || nav.language || ''));
   }
 
   function timeFormatter(id) {
@@ -172,6 +172,7 @@
     timeEl.setAttribute('data-format', A.settings.timeFormat === '24' ? '24' : '12');
     timeEl.textContent = formatTime(d, A.settings.timeFormat);
     sizeTime(timeEl, A.settings.timeFormat);
+    if (A.clockLayouts) { A.clockLayouts.update(); }
   }
 
   A.clock = {

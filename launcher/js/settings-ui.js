@@ -9,7 +9,7 @@
   var weatherQuery = '', weatherResults = [], weatherMessage = '', weatherSearchVersion = 0;
 
   function pill(key, text, selected, onSelect) {
-    var p = A.el('div', 'pill unit' + (selected ? ' on' : ''), text);
+    var p = A.el('div', 'pill unit' + (selected ? ' on' : ''), A.i18n.label(key, text));
     p.dataset.key = key;
     p.onclick = onSelect;
     return p;
@@ -33,15 +33,47 @@
     });
   }
 
+  function renderPhotoWeather() {
+    var panel = A.$('weather-photo-choice');
+    if (!panel || !A.photoWeather) { return; }
+    panel.textContent = '';
+    panel.setAttribute('aria-label',
+      A.i18n && A.i18n.t ? A.i18n.t('Weather wallpaper') : 'Weather wallpaper');
+    [['off', 'Off'], ['auto', 'Automatic (weather)']].forEach(function (choice) {
+      var key = 'photo-weather:' + choice[0];
+      var selected = (S.weatherPhoto === true) === (choice[0] === 'auto');
+      var label = A.i18n && A.i18n.label ? A.i18n.label(key, choice[1]) : choice[1];
+      var control = pill(key, label, selected, function () {
+        S.weatherPhoto = choice[0] === 'auto';
+        focusKey = key;
+        changed(function () {
+          A.applyBackground();
+          window.Weather.updateVisibility();
+        });
+      });
+      control.setAttribute('role', 'button');
+      control.setAttribute('aria-pressed', String(selected));
+      panel.appendChild(control);
+    });
+  }
+
   function renderBackgrounds() {
     var anim = A.$('bg-anim'), still = A.$('bg-still'), selected = null;
     anim.textContent = ''; still.textContent = '';
     window.Backgrounds.list.forEach(function (b) {
       var sw = A.el('div', 'swatch' + (b.id === S.background ? ' on' : ''));
       sw.style.background = window.Backgrounds.preview(b);
-      sw.appendChild(A.el('span', '', b.name));
+      sw.appendChild(A.el('span', '', A.i18n.t(b.name)));
       sw.dataset.key = 'bg:' + b.id;
-      sw.onclick = function () { S.background = b.id; changed(A.applyBackground); };
+      sw.onclick = function () {
+        S.background = b.id;
+        // Selecting a concrete background leaves automatic weather-photo mode.
+        if (A.photoWeather) { S.weatherPhoto = false; }
+        changed(function () {
+          A.applyBackground();
+          if (window.Weather.updateVisibility) { window.Weather.updateVisibility(); }
+        });
+      };
       (b.anim ? anim : still).appendChild(sw);
       if (b.id === S.background) { selected = b; }
     });
@@ -53,7 +85,7 @@
     var pct = (S.speed - cfg.SPEED.MIN) / (cfg.SPEED.MAX - cfg.SPEED.MIN) * 100;
     var slider = A.el('div', 'slider');
     slider.dataset.key = 'speed';
-    slider.innerHTML = '<span class="slider-label">Speed</span><div class="track"><div class="fill"></div><div class="thumb"></div></div>' +
+    slider.innerHTML = '<span class="slider-label">' + A.i18n.t('Speed') + '</span><div class="track"><div class="fill"></div><div class="thumb"></div></div>' +
                        '<span class="slider-value"></span><span class="slider-hint">◀ ▶</span>';
     slider.querySelector('.fill').style.width = pct + '%';
     slider.querySelector('.thumb').style.left = pct + '%';
@@ -69,7 +101,7 @@
 
   function renderWeatherResults() {
     var box = A.$('weather-results'), status = A.$('weather-search-status');
-    status.textContent = weatherMessage; status.hidden = !weatherMessage;
+    status.textContent = A.i18n.t(weatherMessage); status.hidden = !weatherMessage;
     box.textContent = ''; box.hidden = !weatherResults.length;
     weatherResults.forEach(function (geo, i) {
       box.appendChild(pill('weather:result:' + i, geo.label, false, function () {
@@ -102,8 +134,8 @@
     renderVisibility('weather-display', 'showWeather', ['Show weather', 'Hide weather'], window.Weather.updateVisibility);
     var box = A.$('weather-location'), visibility = A.$('weather-visibility');
     A.$('weather-location-summary').textContent = S.weatherLocation ?
-      'Location: ' + (S.weatherLocation.label || S.weatherLocation.name) :
-      'Automatic location uses your internet address and can be inaccurate. Search for your town, city or postcode to set it.';
+      A.i18n.t('Location: ') + (S.weatherLocation.label || S.weatherLocation.name) :
+      A.i18n.t('Automatic location uses your internet address and can be inaccurate. Search for your town, city or postcode to set it.');
     box.textContent = ''; visibility.textContent = '';
     box.appendChild(pill('weather:auto', 'Automatic', !S.weatherLocation, function () {
       S.weatherLocation = null;
@@ -114,8 +146,8 @@
     var search = A.el('div', 'pill unit name-pill weather-search'), field = A.el('input');
     search.dataset.key = 'weather:query';
     field.type = 'text'; field.maxLength = 80; field.value = weatherQuery;
-    field.placeholder = 'Town, city or postcode';
-    field.setAttribute('aria-label', 'Weather location');
+    field.placeholder = A.i18n.t('Town, city or postcode');
+    field.setAttribute('aria-label', A.i18n.t('Weather location'));
     field.oninput = function () {
       weatherQuery = field.value;
       weatherSearchVersion++; weatherResults = []; weatherMessage = '';
@@ -140,10 +172,49 @@
     });
   }
 
+  function renderClockLayouts() {
+    var layoutBox = A.$('clock-layouts'), styleBox = A.$('clock-styles');
+    layoutBox.textContent = ''; styleBox.textContent = '';
+    [
+      ['classic', 'Classic AeroTizen', 'Weather, date and time on one line'],
+      ['custom', 'Custom', 'Large clock, with weather below']
+    ].forEach(function (option) {
+      var key = 'clock-layout:' + option[0];
+      var control = pill(key, '', (S.clockLayout || 'classic') === option[0], function () {
+        S.clockLayout = option[0];
+        focusKey = key;
+        changed(A.clockLayouts.apply);
+      });
+      control.classList.add('clock-layout-choice');
+      control.appendChild(A.el('strong', '', A.i18n ? A.i18n.t(option[1]) : option[1]));
+      control.appendChild(A.el('small', '', A.i18n ? A.i18n.t(option[2]) : option[2]));
+      layoutBox.appendChild(control);
+    });
+    A.$('clock-style-section').hidden = S.clockLayout !== 'custom';
+    [
+      ['vertical', 'Large vertical', '16\n32'],
+      ['horizontal', 'Horizontal', '16:32'],
+      ['minimal', 'Thin', '16\n32'],
+      ['bold', 'Bold', '16\n32']
+    ].forEach(function (option) {
+      var key = 'clock-style:' + option[0];
+      var control = pill(key, '', (S.aeroClockStyle || 'vertical') === option[0], function () {
+        S.aeroClockStyle = option[0];
+        focusKey = key;
+        changed(A.clockLayouts.apply);
+      });
+      control.classList.add('clock-style-choice');
+      control.appendChild(A.el('span', 'clock-preview', option[2]));
+      control.appendChild(A.el('small', '', A.i18n ? A.i18n.t(option[1]) : option[1]));
+      styleBox.appendChild(control);
+    });
+  }
+
   function renderDateTime() {
     var now = new Date(), times = A.$('time-formats'), dates = A.$('date-formats');
     var dateStyle = A.clock.dateStyle(S.dateFormat);
     times.textContent = ''; dates.textContent = '';
+    renderClockLayouts();
     [['12', '(12-hour)'], ['24', '(24-hour)']].forEach(function (t) {
       times.appendChild(pill('time:' + t[0], A.clock.formatTime(now, t[0]) + '  ' + t[1], S.showTime !== false && S.timeFormat === t[0],
         function () { S.showTime = true; S.timeFormat = t[0]; focusKey = 'time:' + t[0]; changed(A.clock.tick); }));
@@ -166,6 +237,37 @@
     });
   }
 
+  function renderHomeCardModes() {
+    var modes = A.$('home-card-modes'), cols = A.$('home-card-columns');
+    if (!modes || !cols) { return; }
+    // Optional i18n bridge: this feature also works before the locale PR is merged.
+    function label(key, english) {
+      return A.i18n && A.i18n.label ? A.i18n.label(key, english) : english;
+    }
+    modes.textContent = ''; cols.textContent = '';
+    modes.setAttribute('aria-label', label('home-cards:heading', 'Home tile layout'));
+    cols.setAttribute('aria-label', label('home-columns:heading', 'Apps per row'));
+    [['square', 'Square'], ['rectangle', 'Rectangle']].forEach(function (item) {
+      var key = 'home-cards:' + item[0];
+      modes.appendChild(pill(key, label(key, item[1]),
+        (S.homeCardMode || 'square') === item[0], function () {
+          S.homeCardMode = item[0]; focusKey = key;
+          changed(A.homeScreen.render);
+        }));
+    });
+    var chosen = Number(S.homeCardColumns);
+    if (chosen !== 3 && chosen !== 4 && chosen !== 5) {
+      chosen = cfg.CARD_COLUMNS[S.cardSize === 'small' ? 'small' : 'big'];
+    }
+    [3, 4, 5].forEach(function (value) {
+      var key = 'home-columns:' + value, english = value + ' per row';
+      cols.appendChild(pill(key, label(key, english), chosen === value, function () {
+        S.homeCardColumns = value; focusKey = key;
+        changed(A.homeScreen.render);
+      }));
+    });
+  }
+
   function renderInputVisibility() {
     var liveTv = A.$('live-tv-visibility'), box = A.$('input-visibility');
     liveTv.textContent = '';
@@ -182,6 +284,39 @@
     });
   }
 
+  // Optional exception for TV firmware that does not identify an HDMI device.
+  // This only changes tile visibility, never claims a live HDMI connection.
+  function renderHdmiOverrides() {
+    var box = A.$('hdmi-force-visibility');
+    if (!box) { return; }
+    box.textContent = '';
+    var keep = S.hdmiKeepVisible;
+    if (!keep || typeof keep !== 'object' || Array.isArray(keep)) { keep = {}; S.hdmiKeepVisible = keep; }
+    var ports = [];
+    A.inputs.sources.forEach(function (source) {
+      var port = Number(source.number);
+      if (source.type === 'HDMI' && isFinite(port) && port > 0 && Math.floor(port) === port &&
+          ports.indexOf(port) < 0) { ports.push(port); }
+    });
+    ports.sort(function (a, b) { return a - b; });
+    ports.forEach(function (port) {
+      var number = String(port), selected = keep[number] === true;
+      var key = 'hdmi-keep:' + number;
+      var status = selected ? 'Always visible' : 'Automatic';
+      if (A.i18n && A.i18n.t) { status = A.i18n.t(status); }
+      var control = pill(key, 'HDMI ' + number + '  ·  ' + status, selected, function () {
+        if (keep[number] === true) { delete keep[number]; }
+        else { keep[number] = true; }
+        focusKey = key;
+        changed(A.inputs.render);
+      });
+      control.setAttribute('role', 'button');
+      control.setAttribute('aria-pressed', String(selected));
+      control.setAttribute('aria-label', 'HDMI ' + number + ': ' + status);
+      box.appendChild(control);
+    });
+  }
+
   // OK opens the TV's on-screen keyboard; an empty name falls back to the TV's own name.
   function renderInputNames() {
     var box = A.$('input-names');
@@ -193,7 +328,7 @@
       var field = A.el('input');
       field.type = 'text'; field.maxLength = 24;
       field.value = S.inputNames[port] || '';
-      field.placeholder = s.editName || 'Add a name';
+      field.placeholder = s.editName || A.i18n.t('Add a name');
       field.onchange = field.onblur = function () {
         var v = field.value.trim();
         if (v) { S.inputNames[port] = v; } else { delete S.inputNames[port]; }
@@ -211,13 +346,13 @@
     box.textContent = '';
     var add = A.el('div', 'tile addapps');
     add.dataset.key = 'add';
-    add.innerHTML = A.tiles.ICONS.plus + '<div class="name">Add apps<div class="sub">Samsung app store</div></div>';
+    add.innerHTML = A.tiles.ICONS.plus + '<div class="name">' + A.i18n.t('Add apps') + '<div class="sub">' + A.i18n.t('Samsung app store') + '</div></div>';
     add.onclick = A.apps.openStore;
     box.appendChild(add);
     [{ id: cfg.FIREPLACE_ID, name: 'Fireplace' }].concat(A.apps.all).forEach(function (app) {
       var tile;
       if (app.id === cfg.FIREPLACE_ID) {
-        tile = A.tiles.card(app.name, A.tiles.ICONS.flame);
+        tile = A.tiles.card(A.i18n.t('Fireplace'), A.tiles.ICONS.flame);
         tile.classList.add('fire');
       } else {
         tile = A.tiles.app(app);
@@ -235,14 +370,17 @@
   }
 
   function render() {
-    renderBackgrounds(); renderWeather(); renderUnits(); renderDateTime();
+    renderPhotoWeather(); renderBackgrounds(); renderWeather(); renderUnits(); renderDateTime();
     renderVisibility('network-visibility', 'showNetwork', ['Show', 'Hide'], A.network.updateVisibility);
-    renderCardSizes(); renderInputVisibility(); renderInputNames(); renderAppMenu();
+    renderCardSizes(); renderHomeCardModes(); renderInputVisibility(); renderHdmiOverrides(); renderInputNames(); renderAppMenu();
+    if (A.glassUI && A.glassUI.refreshLabels) { A.glassUI.refreshLabels(); }
+    if (A.wallpapers) { A.wallpapers.refresh(); }
     focus();
   }
 
   // ---- navigation (focus follows the item, so re-renders don't make it jump) -------
   function editorRows() {
+    if (A.glassUI && A.glassUI.isActive()) { return A.glassUI.rows(); }
     function kids(id) { return [].slice.call(A.$(id).children); }
     // Content-sized date pills can wrap; remote navigation follows visible rows.
     var dateRows = [];
@@ -254,11 +392,13 @@
     var r = A.chunk(kids('bg-anim'), 8);
     if (!A.$('speed-row').hidden) { r.push(kids('speed-row')); }
     var results = kids('weather-results').map(function (el) { return [el]; });
-    return r.concat(A.chunk(kids('bg-still'), 8), [kids('weather-display')],
+    return [kids('weather-photo-choice')].concat(r, A.chunk(kids('bg-still'), 8), [kids('weather-display')],
       [kids('weather-location')], results, [kids('weather-visibility')],
-      [kids('units')], [kids('time-formats')], dateRows, [kids('network-visibility')],
-      [kids('live-tv-visibility')], [kids('card-sizes')], [kids('input-visibility')],
-      [kids('input-names')], A.chunk(kids('all-apps'), 5), [[A.$('escape')]]).filter(function (row) { return row.length; });
+      [kids('units')], [kids('clock-layouts')],
+      A.$('clock-style-section').hidden ? [] : [kids('clock-styles')],
+      [kids('time-formats')], dateRows, [kids('network-visibility')],
+      [kids('live-tv-visibility')], [kids('card-sizes')], [kids('home-card-modes')], [kids('home-card-columns')], [kids('input-visibility')],
+      [kids('hdmi-force-visibility')], [kids('input-names')], A.chunk(kids('all-apps'), 5), [[A.$('escape')]]).filter(function (row) { return row.length; });
   }
 
   function focus() {
@@ -274,7 +414,12 @@
     var el = r[eRow][eCol[eRow]];
     el.classList.add('focused');
     focusKey = el.dataset.key || null;
-    A.$('editor').scrollTop = Math.max(0, el.offsetTop - 640);
+    if (A.glassUI && A.glassUI.isActive()) {
+      A.glassUI.scrollTo(el);
+      A.glassUI.updateHighlight(el);
+    } else {
+      A.$('editor').scrollTop = Math.max(0, el.offsetTop - 640);
+    }
   }
 
   function startPreview() {
@@ -290,12 +435,85 @@
       document.body.classList.remove('previewing'); A.hideToast(); focus();
       return;
     }
+    // Category/content navigation ported from the reference Settings D-pad
+    // routing. Do not modify existing click handlers or stored preferences.
+    if (A.glassUI && A.glassUI.isActive()) {
+      var ui = A.glassUI, rr = editorRows(), menuCount = ui.navCount();
+      var inSidebar = eRow < menuCount;
+      var current = rr[eRow] && rr[eRow][eCol[eRow] || 0];
+      if (k === KEY.BACK || k === KEY.ESC) {
+        e.preventDefault();
+        if (!inSidebar) {
+          if (ui.collapse) { ui.collapse(); }
+          eRow = ui.activeIndex(); eCol[eRow] = 0;
+          focusKey = 'section:' + ui.activeId();
+          focus();
+          return;
+        }
+        return close();
+      }
+      if (inSidebar) {
+        if (k === KEY.UP || k === KEY.DOWN) {
+          e.preventDefault();
+          eRow = Math.max(0, Math.min(menuCount - 1, eRow + (k === KEY.UP ? -1 : 1)));
+          eCol[eRow] = 0;
+          if (ui.select) { ui.select(rr[eRow][0].dataset.sectionMenu); }
+          else { ui.activate(rr[eRow][0].dataset.sectionMenu); }
+          focusKey = rr[eRow][0].dataset.key;
+          focus();
+          return;
+        }
+        if (k === KEY.ENTER || k === KEY.RIGHT) {
+          e.preventDefault();
+          if (ui.expand) { ui.expand(); }
+          var expanded = editorRows();
+          if (expanded.length > menuCount) {
+            eRow = menuCount; eCol[eRow] = 0; focusKey = null; focus();
+          }
+          return;
+        }
+        if (k === KEY.LEFT) { e.preventDefault(); return; }
+        return;
+      }
+      if (k === KEY.LEFT || k === KEY.RIGHT) {
+        e.preventDefault();
+        if (current && current.adjust) { current.adjust(k === KEY.LEFT ? -1 : 1); return; }
+        var cc = eCol[eRow] || 0;
+        if (k === KEY.LEFT && cc === 0) {
+          if (ui.collapse) { ui.collapse(); }
+          eRow = ui.activeIndex(); eCol[eRow] = 0;
+          focusKey = 'section:' + ui.activeId(); focus();
+          return;
+        }
+        eCol[eRow] = Math.max(0, Math.min(rr[eRow].length - 1, cc + (k === KEY.RIGHT ? 1 : -1)));
+        focusKey = null; focus();
+        return;
+      }
+      if (k === KEY.UP || k === KEY.DOWN) {
+        e.preventDefault();
+        var step = eRow + (k === KEY.UP ? -1 : 1);
+        if (step >= menuCount && step < rr.length) {
+          eRow = step;
+          eCol[eRow] = Math.max(0, Math.min(rr[eRow].length - 1, eCol[eRow] || 0));
+          focusKey = null; focus();
+        }
+        return;
+      }
+      if (k === KEY.ENTER) {
+        e.preventDefault();
+        focusKey = current && current.dataset.key;
+        if (current === A.$('escape')) { (A.homewatch.openSamsungHome || A.homewatch.useSamsungHome)(); }
+        else if (current && current.onclick) { current.onclick(); }
+        return;
+      }
+      return;
+    }
     if (k === KEY.BACK || k === KEY.ESC) { e.preventDefault(); return close(); }
     var r = editorRows(), cur = r[eRow] && r[eRow][eCol[eRow] || 0];
     if (cur && cur.adjust && (k === KEY.LEFT || k === KEY.RIGHT)) { return cur.adjust(k === KEY.LEFT ? -1 : 1); }
     if (k === KEY.ENTER) {
       focusKey = cur && cur.dataset.key;
-      if (cur === A.$('escape')) { A.homewatch.useSamsungHome(); } else if (cur && cur.onclick) { cur.onclick(); }
+      if (cur === A.$('escape')) { (A.homewatch.openSamsungHome || A.homewatch.useSamsungHome)(); } else if (cur && cur.onclick) { cur.onclick(); }
       return;
     }
     focusKey = null;
@@ -305,9 +523,10 @@
   }
 
   function openSheet() {
-    open = true; eRow = 0; eCol = []; focusKey = 'bg:' + S.background;
+    open = true; eRow = 0; eCol = []; focusKey = 'section:appearance';
     document.body.classList.add('editing');
     A.$('editor').hidden = false;
+    if (A.glassUI) { A.glassUI.create(); A.glassUI.activate('appearance'); if (A.glassUI.collapse) { A.glassUI.collapse(); } }
     render();
   }
 
@@ -320,5 +539,5 @@
     A.homeScreen.render();
   }
 
-  A.settingsUi = { open: openSheet, close: close, isOpen: function () { return open; }, focus: focus, keydown: keydown };
+  A.settingsUi = { open: openSheet, close: close, render: render, isOpen: function () { return open; }, focus: focus, keydown: keydown };
 })(window.AeroTizen);

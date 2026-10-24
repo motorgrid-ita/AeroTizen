@@ -6,6 +6,10 @@
   var KEY = A.config.KEY;
 
   A.applyBackground = function () {
+    if (A.settings.weatherPhoto && A.photoWeather && A.photoWeather.update()) {
+      return; // The static photo module stops the original canvas animation.
+    }
+    if (A.photoWeather) { A.photoWeather.hide(); }
     window.Backgrounds.setSpeed(A.settings.speed);
     window.Backgrounds.apply(A.settings.background);
   };
@@ -37,18 +41,32 @@
   });
 
   document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) { A.clock.tick(); A.inputs.load(); }
+    if (!document.hidden) { A.i18n.refresh(); A.clock.tick(); A.inputs.load(); }
   });
 
   // ---- boot ----------------------------------------------------------------------
+  var launcherReady = false, settingsReady = false;
+  A.i18n.start(function () {
+    if (!settingsReady) { return; }
+    A.clock.tick();
+    if (!launcherReady) { return; }
+    if (A.settingsUi.isOpen()) { A.settingsUi.render(); }
+    A.homeScreen.render();
+    A.inputs.render();
+    window.Weather.updateDisplay();
+  });
   A.settings.load();
+  settingsReady = true;
   A.applyBackground();
+  if (A.clockLayouts) { A.clockLayouts.apply(); }
   A.clock.start();
   A.network.start();
   window.Weather.start(function () { return A.settings; });
+  if (A.photoWeather) { A.photoWeather.start(); }
   A.apps.load(function () {
     if (A.settings.home === null) { A.settings.home = A.apps.defaultHome(); A.settings.save(); }
     A.homeScreen.render();
+    launcherReady = true;
     A.inputs.load();
     A.homewatch.start();
     setTimeout(function () { A.homewatch.reportApps(A.apps.realIds); }, 1500);

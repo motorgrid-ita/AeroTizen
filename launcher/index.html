@@ -6,74 +6,115 @@
   <title>AeroTizen</title>
   <link rel="icon" href="icon.png">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/tile-actions.css">
+  <link rel="stylesheet" href="css/clock-layouts.css">
+  <link rel="stylesheet" href="css/glass-layout.css">
+  <link rel="stylesheet" href="css/source-dock.css">
+  <link rel="stylesheet" href="css/card-modes.css">
+  <link rel="stylesheet" href="css/photo-weather.css">
 </head>
 <body>
   <div id="bg" class="bg"></div>
+  <div id="weather-photo" class="weather-photo" aria-hidden="true" hidden></div>
   <!-- Layout inspired by LTvLauncher (github.com/leanbitlab-org/LtvLauncher); no code shared. -->
   <header class="topbar">
     <div class="topbar-left">
+      <div id="aero-header-focus" aria-hidden="true"></div>
       <div id="gear" class="icon-btn" data-row="0" aria-label="Settings">
         <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>
+      </div>
+      <div id="samsung-home-shortcut" class="icon-btn" role="button" aria-label="Samsung Home" title="Samsung Home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.8 2.6 11a1 1 0 0 0 1.3 1.5L5 11.6V21h6v-6h2v6h6v-9.4l1.1.9a1 1 0 1 0 1.3-1.5L12 2.8z"/></svg>
       </div>
       <svg id="network" class="status-icon" viewBox="0 0 24 24" aria-label="Network"></svg>
     </div>
     <nav class="view-tabs" aria-label="App views">
-      <button id="home-tab" class="view-tab active" type="button" tabindex="-1" aria-pressed="true">Home</button>
-      <button id="apps-tab" class="view-tab" type="button" tabindex="-1" aria-pressed="false">All apps</button>
+      <div id="aero-tab-glider" aria-hidden="true"></div>
+      <div id="aero-tab-focus" aria-hidden="true"></div>
+      <button id="home-tab" class="view-tab active" type="button" tabindex="-1" aria-pressed="true"><svg class="aero-tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7v9a1 1 0 0 1-1 1H14v-6h-4v6H4.5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round"/></svg><span data-i18n="Home">Home</span></button>
+      <button id="apps-tab" class="view-tab" type="button" tabindex="-1" aria-pressed="false"><svg class="aero-tab-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.65" fill="none" stroke="currentColor" stroke-width="1.65"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.65" fill="none" stroke="currentColor" stroke-width="1.65"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.65" fill="none" stroke="currentColor" stroke-width="1.65"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.65" fill="none" stroke="currentColor" stroke-width="1.65"/></svg><span data-i18n="All apps">All apps</span></button>
     </nav>
     <div class="topbar-right">
       <span id="weather" class="weather" hidden></span>
       <span id="date" class="date"></span>
       <span id="time" class="time"></span>
     </div>
+    <div id="aero-v991-widget" role="status" aria-label="Time, date and weather" hidden>
+      <div class="aero-v991-digits" aria-label="Local time">
+        <span id="aero-v991-hours" class="aero-v991-digit">--</span>
+        <span id="aero-v991-minutes" class="aero-v991-digit">--</span>
+      </div>
+      <div id="aero-v991-date" class="aero-v991-date"></div>
+      <div class="aero-v991-weather">
+        <span id="aero-v991-weather-icon" class="aero-v991-weather-icon"></span>
+        <span id="aero-v991-temp" class="aero-v991-temp">--°</span>
+        <span id="aero-v991-condition" class="aero-v991-condition"></span>
+      </div>
+      <div id="aero-v991-city" class="aero-v991-city"></div>
+    </div>
   </header>
 
   <div class="content-viewport">
     <main id="rows">
       <div id="grid" class="app-grid" aria-label="Home apps"></div>
-      <p id="apps-empty" class="apps-empty" hidden>No apps found.</p>
+      <p id="apps-empty" class="apps-empty" hidden data-i18n="No apps found.">No apps found.</p>
       <section id="inputs-section" class="row-wrap inputs-wrap" hidden>
-        <h2>Inputs</h2>
+        <h2 data-i18n="Inputs">Inputs</h2>
         <div id="inputs" class="row small"></div>
       </section>
     </main>
   </div>
 
   <div id="editor" class="sheet" hidden>
-    <h2>Settings</h2>
-    <h3>Animated backgrounds</h3>
+    <h2 data-i18n="Settings">Settings</h2>
+    <h3 data-i18n="Weather wallpaper">Weather wallpaper</h3>
+    <div id="weather-photo-choice" class="units" role="group" aria-label="Weather wallpaper"></div>
+    <h3 data-i18n="Animated backgrounds">Animated backgrounds</h3>
     <div id="bg-anim" class="swatches"></div>
     <div id="speed-row" class="speed-row" hidden></div>
-    <h3>Still backgrounds</h3>
+    <h3 data-i18n="Still backgrounds">Still backgrounds</h3>
     <div id="bg-still" class="swatches"></div>
-    <h3>Weather</h3>
+    <h3 data-i18n="Weather">Weather</h3>
     <div id="weather-display" class="units" role="group" aria-label="Weather visibility"></div>
     <p id="weather-location-summary" class="hint"></p>
     <div id="weather-location" class="units"></div>
     <p id="weather-search-status" class="hint" role="status" hidden></p>
     <div id="weather-results" class="weather-results" hidden></div>
     <div id="weather-visibility" class="units"></div>
-    <h3>Temperature</h3>
+    <h3 data-i18n="Temperature">Temperature</h3>
     <div id="units" class="units"></div>
-    <h3>Date &amp; time</h3>
+    <h3 data-i18n="Date &amp; time">Date &amp; time</h3>
+    <h3 data-i18n="Clock layout">Clock layout</h3>
+    <div id="clock-layouts" class="units"></div>
+    <div id="clock-style-section" hidden>
+      <h3 data-i18n="Clock style">Clock style</h3>
+      <div id="clock-styles" class="units"></div>
+    </div>
     <div id="time-formats" class="units"></div>
     <div id="date-formats" class="units"></div>
-    <h3>Network indicator</h3>
+    <h3 data-i18n="Network indicator">Network indicator</h3>
     <div id="network-visibility" class="units" role="group" aria-label="Network indicator visibility"></div>
-    <h3>Live TV</h3>
-    <p class="hint">Show the Live TV tile in Inputs.</p>
+    <h3 data-i18n="Live TV">Live TV</h3>
+    <p class="hint" data-i18n="Show the Live TV tile in Inputs.">Show the Live TV tile in Inputs.</p>
     <div id="live-tv-visibility" class="units"></div>
-    <h3>App cards</h3>
+    <h3 data-i18n="App cards">App cards</h3>
     <div id="card-sizes" class="units"></div>
-    <h3>HDMI ports</h3>
-    <p class="hint">Choose whether to show HDMI ports that the TV reports as disconnected.</p>
+    <h3 data-i18n="Home tile layout">Home tile layout</h3>
+    <div id="home-card-modes" class="units" role="group" aria-label="Home tile layout"></div>
+    <h3 data-i18n="Apps per row">Apps per row</h3>
+    <div id="home-card-columns" class="units" role="group" aria-label="Apps per row"></div>
+    <h3 data-i18n="HDMI ports">HDMI ports</h3>
+    <p class="hint" data-i18n="Choose whether to show HDMI ports that the TV reports as disconnected.">Choose whether to show HDMI ports that the TV reports as disconnected.</p>
     <div id="input-visibility" class="units"></div>
-    <h3>Input names</h3>
+    <h3 data-i18n="HDMI always visible">HDMI always visible</h3>
+    <p class="hint" data-i18n="Optionally keep an unidentified HDMI port visible while disconnected.">Optionally keep an unidentified HDMI port visible while disconnected.</p>
+    <div id="hdmi-force-visibility" class="units" role="group" aria-label="HDMI always visible"></div>
+    <h3 data-i18n="Input names">Input names</h3>
     <div id="input-names" class="units"></div>
-    <h3>Show in app menu</h3>
-    <p class="hint">Press OK to show or hide a tile on the home screen. On the home screen, hold OK on a tile to move it.</p>
+    <h3 data-i18n="Show in app menu">Show in app menu</h3>
+    <p class="hint" data-i18n="Press OK to show or hide a tile on the home screen. On the home screen, hold OK on a tile to move it.">Press OK to show or hide a tile on the home screen. On the home screen, hold OK on a tile to move it.</p>
     <div id="all-apps" class="grid"></div>
-    <div id="escape" class="escape">Use Samsung Home instead</div>
+    <div id="escape" class="escape" data-i18n="Use Samsung Home instead">Use Samsung Home instead</div>
   </div>
 
   <div id="fireplace" class="fireplace" hidden>
@@ -84,6 +125,7 @@
 
   <div id="toast" class="toast" hidden></div>
   <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
   <script src="js/app-catalog.js"></script>
   <script src="js/app-lookup.js"></script>
   <script src="js/dom.js"></script>
@@ -92,15 +134,20 @@
   <script src="js/logos.js"></script>
   <script src="js/backgrounds.js"></script>
   <script src="js/weather.js"></script>
+  <script src="js/photo-weather.js"></script>
   <script src="js/network.js"></script>
   <script src="js/fireplace.js"></script>
   <script src="js/artwork.js"></script>
   <script src="js/brands.js"></script>
   <script src="js/homewatch.js"></script>
+  <script src="js/native-navigation.js"></script>
   <script src="js/apps.js"></script>
   <script src="js/inputs.js"></script>
   <script src="js/home-screen.js"></script>
   <script src="js/settings-ui.js"></script>
+  <script src="js/clock-layouts.js"></script>
+  <script src="js/glass-ui.js"></script>
+  <script src="js/wallpaper-categories.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
