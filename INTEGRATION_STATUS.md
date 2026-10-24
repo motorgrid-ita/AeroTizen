@@ -1,56 +1,58 @@
-# AeroTizen — single integration track from proven reference
+# AeroTizen — V992.56 single integration track
 
-**The only active integration branch:** `integration/v99256-upstream`  
-**Immutable proven source:** `reference/v99256` at commit `c9c34bf0b8478bf1c156b41c0568f475f008d272`  
-**Official upstream:** `helalaou/AeroTizen` (`main`)
+**Active working branch:** `integration/v99256-upstream`  
+**Protected TV-tested reference:** `reference/v99256` at `c9c34bf0b8478bf1c156b41c0568f475f008d272`  
+**Upstream:** `helalaou/AeroTizen` (`main`)  
+**Latest Frame integration CI:** [successful GitHub Actions run #40097539342](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40097539342).
 
-## What we stopped
+This is the only active integration track. The formerly experimental fork PRs #5–#8 are closed, and `qa/glass-physical-home-live-tv` is retired. The already-submitted upstream PRs #26–#30 remain separate, open and unmerged. Do **not** create duplicate PRs or merge into upstream without review.
 
-Experimental fork draft PRs **#5–#8 are closed**. The old `qa/glass-physical-home-live-tv` branch is archived and marked **do not install or merge**. None of their experimental HomeWatcher changes will be introduced by default.
+## Non-negotiable V992.56 behaviour
 
-Upstream PRs **#26–#30** were already submitted and remain independent and unmerged. Their contents must be reconciled carefully against this tested baseline; no automatic merges or replacement of upstream `main`.
+Keep the tested **physical HOME**, YouTube/Cobalt handshake, native Samsung Home, Live TV and HDMI routes, Square/Rectangle tiles, nine original branded PNGs, nine weather JPEGs, Glass Settings, clocks, backgrounds, animations and D-pad experience. A new feature is accepted only if existing behaviour is verified.
 
-## Non-negotiable reference behaviour
+The following remain byte-identical to the reference:
 
-Preserve V992.56's **physical remote HOME return**, YouTube/Cobalt launch handshake, native Samsung Home shortcut, native Live TV viewer and tuner routing, HDMI behaviour, original 9 branded PNGs, original 9 Full-HD weather images, glass UI and D-pad transitions, including the Square/Rectangle card modes and all original settings.
+- `launcher/js/homewatch.js` — `82c1c97c2fc111aea2f9f1d05f805f7b6e3c01fd`
+- `launcher/js/inputs.js` — `ecf1f13e95f83c96809adcfc5ffd59c4bf396191`
+- `launcher/index.html` — `f4a53ea1b28b774e1c1c74659a0dc54c32c044fc`
+- All **nine brand PNGs and nine weather JPEGs**, compared against original Git blob IDs.
 
-At the first integration milestone, the following Git blobs are **unchanged from the reference**:
+The **service `launcher/service/index.js` is intentionally no longer byte-identical** because of the next increment. Its proven `launchSelf` implementation is preserved in `launchOriginal`, with its exact function text verified by a pinned SHA-256 test. No experimental native Home probing, launcher key remapping, or rewritten YouTube logic was imported.
 
-| File | Original Git blob SHA |
-|---|---|
-| `launcher/js/homewatch.js` | `82c1c97c2fc111aea2f9f1d05f805f7b6e3c01fd` |
-| `launcher/service/index.js` | `8aeaf3e87ed6efa23bdf8ce0196295529d149a7d` |
-| `launcher/js/inputs.js` | `ecf1f13e95f83c96809adcfc5ffd59c4bf396191` |
-| `launcher/index.html` | `f4a53ea1b28b774e1c1c74659a0dc54c32c044fc` |
+## Increment 01 — upstream HbbTV compatibility
 
-## Increment 01 — imported upstream HbbTV support
+**Committed; automated tests passed; TV testing outstanding.**
 
-**Status: committed to the integration branch, Node test pass; hardware test pending.**
+- `launcher/js/config.js` provides official HbbTV host constants.
+- `launcher/js/apps.js` supports HbbTV wrapper metadata and includes the host in app discovery.
+- **YouTube is checked first**, retaining the original confirmed `/leave` handoff. Ordinary apps retain their original `/watch` behaviour.
 
-Only `launcher/js/apps.js` and `launcher/js/config.js` differ functionally from V992.56:
+## Increment 02 — guarded Frame Art Mode compatibility
 
-- HbbTV link metadata now routes hosted content to `org.tizen.hbbtv` using the Tizen AppControl data contract.
-- HbbTV host is included in the watcher app inventory.
-- Ordinary application and YouTube/Cobalt launch paths **remain unchanged**. YouTube's verified `/leave` handshake runs before any HbbTV metadata lookup; this is enforced by a regression test.
-- No experimental HomeWatcher replacement, Tizen package ID change, or updated configuration/reset is included.
+**Committed; automated tests passed; Frame hardware testing outstanding.**
 
-Checks: `node --test tests/*.test.cjs` = **17/17 passed** on an actual Node.js runner; syntax checks passed for all original JS files. These are mocked device interfaces, *not physical Samsung TV tests*. Three regression test files are committed alongside the feature. The new integrity checks compare the original HomeWatcher service, client, nine banner PNGs and nine weather JPEGs against their pinned Git blobs.
+- `launcher/service/artmode.js` and its protocol tests were copied unchanged from current upstream Git objects.
+- `launcher/service/frame-gate.js` is a separate opt-in-by-device guard: valid normal Samsung TVs use the original HOME relaunch function directly.
+- For confirmed Frame models, the service requires **two fresh independent Art Mode “off” replies**, repeated checks that AeroTizen is hidden and no monitored app is unexpectedly visible, then a fresh power-on/Frame identity check.
+- Art Mode “on” or “unknown”, an unsupported TV capability response, application changes, or a `/leave` cancellation prevent a speculative relaunch. A background retry never skips these checks.
+- The original HomeWatcher application ID, service endpoint, manifest registration, YouTube handoff and Live TV path are preserved.
+- The added boot retry timer stops when the launcher has already started, avoiding needless polling.
 
-## Repeatable integration checks
+**Note:** Initial boot and application state reporting vary by firmware. This guard is deliberately conservative: when a Frame's capability or Art state is unavailable, it may delay or refuse Home reclaim instead of interrupting artwork.
 
-A branch-scoped GitHub Actions workflow, `.github/workflows/v99256-integration-qa.yml`, now runs JavaScript syntax validation and the integration test suite on commits to this branch. **GitHub Actions run [#40096068375](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40096068375) completed successfully** on the integration branch. Local Node.js checks passed (17/17). These tests deliberately guard the byte-identical original HomeWatcher and assets; a later intentional HomeWatcher change will require an explicit contract migration and new regression tests.
+## Verification
 
-## Next increments — not yet applied
+Automated GitHub Actions executes `find launcher -name '*.js' -type f -print0 | xargs -0 -n1 node --check` and `node --test tests/*.test.cjs`, plus the pinned original-file integrity tests.
 
-1. Compare official HbbTV/launcher inventory handling and apply only follow-up fixes actually required by the current upstream, preserving the first increment.
-2. Carefully add official Frame Art Mode safety checks *without overwriting the proven HomeWatcher behaviour*. Test this on a Frame device, not just S90C.
-3. Port other upstream improvements individually: source/app identity lookups, artwork performance, Home/All Apps, clock/i18n changes, official Settings conventions and CLI/release compatibility.
-4. Run tests after each increment and maintain all original theme assets (9 brand PNGs and 9 weather JPEGs).
-5. Prepare one full integration build for **explicit hardware acceptance**, retaining a rollback copy of the signed working WGT/settings before any install.
-6. Prepare upstream-compatible contributions based on the current upstream `main`; do not propose a wholesale launcher replacement from this unrelated-history snapshot.
+The latest **combined suite passed on GitHub Actions**: [run #40097539342](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40097539342), covering the official Art protocol module, Frame/non-Frame gate, complete service boot/Home scenarios, preserved S90C HOME contract and binary artwork integrity. These are simulated Tizen/HTTP/Art devices, **not real-TV verification**.
 
-## Verification gate
+## Remaining work — do not mark complete
 
-No claims of complete V992.56 integration or universal Home-key remapping until the whole combined app passes its tests and hardware acceptance. In particular, Samsung's local application visibility API behaves differently for Cobalt/YouTube and native TV apps. The Frame's Art Mode must never be interrupted.
+1. Confirm the Frame guard against a real Samsung Frame in Art Mode and test the normal S90C HOME/YouTube/Live TV paths on a disposable signed QA build with rollback. **Do not overwrite the currently working V992.56.**
+2. Reconcile original V992.56 artwork and app-display internals with upstream cache, app catalog and recognized-HDMI handling *one change at a time*; preserve all original branded images.
+3. Reconcile the already-open upstream PRs #26–#30 with the reference behavior without sending duplicate changes.
+4. Preserve full Settings, Square/Rectangle graphics, clock/i18n, wallpapers and animation parity through regression and visual tests.
+5. Build and test a single packaged integration QA artifact, then publish upstream-compatible changes in reviewable increments. Acceptance of official PRs remains the upstream maintainer's decision.
 
-**Do not install this branch on the user's working S90C yet**; it shares the same Tizen app ID and is a source-level integration branch, not a signed QA release.
+**Do not install or announce this branch as a complete production build.** It uses the same Tizen application ID and has not passed TV hardware acceptance yet.
