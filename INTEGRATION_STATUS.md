@@ -38,7 +38,7 @@ Checks: `node --test tests/*.test.cjs` = **17/17 passed** on an actual Node.js r
 
 ## Repeatable integration checks
 
-A branch-scoped GitHub Actions workflow, `.github/workflows/v99256-integration-qa.yml`, now runs JavaScript syntax validation and the integration test suite on commits to this branch. **Workflow registration is complete; a successful GitHub-hosted run has not yet been observed.** Local Node.js checks passed (17/17). These tests deliberately guard the byte-identical original HomeWatcher and assets; a later intentional HomeWatcher change will require an explicit contract migration and new regression tests.
+A branch-scoped GitHub Actions workflow, `.github/workflows/v99256-integration-qa.yml`, now runs JavaScript syntax validation and the integration test suite on commits to this branch. **GitHub Actions run [#40096068375](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40096068375) completed successfully** on the integration branch. Local Node.js checks passed (17/17). These tests deliberately guard the byte-identical original HomeWatcher and assets; a later intentional HomeWatcher change will require an explicit contract migration and new regression tests.
 
 ## Next increments — not yet applied
 
