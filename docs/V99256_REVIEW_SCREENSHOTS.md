@@ -39,8 +39,12 @@ Add this note alongside the images:
 
 If actual proposed-branch browser screenshots are supplied instead, replace the reference labels with the exact branch/commit and state that the captures are desktop previews.
 
-## Publication status
+## Received visual evidence — 24 October 2026
 
-The screenshot request remains open until the actual images are attached to the PR description or review discussion. This checklist and the CI screenshot are not substitutes for launcher screenshots.
+Six digital PNG captures were supplied from the existing Samsung S90C installation, all 1920 × 1080. Four unchanged images were selected for the [reference gallery](screenshots/v99256-reference/README.md): Home overview, Home actions, directional reorder state, and Add to Home inside All apps.
+
+The other two captures show the Home removal selection and an All apps overview. They do not show Remove from Home inside All apps; that specific capture remains pending.
+
+The reference-gallery images are being linked from PR #26 with explicit scope/evidence labels. They document the working V992.56 reference, not the proposed upstream branch. The CI screenshot is not launcher visual evidence.
 
 No new TV installation or TV/firmware operation has been performed to prepare this document.

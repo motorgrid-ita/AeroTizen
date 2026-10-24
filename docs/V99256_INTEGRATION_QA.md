@@ -98,3 +98,7 @@ Any later TV test needs separate authorization and a genuinely isolated disposab
 - Redistribution/provenance review for the 18 original bundled bitmap assets. Byte identity does not establish licensing permission. Their source/license evidence is not available in the reference snapshot.
 - Visual and performance acceptance; device-specific failures may require follow-up changes.
 - Universal physical HOME support remains out of scope until each model/firmware baseline and restore are independently verified.
+
+## Received native reference screenshots — 24 October 2026
+
+Four unchanged 1920 × 1080 PNG captures from the existing Samsung S90C V992.56 installation are now published in the [PR #26 description](https://github.com/helalaou/AeroTizen/pull/26) and indexed in the [reference gallery](screenshots/v99256-reference/README.md). They show Home, Home actions, reorder arrows, and Add to Home from All apps. Remove from Home inside All apps remains pending. These are reference screenshots, not hardware acceptance of the proposed upstream source.
