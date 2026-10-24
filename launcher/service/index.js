@@ -194,9 +194,16 @@ module.exports.onStart = function () {
   setTimeout(function () {
     bootDue = true;
     launchSelf('boot');
-    bootRetry = setInterval(function () {
-      if (!state.lastLaunch && !state.leaving) { launchSelf('boot'); }
-    }, 3000);
+    if (!state.lastLaunch) {
+      bootRetry = setInterval(function () {
+        if (state.lastLaunch) {
+          clearInterval(bootRetry);
+          bootRetry = null;
+          return;
+        }
+        if (!state.leaving) { launchSelf('boot'); }
+      }, 3000);
+    }
   }, 3000);
 };
 
