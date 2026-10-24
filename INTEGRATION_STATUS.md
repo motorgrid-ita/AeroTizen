@@ -31,10 +31,10 @@ Only `launcher/js/apps.js` and `launcher/js/config.js` differ functionally from 
 
 - HbbTV link metadata now routes hosted content to `org.tizen.hbbtv` using the Tizen AppControl data contract.
 - HbbTV host is included in the watcher app inventory.
-- Ordinary application and YouTube/Cobalt launch paths **remain unchanged**.
+- Ordinary application and YouTube/Cobalt launch paths **remain unchanged**. YouTube's verified `/leave` handshake runs before any HbbTV metadata lookup; this is enforced by a regression test.
 - No experimental HomeWatcher replacement, Tizen package ID change, or updated configuration/reset is included.
 
-Checks: `node --test tests/*.test.cjs` = **11/11 passed** on an actual Node.js runner; syntax checks passed for all original JS files. These are mocked device interfaces, *not physical Samsung TV tests*. Two regression test files are committed alongside the feature.
+Checks: `node --test tests/*.test.cjs` = **12/12 passed** on an actual Node.js runner; syntax checks passed for all original JS files. These are mocked device interfaces, *not physical Samsung TV tests*. Two regression test files are committed alongside the feature.
 
 ## Next increments — not yet applied
 
