@@ -41,7 +41,7 @@ The new native-handoff PR is **#37**, published from `feat/launcher-v99256-nativ
 
 Combined local checks: **205 Node tests passed; 135 Python tests and 30 subtests passed; ESLint and Ruff checks/formatting passed; diff whitespace checks passed**. Full-DOM boot and D-pad checks use jsdom with simulated layout. No rendered-browser, real native API or TV performance acceptance is claimed.
 
-Combined fork CI: [run #40124174636](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40124174636) on `3de6ed06896633dcae1907ffa358047602d701e1`; queued at publication. Read the run for the final result. Official workflows still need maintainer approval. Passing local/fork tests are not upstream acceptance.
+Combined fork CI: [run #40124174636](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40124174636) on `3de6ed06896633dcae1907ffa358047602d701e1`; **completed successfully**. All four jobs (launcher and Python 3.10/3.12/3.13) passed. Official workflows still need maintainer approval. Passing local/fork tests are not upstream acceptance.
 
 ## Remaining acceptance
 
