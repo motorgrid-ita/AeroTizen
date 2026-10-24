@@ -33,6 +33,28 @@
     });
   }
 
+  function renderPhotoWeather() {
+    var container = A.$('weather-photo-choice');
+    if (!container) { return; }
+    container.textContent = '';
+    [['off', 'Off'], ['auto', 'Automatic (weather)']].forEach(function (item) {
+      var enabled = item[0] === 'auto';
+      var selected = (S.photoWeather === true) === enabled;
+      var key = 'photo-weather:' + item[0];
+      var control = pill(key, item[1], selected, function () {
+        S.photoWeather = enabled;
+        focusKey = key;
+        changed(function () {
+          A.applyBackground();
+          window.Weather.updateVisibility();
+        });
+      });
+      control.setAttribute('role', 'button');
+      control.setAttribute('aria-pressed', String(selected));
+      container.appendChild(control);
+    });
+  }
+
   function renderBackgrounds() {
     var anim = A.$('bg-anim'), still = A.$('bg-still'), selected = null;
     anim.textContent = ''; still.textContent = '';
@@ -235,7 +257,7 @@
   }
 
   function render() {
-    renderBackgrounds(); renderWeather(); renderUnits(); renderDateTime();
+    renderPhotoWeather(); renderBackgrounds(); renderWeather(); renderUnits(); renderDateTime();
     renderVisibility('network-visibility', 'showNetwork', ['Show', 'Hide'], A.network.updateVisibility);
     renderCardSizes(); renderInputVisibility(); renderInputNames(); renderAppMenu();
     focus();
@@ -254,7 +276,7 @@
     var r = A.chunk(kids('bg-anim'), 8);
     if (!A.$('speed-row').hidden) { r.push(kids('speed-row')); }
     var results = kids('weather-results').map(function (el) { return [el]; });
-    return r.concat(A.chunk(kids('bg-still'), 8), [kids('weather-display')],
+    return [kids('weather-photo-choice')].concat(r, A.chunk(kids('bg-still'), 8), [kids('weather-display')],
       [kids('weather-location')], results, [kids('weather-visibility')],
       [kids('units')], [kids('time-formats')], dateRows, [kids('network-visibility')],
       [kids('live-tv-visibility')], [kids('card-sizes')], [kids('input-visibility')],
