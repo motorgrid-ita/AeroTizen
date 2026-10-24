@@ -34,7 +34,11 @@ Only `launcher/js/apps.js` and `launcher/js/config.js` differ functionally from 
 - Ordinary application and YouTube/Cobalt launch paths **remain unchanged**. YouTube's verified `/leave` handshake runs before any HbbTV metadata lookup; this is enforced by a regression test.
 - No experimental HomeWatcher replacement, Tizen package ID change, or updated configuration/reset is included.
 
-Checks: `node --test tests/*.test.cjs` = **12/12 passed** on an actual Node.js runner; syntax checks passed for all original JS files. These are mocked device interfaces, *not physical Samsung TV tests*. Two regression test files are committed alongside the feature.
+Checks: `node --test tests/*.test.cjs` = **17/17 passed** on an actual Node.js runner; syntax checks passed for all original JS files. These are mocked device interfaces, *not physical Samsung TV tests*. Three regression test files are committed alongside the feature. The new integrity checks compare the original HomeWatcher service, client, nine banner PNGs and nine weather JPEGs against their pinned Git blobs.
+
+## Repeatable integration checks
+
+A branch-scoped GitHub Actions workflow, `.github/workflows/v99256-integration-qa.yml`, now runs JavaScript syntax validation and the integration test suite on commits to this branch. **Workflow registration is complete; a successful GitHub-hosted run has not yet been observed.** Local Node.js checks passed (17/17). These tests deliberately guard the byte-identical original HomeWatcher and assets; a later intentional HomeWatcher change will require an explicit contract migration and new regression tests.
 
 ## Next increments — not yet applied
 
