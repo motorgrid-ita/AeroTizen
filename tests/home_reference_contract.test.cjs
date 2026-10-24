@@ -106,3 +106,12 @@ test('unavailable HbbTV metadata never changes Netflix and YouTube launches', ()
   h.requests[1].resolve(200);
   assert.deepEqual(h.launches.map(x=>x.id),['netflix.app','yt.app']);
 });
+
+test('YouTube never fetches HbbTV metadata before the tested HomeWatcher handoff', () => {
+  const h=setup(); let reads=0;
+  h.A.tizen.application.getAppMetaData=()=>{reads++; throw Error('should never run')};
+  h.A.apps.launch({id:'yt.app',name:'YouTube'});
+  assert.equal(reads,0);
+  assert.equal(h.launches.length,0);
+  assert.match(h.requests[0].url,/\/leave$/);
+});
