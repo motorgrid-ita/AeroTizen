@@ -1,5 +1,7 @@
 # AeroTizen — Consolidamento V992.56
 
+> **ACTIVE INTEGRATION BRANCH — NOT A RELEASE.** This branch starts from the confirmed working `reference/v99256` snapshot. The sole up-to-date work log is [INTEGRATION_STATUS.md](INTEGRATION_STATUS.md). Keep the proven TV installation intact; never install this source branch as a replacement without a signed, rollback-ready QA package. The older archive instructions below are historical.
+
 Questo archivio contiene lo **snapshot integrale del launcher V992.56**, usato come riferimento funzionale e grafico, e un percorso per trasformare le differenze rispetto a `helalaou/AeroTizen` in **PR separate, applicabili a tutti i TV Tizen supportati dal progetto**, non soltanto alla S90C.
 
 > **Non è il repository ufficiale aggiornato** e **non è una PR già pubblicata**. La V992.56 è installabile attraverso il precedente pacchetto di distribuzione, non attraverso questo archivio di codice. Il repo upstream attuale ha rilasciato CLI/launcher 2.2.0; la nostra `config.xml` mantiene intenzionalmente `2.0.42` perché è lo stato testato del ramo personalizzato.
