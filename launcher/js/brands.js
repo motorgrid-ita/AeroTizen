@@ -60,17 +60,22 @@
 
   function appTile(app, extraClass, onSelect) {
     var b = brandFor(app), tile = A.el('div');
+    var rectangle = extraClass === 'home-display' && A.settings && A.settings.homeCardMode === 'rectangle';
+    var banner = rectangle ? referenceBanner(app.name) : null;
     tile.className = 'tile app-tile' + (extraClass ? ' ' + extraClass : '');
     tile.setAttribute('role', 'button');
     tile.setAttribute('aria-label', shortName(app.name));
     tile.title = shortName(app.name);
-    tile.style.background = b.background;
+    tile.style.background = banner ? banner[1] : b.background;
+    if (rectangle) { tile.classList.add('brand-rectangle'); }
+    if (banner) { tile.classList.add('brand-original-banner'); }
+    if (banner && banner[0] === 'raiplay-official.png') { tile.classList.add('brand-raiplay'); }
     var fallback = A.el('div', 'app-fallback'), mark = b.logo && logoSvg(b.logo, b.logoColour);
     if (!b.label) { fallback.classList.add('logo-only'); }
     if (b.largeLogo) { fallback.classList.add('logo-big'); }
     if (mark) {
       fallback.innerHTML = mark;
-    } else if (b.useAppIcon && app.icon) {
+    } else if (!rectangle && b.useAppIcon && app.icon) {
       var img = new Image();
       img.className = 'logo'; img.alt = '';
       img.onerror = function () { fallback.removeChild(img); };
