@@ -54,3 +54,11 @@ Combined fork CI: [run #40124174636](https://github.com/motorgrid-ita/AeroTizen/
 The source candidate uses the official application/service identity. **Do not install it over the working V992.56.** No firmware/native helper/TV operation is authorized by this register. Source parity review is complete for the audited modules; production acceptance remains open.
 
 Previous detailed status is preserved in [the archive](docs/archive/INTEGRATION_STATUS_before_combined_20261024.md).
+
+## Reviewer request — screenshot evidence
+
+Rechecked all ten upstream PR discussions on 24 October 2026. The only concrete request is metacurb's request for screenshots on #26. No code-change review request is currently recorded.
+
+[Capture checklist and English captions](https://github.com/motorgrid-ita/AeroTizen/blob/integration/v99256-combined-qa/docs/V99256_REVIEW_SCREENSHOTS.md) are prepared. Required states: Home actions, Add to Home from All apps, and Remove from Home from All apps. Actual images remain to be supplied; V992.56 TV photos must be labelled as reference evidence, not as proof of the upstream port.
+
+The QA branch's subsequent documentation-only commit does not change the source tree validated by CI run #40124174636. Read the fork PR checks for its latest automatic documentation-head CI run.
