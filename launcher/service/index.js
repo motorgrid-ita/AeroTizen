@@ -56,6 +56,8 @@ function snapshot(cb) {
 // Original V992.56 relaunch code. The Frame-only authorization gate below
 // never changes this function or its timeouts on a confirmed non-Frame TV.
 function launchOriginal(why) {
+  // Rate-limited so a failing relaunch can't loop. The TV's local API ignores launch
+  // requests from the TV itself, so this uses the Tizen application API.
   if (Date.now() - state.lastLaunch < 2000) { return; }
   state.lastLaunch = Date.now();
   state.watched = null;
