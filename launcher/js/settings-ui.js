@@ -163,7 +163,7 @@
     [['square', 'Square'], ['rectangle', 'Rectangle']].forEach(function (choice) {
       var key = 'card:mode:' + choice[0];
       var selected = (S.homeCardMode || 'square') === choice[0];
-      var control = pill(key, choice[1], selected, function () {
+      var control = pill(key, A.i18n ? A.i18n.label(key, choice[1]) : choice[1], selected, function () {
         S.homeCardMode = choice[0]; focusKey = key;
         changed(A.homeScreen.render);
       });
@@ -175,7 +175,7 @@
       .forEach(function (choice) {
         var key = 'card:cols:' + (choice[0] || 'default');
         var selected = (S.homeCardColumns || null) === choice[0];
-        var control = pill(key, choice[1], selected, function () {
+        var control = pill(key, A.i18n ? A.i18n.label(key, choice[1]) : choice[1], selected, function () {
           S.homeCardColumns = choice[0]; focusKey = key;
           changed(A.homeScreen.render);
         });
