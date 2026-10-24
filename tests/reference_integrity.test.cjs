@@ -8,8 +8,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const ROOT = path.resolve(__dirname, '..');
 const CORE = {
-  'launcher/js/homewatch.js': '82c1c97c2fc111aea2f9f1d05f805f7b6e3c01fd',
-  'launcher/service/index.js': '8aeaf3e87ed6efa23bdf8ce0196295529d149a7d'
+  'launcher/js/homewatch.js': '82c1c97c2fc111aea2f9f1d05f805f7b6e3c01fd'
 };
 const BRANDS = {
   'alexa-official.png': '7a4add14386bcf3d4ad2a583f3ec4d98d2ad2230',
@@ -42,9 +41,19 @@ function verifyFiles(files, folder) {
     assert.equal(gitBlob(fs.readFileSync(file)), expected, name + ' differs from V992.56');
   }
 }
-test('original physical HOME and HomeWatcher service remain byte-identical', () => {
+test('original physical HOME client stays byte-identical', () => {
   verifyFiles(CORE, '');
 });
+test('original V992.56 relaunch remains byte-equivalent inside the Frame-only wrapper', () => {
+  const source = fs.readFileSync(path.join(ROOT,'launcher/service/index.js'),'utf8');
+  const match = source.match(/function launchOriginal\\(why\\) \\{[\\s\\S]*?\\n\\}/);
+  assert.ok(match, 'the proven relaunch function must remain in the service');
+  const canonical = match[0].replace('launchOriginal','launchSelf');
+  assert.equal(crypto.createHash('sha256').update(canonical).digest('hex'),
+    '31b87a6c260819220fbde3075c060b928e5713536ac5642e7c1916e1568e7b11');
+  assert.match(source,/frameGate\\.allow\\(why, function \\(\\) \\{ launchOriginal\\(why\\); \\}\\)/);
+});
+
 test('all nine original custom brand PNGs remain byte-identical', () => {
   verifyFiles(BRANDS, 'launcher/assets/brands');
 });
