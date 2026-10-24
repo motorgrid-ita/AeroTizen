@@ -102,12 +102,14 @@ test('Samsung Home falls back to AppControl if normal launch is rejected', () =>
   assert.equal(h.launched[1].id, 'com.samsung.tv.csfs');
 });
 
-test('Live TV selects native TV tuner after ACK, then launches Samsung viewer', () => {
+test('Live TV is registered as monitored before its native viewer launches', () => {
   const h = harness();
   const raw = { type: 'TV', number: 1, editName: 'Digital TV' };
   h.A.inputs.show({ type: 'TV', number: 1, raw });
   assert.equal(h.launched.length, 0);
   assert.equal(h.switched.length, 0);
+  assert.equal(h.http[0].url, 'http://127.0.0.1:47790/watch?id=org.tizen.tv-viewer');
+  assert.equal(h.launched.length, 0, 'viewer must not start before the watcher ACK');
   h.http[0].resolve(200);
   assert.equal(h.switched.length, 1);
   assert.equal(h.switched[0].source, raw);
@@ -143,6 +145,27 @@ test('Live TV success callback does not imply foreground; recover if still visib
   h.timers[0].fn();
   assert.equal(h.http[1].url, 'http://127.0.0.1:47790/home');
   assert.match(h.toasts[0], /did not take focus/);
+});
+
+
+test('Live TV refuses launch after failed watcher acknowledgment and restores tracking', () => {
+  const h = harness();
+  h.A.homewatch.openNativeLiveTV({ type: 'TV', number: 1 });
+  assert.equal(h.http[0].url, 'http://127.0.0.1:47790/watch?id=org.tizen.tv-viewer');
+  h.http[0].resolve(503);
+  assert.equal(h.launched.length, 0);
+  assert.equal(h.switched.length, 0);
+  assert.equal(h.http[1].url, 'http://127.0.0.1:47790/home');
+  assert.match(h.toasts[0], /HomeWatcher HTTP 503/);
+});
+
+test('Samsung Home and Live TV use distinct HomeWatcher handoff modes', () => {
+  const a = harness();
+  a.A.homewatch.openSamsungHome();
+  assert.equal(a.http[0].url, 'http://127.0.0.1:47790/leave');
+  const b = harness();
+  b.A.homewatch.openNativeLiveTV(null);
+  assert.equal(b.http[0].url, 'http://127.0.0.1:47790/watch?id=org.tizen.tv-viewer');
 });
 
 test('HDMI source activation still uses the original embedded TVWindow path', () => {
