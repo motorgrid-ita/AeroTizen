@@ -46,12 +46,12 @@ test('original physical HOME client stays byte-identical', () => {
 });
 test('original V992.56 relaunch remains byte-equivalent inside the Frame-only wrapper', () => {
   const source = fs.readFileSync(path.join(ROOT,'launcher/service/index.js'),'utf8');
-  const match = source.match(/function launchOriginal\\(why\\) \\{[\\s\\S]*?\\n\\}/);
+  const match = source.match(/function launchOriginal\(why\) \{[\s\S]*?\n\}/);
   assert.ok(match, 'the proven relaunch function must remain in the service');
   const canonical = match[0].replace('launchOriginal','launchSelf');
   assert.equal(crypto.createHash('sha256').update(canonical).digest('hex'),
     '31b87a6c260819220fbde3075c060b928e5713536ac5642e7c1916e1568e7b11');
-  assert.match(source,/frameGate\\.allow\\(why, function \\(\\) \\{ launchOriginal\\(why\\); \\}\\)/);
+  assert.match(source,/frameGate\.allow\(why, function \(\) \{ launchOriginal\(why\); \}\)/);
 });
 
 test('all nine original custom brand PNGs remain byte-identical', () => {
