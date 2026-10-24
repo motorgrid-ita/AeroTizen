@@ -1,5 +1,7 @@
 # AeroTizen — contributi upstream (riferimento V992.56)
 
+> **HISTORICAL ROADMAP — superseded.** Refer to [INTEGRATION_STATUS.md](../INTEGRATION_STATUS.md) for the one active integration branch, up-to-date GitHub PR status and tests. Do not start new draft feature branches from this historical document.
+
 **Target:** `helalaou/AeroTizen`, ramo `main`, a partire dal commit `69aecf8e4e20497a68116af3d5cefafe08a7d80d` (2026-10-23, launcher e CLI 2.2.0). Ricontrollare il ramo `main` prima di ogni PR.
 
 **Importante:** questo codice rappresenta la versione di riferimento V992.56. Non è un branch derivato dall'upstream 2.2.0: `launcher/config.xml` ha versione `2.0.42`, la struttura è diversa, ed è intenzionale. Non sostituire l'intera cartella `launcher/` nel fork per aprire una PR: reimplementare/adattare ogni funzionalità al codice upstream, conservando tutte le correzioni già presenti in upstream. Il tag V992.56 è il riferimento da cui portare le funzioni.
