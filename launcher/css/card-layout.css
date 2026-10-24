@@ -1,0 +1,92 @@
+/* V992.56 rectangle geometry and optical 3D depth, adapted to upstream DOM.
+   Square mode deliberately retains the original upstream Samsung artwork CSS. */
+.app-grid.cards-rectangle {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  gap: 24px !important;
+  width: 1792px;
+  margin: 8px 0 32px !important;
+}
+.app-grid.cards-rectangle > .tile {
+  position: relative;
+  width: var(--v992-card-width, 576px) !important;
+  height: var(--v992-card-height, 300px) !important;
+  flex: 0 0 auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  outline: 0;
+  border: 0;
+  padding: 0;
+  transform: translateZ(0) scale(.955) !important;
+  transform-origin: center center;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.11),
+    0 11px 21px rgba(0,0,0,.30) !important;
+  transition: transform .17s cubic-bezier(.20,.72,.25,1),
+    box-shadow .17s ease-out !important;
+}
+.app-grid.cards-rectangle > .tile::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit; z-index: 2; pointer-events: none;
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,.075), transparent 34%, rgba(0,0,0,.07));
+}
+.app-grid.cards-rectangle > .tile.focused {
+  transform: translate3d(0,-7px,0) scale(1.065) !important;
+  z-index: 8;
+  box-shadow: 0 0 0 2px rgba(255,255,255,.94),
+    0 0 13px 3px rgba(248,250,255,.23),
+    0 19px 30px rgba(0,0,0,.49),
+    0 37px 51px rgba(0,0,0,.32) !important;
+}
+.app-grid.cards-rectangle > .tile.moving {
+  overflow: visible !important;
+  z-index: 30 !important;
+  transform: translate3d(0,-7px,0) scale(1.065) !important;
+}
+.app-grid.cards-rectangle .tile .app-fallback {
+  width: 100%; height: 100%; padding: 18px;
+  overflow: hidden; text-align: center;
+}
+.app-grid.cards-rectangle .tile .app-fallback[hidden] { display: none !important; }
+.app-grid.cards-rectangle .tile .app-fallback .name {
+  font-size: clamp(34px, 3.1vw, 58px);
+  line-height: 1.08;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+.app-grid.cards-rectangle .tile .app-fallback .logo {
+  max-height: 135px; max-width: 240px;
+  object-fit: contain;
+}
+.app-grid.cards-rectangle .tile .brand-custom-art {
+  position: absolute;
+  inset: 0;
+  width: 100% !important; height: 100% !important;
+  object-fit: cover;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+}
+.app-grid.cards-rectangle .tile.brand-raiplay {
+  background: #05061e !important;
+}
+.app-grid.cards-rectangle .tile.brand-raiplay .brand-custom-art {
+  inset: 8% 5%; width: 90% !important; height: 84% !important;
+  object-fit: contain; border-radius: 0;
+}
+.app-grid.cards-rectangle .tile.fire {
+  flex-direction: column;
+  gap: 8px;
+  background: radial-gradient(110% 120% at 50% 110%,
+    #ff8a1e 0%, #c2380d 35%, #3a0d04 70%, #0c0504 100%);
+}
+.app-grid.cards-rectangle .tile.fire svg { width: 110px; height: 110px; }
+.app-grid.cards-rectangle .tile.fire .rectangle-fire-label {
+  font-size: 38px; font-weight: 650;
+}
+.app-grid:not(.cards-rectangle) .rectangle-fire-label { display: none; }
