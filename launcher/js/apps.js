@@ -85,6 +85,12 @@
   apps.launch = function (app) {
     var label = A.tiles.shortName(app.name);
     if (!tz || !tz.application) { return A.toast('Aprirei ' + label); }
+    // Preserve the proven Cobalt HOME handoff as the first route. Do not
+    // fetch metadata or introduce extra asynchronous work before YouTube.
+    if (/^youtube$/i.test(String(app.name || '').replace(/^\s+|\s+$/g, ''))) {
+      launchYouTube(app, label);
+      return;
+    }
     var link = hbbtvLink(app.id);
     if (link) {
       try {
@@ -98,10 +104,6 @@
           new tz.ApplicationControl('http://tizen.org/appcontrol/operation/default', null, null, null, data),
           cfg.HBBTV_APP_ID, null, function () { A.toast('Could not open ' + label); });
       } catch (e) { A.toast('Could not open ' + label); }
-      return;
-    }
-    if (/^youtube$/i.test(String(app.name || '').replace(/^\s+|\s+$/g, ''))) {
-      launchYouTube(app, label);
       return;
     }
     A.homewatch.watch(app.id);
