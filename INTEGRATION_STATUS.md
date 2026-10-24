@@ -1,5 +1,81 @@
 # AeroTizen — V992.56 single integration track
 
+## Upstream porting status — 24 October 2026 (latest update)
+
+The protected original `reference/v99256` is unchanged. All implementation PRs are
+based on fork `main`, not on the standalone reference snapshot. All GitHub
+PR titles, descriptions, and implementation commits remain in English.
+
+### Submitted to `helalaou/AeroTizen`
+
+| PR | Contribution | Status and remaining work |
+| --- | --- | --- |
+| [#26](https://github.com/helalaou/AeroTizen/pull/26) | Home app actions / favourites | Open, awaiting maintainer review |
+| [#27](https://github.com/helalaou/AeroTizen/pull/27) | Automatic English / Italian locale | Open; added HDMI override translations; fork CI passed on `938082e` |
+| [#28](https://github.com/helalaou/AeroTizen/pull/28) | Classic / custom clock layouts | Open, awaiting review and integration QA |
+| [#29](https://github.com/helalaou/AeroTizen/pull/29) | HDMI standby recognition | Open; **manual per-port keep-visible override**, persistence and D-pad settings now included; [fork CI success](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40120665625) |
+| [#30](https://github.com/helalaou/AeroTizen/pull/30) | Glass Settings, source dock and D-pad | Open; manual HDMI controls now categorised as Inputs; fork CI passed on `9466a47` |
+| [#33](https://github.com/helalaou/AeroTizen/pull/33) | Physical Samsung remote HOME binding | Open; guarded S90C native reference plus generic read-only survey; [fork CI success](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40117830776). **No universal firmware writer** |
+| [#34](https://github.com/helalaou/AeroTizen/pull/34) | Square / Rectangle cards, original brand banners | Open; **Samsung Square artwork positive/negative resolution cache** added, with original onload timing preserved; [fork CI success](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40121147162) |
+| [#35](https://github.com/helalaou/AeroTizen/pull/35) | Photographic weather wallpapers | Open; [fork CI success](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40114556880). Review image redistribution rights |
+
+All eight upstream PRs are unmerged and awaiting maintainer review as of
+24 October 2026. Upstream Actions report `action_required` and require
+maintainer handling; **fork CI success is not upstream acceptance or TV hardware QA**.
+
+### Completed but not yet submitted to upstream
+
+**Native Samsung Home / Live TV / YouTube handoffs:**
+`feat/launcher-v99256-native-handoffs` (head `4639146f64f1bb8dc45a67b3397c020cc04056f9`).
+This is the least-invasive upstream port of the V992.56 acknowledged
+`/leave` handoff for Cobalt YouTube, native Samsung Home and the native TV
+viewer, preserving the current Frame-aware `launcher/service/index.js`
+unchanged, with HDMI continuing to use upstream TVWindow. Sixteen offline
+tests were added; [fork CI passed all four jobs](https://github.com/motorgrid-ita/AeroTizen/actions/runs/40120364898).
+The previous upstream [#32](https://github.com/helalaou/AeroTizen/pull/32)
+was closed without merging and does not cover this prepared branch.
+**Opening the new upstream PR from the GitHub connector returned 403
+Resource not accessible by integration.** The code is ready for maintainer
+review, but no new upstream PR has been created for it.
+
+[Upstream compare / create PR](https://github.com/helalaou/AeroTizen/compare/main...motorgrid-ita:feat/launcher-v99256-native-handoffs?expand=1)
+
+Suggested title:
+`feat(launcher): preserve V992.56 native Samsung and Cobalt handoffs`
+
+### Genuine V992.56 coverage gaps / QA
+
+1. Reconcile the full categorised wallpaper Settings UI (photo / animated /
+   gradients / solid), with the new Glass Settings and D-pad categories.
+2. Independently review the remaining Home/All Apps DOM caching, focus, scroll
+   and transition optimisations from the protected reference; avoid reverting
+   existing upstream fixes. Square Samsung artwork discovery caching was added
+   to #34, but **this is not full UI performance parity**.
+3. Resolve integration conflicts between the independent PRs touching
+   `launcher/index.html`, `launcher/js/settings-ui.js` and other shared UI.
+   Individual passing suites do not establish a tested combined bundle.
+4. Verify actual TV behaviour of native YouTube, Samsung Home, Live TV, standby,
+   Frame Art Mode and D-pad focus using a disposable signed QA build with
+   rollback. **Never overwrite the tested installed V992.56** for these tests.
+5. Verify redistribution rights for bundled PNG/JPEG artwork in #34 and #35.
+6. Expand physical HOME support only via independently verified device model,
+   exact firmware, read-only baseline, tested restore, and owner approval.
+   Do not weaken the #33 firmware guard or copy S90C original values to
+   arbitrary Samsung TVs.
+
+### Hard rules
+
+- Keep `reference/v99256` unchanged as the tested reference.
+- Do not claim physical remote HOME is solved by HomeWatcher JavaScript alone.
+- Do not open duplicate PRs for #26-#30, #33-#35.
+- Keep the latest native-handoff branch independent of #33, and do not
+  transplant the retired experimental service rewrite.
+- Do not mark the official project port complete until the combined QA matrix
+  and actual TV tests pass.
+
+---
+
+
 **Active working branch:** `integration/v99256-upstream`  
 **Protected TV-tested reference:** `reference/v99256` at `c9c34bf0b8478bf1c156b41c0568f475f008d272`  
 **Upstream:** `helalaou/AeroTizen` (`main`)  
