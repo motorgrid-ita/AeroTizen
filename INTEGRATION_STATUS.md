@@ -47,7 +47,7 @@ Combined fork CI: [run #40124174636](https://github.com/motorgrid-ita/AeroTizen/
 
 1. Maintainer code review, upstream CI approval and merge decisions.
 2. Actual TV validation of Cobalt, Samsung Home, native channel controls, physical HOME/standby, HDMI reports and Frame Art Mode, on separately authorized isolated QA builds with rollback.
-3. TV visual/performance acceptance for the integrated UI and long-session cache behavior.
+3. TV visual/performance acceptance for the integrated UI and long-session cache behavior. The screenshot request in [the #26 review discussion](https://github.com/helalaou/AeroTizen/pull/26#issuecomment-6387988514) remains open; no rendered launcher screenshots were produced in this environment.
 4. Provenance/redistribution review for bundled PNG/JPEG assets; integrity alone does not establish licensing rights.
 5. Other model/firmware physical HOME support only after independent read-only baseline, exact guard and tested restore. Do not weaken #33 or turn it into a universal writer.
 
