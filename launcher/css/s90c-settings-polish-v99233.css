@@ -1,0 +1,102 @@
+/* S90C V992.33 — compact controls and safe remote-scroll viewport.
+   Scope only to Meteo/Orologio and Sorgenti; Home cards and Source dock unchanged. */
+#editor .s90c-settings-scroll {
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain;
+  padding-top: 38px !important;
+  padding-bottom: 78px !important;
+}
+#editor .s90c-status-content { padding-top: 2px; }
+#editor .s90c-status-card {
+  padding: 18px 20px 12px !important;
+  border-radius: 17px !important;
+  background: rgba(255,255,255,.032) !important;
+  border-color: rgba(255,255,255,.095) !important;
+  margin-bottom: 15px !important;
+}
+#editor .s90c-status-card-head { margin-bottom: 15px !important; padding-bottom: 10px !important; }
+#editor .s90c-status-card-head h4 { font-size: 24px !important; }
+#editor .s90c-status-card-head p { font-size: 15px !important; }
+#editor .s90c-status-field { margin-bottom: 15px !important; }
+#editor .s90c-status-field h3 { font-size: 18px !important; margin-bottom: 8px !important; }
+#editor .s90c-status-field .units {
+  width: 100% !important;
+  display: grid !important;
+  justify-content: start !important;
+  align-content: start !important;
+  gap: 8px !important;
+  padding: 2px 5px 7px !important;
+}
+#editor .s90c-status-field .pill.unit {
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 43px !important;
+  padding: 8px 12px !important;
+  border-radius: 12px !important;
+  font-size: 17px !important;
+  line-height: 1.18 !important;
+  white-space: normal !important;
+  text-align: center !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.035);
+}
+#editor .s90c-status-field #weather-display,
+#editor .s90c-status-field #weather-visibility,
+#editor .s90c-status-field #network-visibility {
+  grid-template-columns: repeat(2, 185px) !important;
+}
+#editor .s90c-status-field #units { grid-template-columns: repeat(3, 168px) !important; }
+#editor .s90c-status-field #time-formats { grid-template-columns: repeat(3, 184px) !important; }
+#editor .s90c-status-field #date-formats { grid-template-columns: repeat(3, 215px) !important; }
+#editor .s90c-status-field #aero-clock-styles { grid-template-columns: repeat(4, 166px) !important; }
+#editor .s90c-status-field #aero-clock-styles > .pill.unit {
+  min-height: 98px !important;
+  padding: 10px 8px !important;
+}
+#editor .s90c-status-field #aero-clock-styles .aero-clock-choice > small { font-size: 13px !important; }
+#editor .s90c-status-field #weather-location,
+#editor .s90c-status-field #weather-results { grid-template-columns: minmax(0, 670px) !important; }
+#editor .s90c-status-field #weather-location .pill.unit {
+  width: 100% !important;
+  max-width: 670px !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+#editor .s90c-status-field #weather-location > .pill.unit:not(.name-pill) {
+  width: auto !important; max-width: 310px !important;
+  justify-content: center !important;
+}
+#editor .s90c-status-field #weather-location > .name-pill {
+  width: 510px !important; max-width: 100% !important;
+}
+#editor .s90c-status-field #weather-location input { max-width: 345px !important; }
+/* Source visibility controls are compact, not full-width cards. */
+#editor .s90c-section-pane[data-section-pane="sources"] #live-tv-visibility,
+#editor .s90c-section-pane[data-section-pane="sources"] #input-visibility {
+  display: flex !important;
+  width: auto !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  margin: 0 0 30px !important;
+}
+#editor .s90c-section-pane[data-section-pane="sources"] #live-tv-visibility .pill.unit,
+#editor .s90c-section-pane[data-section-pane="sources"] #input-visibility .pill.unit {
+  flex: 0 0 auto !important;
+  min-width: 165px !important;
+  padding: 11px 20px !important;
+  font-size: 20px !important;
+  border-radius: 12px !important;
+}
+#editor .s90c-section-pane[data-section-pane="sources"] #input-visibility .pill.unit { min-width: 185px !important; }
+
+/* V992.34: optional exceptions to broken HDMI connection reports. */
+#editor .s90c-section-pane[data-section-pane="sources"] #hdmi-force-visibility {
+  display: flex !important; flex-wrap: wrap !important; gap: 10px !important;
+  margin: 0 0 26px !important; width: auto !important;
+}
+#editor .s90c-section-pane[data-section-pane="sources"] #hdmi-force-visibility .pill.unit {
+  flex: 0 0 auto !important; min-width: 220px !important;
+  padding: 10px 14px !important; font-size: 19px !important; border-radius: 12px !important;
+}
+#editor .s90c-section-pane[data-section-pane="sources"] .s90c-input-note {
+  font-size: 17px; color: rgba(255,255,255,.72); padding: 8px 4px;
+}

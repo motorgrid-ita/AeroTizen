@@ -1,0 +1,68 @@
+/* S90C V9.6: collapsed settings category menu and smoothly expandable detail pane. */
+#editor.s90c-settings-ready .s90c-settings-frame {
+  overflow: hidden !important;
+  transition: width .38s cubic-bezier(.22,.78,.25,1),
+              height .38s cubic-bezier(.22,.78,.25,1),
+              border-radius .30s ease !important;
+}
+#editor.s90c-settings-ready .s90c-settings-main {
+  transition: opacity .22s ease, transform .34s cubic-bezier(.2,.75,.3,1),
+              visibility .34s ease !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-frame {
+  width: 375px !important;
+  height: 650px !important;
+  border-radius: 24px !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-sidebar {
+  flex: 0 0 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  border-radius: 24px !important;
+  border-right: none !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-main {
+  flex: 0 0 0 !important;
+  min-width: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translate3d(-22px, 0, 0) !important;
+}
+#editor.s90c-settings-ready.s90c-menu-expanded .s90c-settings-main {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translate3d(0,0,0) !important;
+}
+#editor.s90c-settings-ready.s90c-menu-expanded .s90c-settings-sidebar {
+  flex: 0 0 330px !important;
+  min-width: 330px !important;
+}
+/* A white halo for every category, including Applicazioni. */
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused {
+  border: 2px solid #fff !important;
+  box-shadow: 0 0 0 3px #08090d, 0 0 0 7px rgba(255,255,255,.96),
+              0 0 24px 4px rgba(255,255,255,.22) !important;
+  background: rgba(255,255,255,.13) !important;
+  transform: translateZ(0) scale(1.012) !important;
+  z-index: 9 !important;
+}
+/* Override the original purple focus on all tiles inside Applicazioni. */
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.addapps.focused {
+  outline: none !important;
+  border: 2px solid rgba(255,255,255,.95) !important;
+  box-shadow: 0 0 0 3px #08090d, 0 0 0 7px #fff,
+              0 0 24px 5px rgba(255,255,255,.23), 0 15px 30px rgba(0,0,0,.35) !important;
+  opacity: 1 !important;
+  transform: translateZ(0) scale(1.022) !important;
+  z-index: 8 !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor.s90c-settings-ready .s90c-settings-frame,
+  #editor.s90c-settings-ready .s90c-settings-main {
+    transition-duration: .01ms !important;
+  }
+}

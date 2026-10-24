@@ -1,0 +1,96 @@
+/* AeroTizen S90C V992.56 — Glass focus geometry and single-border polish.
+   Purely visual. Keep the V992.54 Home geometry and V992.55 D-pad routing.
+   The long-OK action menu remains the reference: a single satin border,
+   one translucent moving plate, and readable options underneath. */
+
+/* Header shortcuts are round icon buttons; their moving plate must be round too. */
+.topbar-left > #s90c-action-focus { border-radius: 50% !important; }
+.topbar-left > #gear.focused,
+.topbar-left > #samsung-home-shortcut.focused {
+  border-color: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Category rows and their translating plate use the same curvature. */
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-settings-glider,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry {
+  border-radius: 17px !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused {
+  outline: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* IMPORTANT: choice buttons were still capsule pills (999px) while their
+   focus travelled inside a 15px rectangle. Unify actionable choices with
+   the 17px radius of the small popup, without resizing them or their rows. */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill,
+#editor.s90c-settings-ready .s90c-section-pane .aero-wall-tab,
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice {
+  border-radius: 17px !important;
+}
+/* Artwork and swatches keep their actual image-mask corner shape; the
+   translating plate reads the computed radius in settings-sections.js. */
+
+/* Unfocused selected items still have a single quiet border; that is NOT
+   a second focus outline. Focused options are painted only by the moving
+   plate; remove old theme outlines (including the high-specificity ones). */
+#editor.s90c-settings-ready .s90c-section-pane [data-key].focused,
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.on.focused,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill.focused,
+#editor.s90c-settings-ready .s90c-section-pane #input-names .name-pill.focused,
+#editor.s90c-settings-ready .s90c-section-pane .swatch.focused,
+#editor.s90c-settings-ready .s90c-section-pane .slider.focused,
+#editor.s90c-settings-ready .s90c-section-pane #escape.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.on.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.addapps.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.s90c-fireplace-setting.focused,
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice.focused,
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="wall"] .aero-wall-tab.focused,
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="wall"] .aero-wall-tab.on.focused,
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="wall"] #aero-weather-modes .aero-weather-choice.pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="wall"] #aero-weather-modes .aero-weather-choice.pill.unit.on.focused {
+  outline: none !important;
+  outline-offset: 0 !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color .10s linear, background-color .10s linear !important;
+}
+/* Preserve status fill and text contrast below the single movable outline.
+   Do not cover photo swatches with a flat background. */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill.focused,
+#editor.s90c-settings-ready .s90c-section-pane .aero-wall-tab.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused,
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice.focused {
+  background: rgba(236,242,255,.15) !important;
+  color: #fff !important;
+}
+/* The weather preview and wallpaper thumbnails retain their image background. */
+#editor.s90c-settings-ready .s90c-section-pane .swatch.focused {
+  background-blend-mode: normal !important;
+}
+/* Exactly one glider outline, matching the selected control's real radius.
+   No extra halo or second stroke even on switching from a picture to a button. */
+#editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider {
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: rgba(255,255,255,.89) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.19) !important;
+  transition: transform .15s ease-out, opacity .10s linear, border-radius .12s ease-out !important;
+}
+#editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider.no-motion {
+  transition: opacity .10s linear !important;
+}
+/* A focus tile inside the list must sit UNDER its glider. */
+#editor.s90c-settings-ready .s90c-section-pane [data-key].focused { z-index: 1 !important; }
+/* Never change hidden/unfocused controls or the main Home layouts. */
+@media (prefers-reduced-motion: reduce) {
+  #editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider {transition: none !important;}
+}

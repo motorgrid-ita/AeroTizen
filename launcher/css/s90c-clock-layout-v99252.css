@@ -1,0 +1,98 @@
+/* V992.52 — alternate ORIGINAL AeroTizen one-line header layout.
+   The large S90C clock remains the default. All overrides are strictly
+   scoped to the saved classic mode; no change to inputs, apps or watcher. */
+body.s90c-clock-classic > header.topbar {
+  height: 126px !important;
+  min-height: 126px !important;
+  padding-top: 0 !important;
+  align-items: center !important;
+}
+body.s90c-clock-classic .topbar-left { margin-top: 0 !important; }
+body.s90c-clock-classic .topbar-right {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  max-width: 660px;
+  min-width: 0;
+  margin: 0 0 0 auto;
+  text-align: right;
+}
+/* Overrides the V991 zero-width invisible original nodes. The actual
+   [hidden] state (user's weather/date/time setting) ALWAYS wins. */
+body.s90c-clock-classic .topbar-right > #weather:not([hidden]),
+body.s90c-clock-classic .topbar-right > #date:not([hidden]),
+body.s90c-clock-classic .topbar-right > #time:not([hidden]) {
+  display: flex !important;
+  position: static !important;
+  height: auto !important;
+  width: auto !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  white-space: nowrap;
+}
+body.s90c-clock-classic .topbar-right > #weather[hidden],
+body.s90c-clock-classic .topbar-right > #date[hidden],
+body.s90c-clock-classic .topbar-right > #time[hidden] { display: none !important; }
+body.s90c-clock-classic .topbar-right > #weather {
+  font-size: 26px !important;
+  gap: 8px !important;
+  min-width: 0;
+  max-width: 260px;
+}
+body.s90c-clock-classic .topbar-right > #weather svg {
+  width: 36px !important; height: 36px !important; flex: 0 0 36px;
+}
+body.s90c-clock-classic .topbar-right > #weather b {flex: 0 0 auto;}
+body.s90c-clock-classic .topbar-right > #weather span {
+  font-size: 22px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  max-width: 112px;
+  min-width: 0;
+}
+body.s90c-clock-classic .topbar-right > #date {
+  font-size: 27px !important; font-weight: 400 !important;
+}
+body.s90c-clock-classic .topbar-right > #time {
+  font-size: 29px !important; font-weight: 700 !important;
+  font-variant-numeric: tabular-nums;
+  flex: 0 0 auto;
+}
+body.s90c-clock-classic #aero-v991-widget { display: none !important; }
+/* Keep the app focus/scroll threshold and screen-fixed mask consistent with
+   the shorter header, without changing card dimensions or D-pad ordering. */
+body.s90c-clock-classic #s90c-home-viewport > main#rows { margin-top: 132px !important; }
+body.s90c-clock-classic #s90c-home-viewport.s90c-scrolled {
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0px, transparent 92px, rgba(0,0,0,.60) 150px, #000 190px);
+  mask-image: linear-gradient(to bottom,
+    transparent 0px, transparent 92px, rgba(0,0,0,.60) 150px, #000 190px);
+}
+/* The 4 custom-clock variants are irrelevant to the ORIGINAL compact layout.
+   Hide the whole row and keep it out of remote navigation (see sections.js). */
+#editor.s90c-settings-ready .s90c-status-field #aero-clock-layouts {
+  grid-template-columns: repeat(2,minmax(0,1fr));
+}
+#editor.s90c-settings-ready #aero-clock-layouts .aero-layout-choice {
+  min-height: 86px !important;
+  padding: 14px 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+#editor.s90c-settings-ready #aero-clock-layouts .aero-layout-choice strong {
+  font-size: 23px; font-weight: 600; line-height: 1.12;
+}
+#editor.s90c-settings-ready #aero-clock-layouts .aero-layout-choice small {
+  font-size: 16px; font-weight: 400; line-height: 1.12;
+}
+body.s90c-clock-classic #editor.s90c-settings-ready .s90c-clock-style-field {
+  display: none !important;
+}

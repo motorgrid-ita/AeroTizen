@@ -1,0 +1,45 @@
+/* AeroTizen S90C V9.9 — rendering di menu reattivo su Tizen 9.
+   Il pannello cambia larghezza una volta sola al comando OK; niente
+   animazione delle dimensioni, che provocava layout/repaint a ogni frame.
+   Mantiene le animazioni di apertura/chiusura dell'intero popup V9.5.1. */
+#editor.s90c-settings-ready .s90c-settings-frame,
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-frame,
+#editor.s90c-settings-ready.s90c-menu-expanded .s90c-settings-frame {
+  transition: none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-sidebar {
+  transition: none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-main {
+  transition: opacity .11s ease-out !important;
+  transform: none !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-main {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: none !important;
+}
+#editor.s90c-settings-ready.s90c-menu-expanded .s90c-settings-main {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+/* Nessuna seconda animazione dopo aver aggiornato la sezione: focus istantaneo. */
+#editor .s90c-section-pane.s90c-pane-arriving,
+#editor .s90c-settings-active-title.s90c-title-arriving {
+  animation: none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry {
+  transition: background-color .07s linear, border-color .07s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused {
+  /* Preserva il bagliore bianco, evitando l'animazione del box-shadow. */
+  transition: background-color .07s linear !important;
+}
+/* Nessun smooth scroll accodato durante pressioni rapide sul telecomando. */
+#editor .s90c-settings-menu, #editor .s90c-settings-scroll {
+  scroll-behavior: auto !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor.s90c-settings-ready .s90c-settings-main { transition: none !important; }
+}

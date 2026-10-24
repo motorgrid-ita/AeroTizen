@@ -1,0 +1,231 @@
+/* AeroTizen S90C V992.15 – SOLO BANNER APP E SCROLL HOME.
+   Nessuna modifica al dock Sorgenti, impostazioni, TV nativa o HomeWatcher.
+   Usiamo un semplice mask compositato: niente backdrop-filter e niente loop. */
+
+/* Mantiene la stessa coordinata iniziale delle app: il vecchio header occupava
+   325px nel flusso, adesso il suo spazio e' riservato dentro la viewport. */
+#s90c-home-viewport {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+#s90c-home-viewport > main#rows {
+  position: relative;
+  z-index: 1;
+  margin-top: 325px;
+}
+/* Header piu' in alto delle app, anche quando una tessera riceve il focus. */
+body > .topbar {
+  position: relative;
+  z-index: 4;
+}
+
+/* La dissolvenza e' ANCORATA allo schermo, non al contenuto in movimento.
+   A riposo nessuna maschera: la prima riga resta nitida. Durante lo scroll
+   la riga che risale svanisce progressivamente dietro orologio/pulsanti. */
+#s90c-home-viewport.s90c-scrolled {
+  -webkit-mask-image: linear-gradient(to bottom,
+    transparent 0px,
+    transparent 160px,
+    rgba(0,0,0,.24) 240px,
+    rgba(0,0,0,.63) 310px,
+    #000 385px);
+  mask-image: linear-gradient(to bottom,
+    transparent 0px,
+    transparent 160px,
+    rgba(0,0,0,.24) 240px,
+    rgba(0,0,0,.63) 310px,
+    #000 385px);
+}
+
+/* Brand rettangolare: le app senza loghi orizzontali non hanno piu' piccole
+   icone quadrate e nomi troncati. RaiPlay e i banner vettoriali restano intatti. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-full-banner {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px 30px !important;
+  gap: 6px !important;
+  text-align: center !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .name {
+  display: block !important;
+  flex: 0 1 auto !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  font-family: 'SamsungOne','Roboto','Helvetica Neue',Arial,sans-serif !important;
+  font-size: 66px !important;
+  font-weight: 680 !important;
+  letter-spacing: -.9px !important;
+  line-height: 1.06 !important;
+  text-align: center !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  overflow-wrap: break-word;
+  text-shadow: 0 3px 12px rgba(0,0,0,.18) !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-long .name { font-size: 51px !important; }
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-xlong .name { font-size: 42px !important; }
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .s90c-banner-kicker {
+  font-family: 'SamsungOne','Roboto',Arial,sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .4px;
+  color: rgba(255,255,255,.85);
+  text-shadow: 0 2px 8px rgba(0,0,0,.14);
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .name { font-size: 49px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-long .name { font-size: 39px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-xlong .name { font-size: 33px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .s90c-banner-kicker { font-size: 18px; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .name { font-size: 38px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-long .name { font-size: 30px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner.s90c-banner-xlong .name { font-size: 26px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.s90c-full-banner .s90c-banner-kicker { font-size: 15px; }
+
+@media (prefers-reduced-motion: reduce) {
+  #s90c-home-viewport > main#rows { transition: none !important; }
+}
+
+/* V992.16 – ONLY HOME Brand rectangular app tiles. No change to Settings,
+   Sorgenti Glass, scrolling, source management or native Samsung integration. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand #grid.grid3 > .tile.fire {
+  border-radius: 27px !important;
+  transform: translateZ(0) scale(.955) !important;
+  transition: transform .19s ease-out, box-shadow .19s ease-out !important;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.focused,
+html.v9-brand #grid.grid3 > .tile.fire.focused {
+  transform: translateZ(0) scale(1.055) !important;
+  box-shadow: 0 0 0 4px #080b10, 0 0 0 8px #fff, 0 18px 42px rgba(0,0,0,.48) !important;
+  z-index: 7 !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-official-banner {
+  padding: 0 !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-official-banner > .s90c-official-banner-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  flex: 0 0 100% !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  pointer-events: none !important;
+}
+/* No blank fallback if the asset fails to load; app remains launchable. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-official-banner > .name {
+  max-width: 88% !important;
+  font-size: 45px !important;
+  color: #ffffff;
+  text-align: center !important;
+}
+
+
+/* =======================================================================
+   AeroTizen S90C V992.18 — FOCUS LEGGERO + FRECCE DI RIORDINO VISIBILI
+   Intervento solo CSS nella Home Brand: nessuna immagine o JS modificato.
+   Conserva: 95.5% a riposo; ombra 3D; 3/4/5 colonne; sfumatura scroll.
+   ======================================================================= */
+
+/* Profondita' ottica con ombre statiche piu' leggere: trasformazioni 2D
+   compositabili, nessuna prospettiva/rotazione o box-shadow animato. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand #grid.grid3 > .tile.fire {
+  transform: scale(.955) !important;
+  transform-origin: center center !important;
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,.11),
+    0 11px 21px rgba(0,0,0,.30) !important;
+  transition: transform .17s cubic-bezier(.20,.72,.25,1) !important;
+}
+/* Luce superficiale tenue, statica: nessun layer in animazione. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card::before,
+html.v9-brand #grid.grid3 > .tile.fire::before {
+  content: '';
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,.075) 0%, transparent 34%, rgba(0,0,0,.07) 100%);
+  pointer-events: none;
+  z-index: 2;
+  opacity: .8;
+  transition: none !important;
+}
+/* Focus premium: alzata + ingrandimento, bagliore e ombra inferiore;
+   il bagliore viene applicato solo all'elemento selezionato. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.focused,
+html.v9-brand #grid.grid3 > .tile.fire.focused {
+  transform: translateY(-7px) scale(1.065) !important;
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.94),
+    0 0 13px 3px rgba(248,250,255,.23),
+    0 19px 30px rgba(0,0,0,.49),
+    0 37px 51px rgba(0,0,0,.32) !important;
+  z-index: 8 !important;
+}
+/* FIX HOLD-OK: il file di RaiPlay e i 7 PNG nuovi erano clippati dal
+   parent overflow:hidden, quindi le frecce posizionate fuori sparivano.
+   Durante il riordino rendiamo visibili i figli, lasciando arrotondata
+   l'immagine dentro alla tessera. Nessun intervento JS di navigazione. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.moving,
+html.v9-brand #grid.grid3 > .tile.fire.moving {
+  overflow: visible !important;
+  transform: translateY(-7px) scale(1.065) !important;
+  z-index: 30 !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.s90c-official-banner.moving > .s90c-official-banner-image {
+  border-radius: inherit !important;
+}
+/* Supporto RaiPlay: mantiene sempre il logo identico e la cornice arrotondata. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.raiplay-official.moving > .raiplay-official-image {
+  border-radius: 0 !important;
+}
+/* Frecce esterne, sopra immagini e lieve glow; ridotte animazioni continue. */
+html.v9-brand #grid.grid3 > .tile.moving > .move-arrow {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 40 !important;
+  animation: nudge .92s ease-in-out infinite alternate !important;
+  box-shadow: 0 5px 12px rgba(0,0,0,.50) !important;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+  html.v9-brand #grid.grid3 > .tile.fire {
+    transition: none !important;
+  }
+}
+
+/* V992.19: reintroduce the subtle arrow nudge only while rearranging.
+   Arrows are temporary elements and disappear after confirming with OK. */
+@media (prefers-reduced-motion: reduce) {
+  html.v9-brand #grid.grid3 > .tile.moving > .move-arrow {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,7 @@
+/* V992.31 — adapt header visibility controls (#21) to our V991 widget. */
+body.s90c-hide-time #aero-v991-widget .aero-v991-digits {display:none !important;}
+body.s90c-hide-weather #aero-v991-widget .aero-v991-weather,
+body.s90c-hide-weather #aero-v991-widget .aero-v991-city {display:none !important;}
+body.s90c-hide-network #network,
+.topbar-left #network[hidden] {display:none !important;}
+/* Date remains independent through the existing dateFormat=none logic. */

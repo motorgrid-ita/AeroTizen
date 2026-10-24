@@ -1,0 +1,15 @@
+/* AeroTizen S90C V992.51 — efficient focus highlight for Samsung square cards.
+   The previous 36px soft blur covered a large repaint region on every D-pad
+   movement. Keep the high-contrast focus ring and slight zoom with no heavy blur.
+   No overrides for rectangular banners, settings or source dock. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.focused {
+  box-shadow: 0 0 0 4px #0a0d12, 0 0 0 9px #fff !important;
+  transform: translate3d(0,0,0) scale(1.025) !important;
+  transition: transform .12s ease-out !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.v9-classic #grid.grid3 > .tile.s90c-standard-card.focused {
+    transform: none !important;
+    transition: none !important;
+  }
+}

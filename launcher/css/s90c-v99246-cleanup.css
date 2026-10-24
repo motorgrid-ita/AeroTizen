@@ -1,0 +1,31 @@
+/* AeroTizen S90C V992.46 - lightweight tab switch and aligned settings typography. */
+/* The previous two-stage transform exit + transform entry is replaced with a
+   single short opacity reveal. DOM/decoration stays cached between tab switches. */
+#grid.grid3.s90c-tab-enter { animation: s90cTabQuickReveal .13s ease-out both; }
+@keyframes s90cTabQuickReveal { from { opacity: .70; } to { opacity: 1; } }
+/* All Apps contains only the app grid, and there is no source row in the D-pad. */
+body.s90c-all-apps .inputs-wrap { display: none !important; }
+/* In Aspetto Home, the original two status choices use normal-size buttons. */
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="home"] #network-visibility {
+  display: flex !important; flex-wrap: nowrap; gap: 12px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="home"] #network-visibility > .pill.unit {
+  font-size: 20px !important; min-height: 54px; min-width: 155px;
+}
+/* Match typography in Meteo/Orologio to other settings sections.
+   Preserve grids, dimensions, scroll and focus outlines. */
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-field h3 {
+  font-family: inherit !important; font-size: 22px !important; font-weight: 550 !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-field .pill.unit {
+  font-family: inherit !important; font-size: 20px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card-head h4 {
+  font-family: inherit !important; font-size: 25px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] #aero-clock-styles .aero-clock-choice > small {
+  font-size: 17px !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  #grid.grid3.s90c-tab-enter { animation: none !important; }
+}

@@ -1,0 +1,317 @@
+/* V992.21 BASE — PR #11 square Samsung artwork (Home + Tutte le app only). */
+/* PR #11 geometry: BIG=420px (3 cols), SMALL=332px (5 cols).
+   Keep the user's optional 4-column layout at 420px, all centered. */
+html.v9-classic #grid.grid3 {
+  display:flex !important;flex-wrap:wrap !important;
+  width:1792px !important;
+  --s90c-card-size:420px;
+  column-gap:48px !important;row-gap:36px !important;
+  align-content:flex-start !important;justify-content:center !important;
+}
+html.v9-classic.v9-columns-4 #grid.grid3 {
+  column-gap:32px !important;
+  justify-content:center !important;
+}
+html.v9-classic.v9-columns-5 #grid.grid3 {
+  --s90c-card-size:332px;
+  column-gap:32px !important;row-gap:30px !important;
+  justify-content:center !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card,
+html.v9-classic #grid.grid3 > .tile.fire {
+  position:relative !important;
+  width:var(--s90c-card-size) !important;
+  height:var(--s90c-card-size) !important;
+  min-width:0 !important; flex:0 0 auto !important;
+  border-radius:20px !important;
+  overflow:hidden; padding:0 !important; gap:0 !important;
+  display:flex !important;flex-direction:column !important;
+  justify-content:center !important;align-items:center !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card > .s90c-samsung-artwork {
+  position:absolute;inset:0;display:block;width:100%;height:100%;
+  object-fit:contain;pointer-events:none;border-radius:inherit;z-index:1;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-samsung-ready {background:transparent !important;}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback[hidden] {display:none !important;}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback {
+  display:flex;flex-direction:column;gap:7px;align-items:center;justify-content:center;
+  width:100%;height:100%;padding:8px;text-align:center;min-width:0;min-height:0;
+}
+/* ICONA fallback: Simple Icons where available; then Tizen icon + name. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .name,
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card[data-s90c-artwork-state="missing"] .s90c-app-fallback > .name {
+  display:block !important;
+  flex:0 1 auto;
+  max-width:94% !important;
+  margin:0 !important;
+  padding:12px !important;
+  font-size:clamp(28px,2.15vw,42px) !important;
+  line-height:1.18 !important;
+  font-weight:600 !important;
+  text-align:center !important;
+  overflow-wrap:break-word;
+  color:inherit !important;
+  text-shadow:0 2px 12px rgba(0,0,0,.28);
+}
+html.v9-classic #grid.grid3 > .tile.focused {
+  box-shadow:0 0 0 4px #0a0d12,0 0 0 9px #fff,0 15px 36px rgba(0,0,0,.50) !important;
+  transform:translateZ(0) scale(1.035) !important;
+}
+html.v9-classic #grid.grid3 > .tile.moving {overflow:visible !important;}
+html.v9-classic #grid.grid3 > .tile.moving > .s90c-samsung-artwork {border-radius:20px;}
+html.v9-classic #grid.grid3 > .tile.moving > .move-arrow {z-index:10 !important;visibility:visible !important;}
+/* V992.26 — HOME / TUTTE LE APP: same single-pane glass language as Sorgenti.
+   Header remains fixed. Four-row remote navigation and click handlers unchanged. */
+body > header.topbar { position:relative; z-index:4; }
+header.topbar > #s90c-view-tabs {
+  position:absolute; top:35px; left:50%; transform:translate3d(-50%,0,0);
+  display:flex; align-items:stretch; justify-content:center;
+  box-sizing:border-box; gap:0; margin:0; padding:7px;
+  min-height:76px; isolation:isolate; overflow:visible;
+  border:1px solid rgba(255,255,255,.30);
+  border-radius:28px;
+  background:linear-gradient(165deg,
+    rgba(255,255,255,.19) 0%,
+    rgba(60,68,78,.43) 22%,
+    rgba(20,25,35,.62) 63%,
+    rgba(15,20,28,.72) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24),
+    inset 0 -1px 0 rgba(255,255,255,.09),
+    0 13px 32px rgba(0,0,0,.27);
+  -webkit-backdrop-filter:blur(8px) saturate(112%);
+  backdrop-filter:blur(8px) saturate(112%);
+  white-space:nowrap;
+}
+header.topbar > #s90c-view-tabs::before {
+  content:''; position:absolute; top:1px; left:15px; right:15px;
+  height:46%; border-radius:27px 27px 45% 45%;
+  background:linear-gradient(to bottom,rgba(255,255,255,.085),transparent);
+  pointer-events:none; z-index:0;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab {
+  box-sizing:border-box; position:relative; z-index:1;
+  display:flex; flex:0 0 auto; justify-content:center; align-items:center;
+  gap:12px; min-width:150px; height:60px; padding:0 25px;
+  border:1px solid transparent; border-radius:21px;
+  background:transparent; box-shadow:none;
+  font-family:'SamsungOne','Roboto',Arial,sans-serif;
+  color:rgba(234,239,247,.78); font-size:25px; font-weight:550;
+  letter-spacing:.15px; line-height:1;
+  cursor:pointer; -webkit-transition:background-color .15s ease,color .15s ease,box-shadow .15s ease;
+  transition:background-color .15s ease,color .15s ease,box-shadow .15s ease;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab:last-child { min-width:213px; }
+header.topbar > #s90c-view-tabs #s90c-tab-home::after {
+  content:''; position:absolute; right:-1px; top:16px; bottom:16px; width:1px;
+  background:linear-gradient(to bottom,transparent,rgba(255,255,255,.23),transparent);
+  pointer-events:none;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab .s90c-tab-icon {
+  width:26px; height:26px; flex:0 0 26px;
+  display:block; fill:none; color:inherit; stroke:currentColor; stroke-width:1.65;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab.on {
+  color:#fff;
+  border-color:rgba(255,255,255,.26);
+  background:linear-gradient(170deg,rgba(255,255,255,.23),rgba(255,255,255,.09) 47%,rgba(255,255,255,.04));
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.27),0 3px 12px rgba(0,0,0,.13);
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab.on::after { opacity:0; }
+header.topbar > #s90c-view-tabs .s90c-view-tab.focused {
+  z-index:3; color:#fff; border:2px solid rgba(255,255,255,.96) !important;
+  background:linear-gradient(170deg,rgba(255,255,255,.28),rgba(255,255,255,.13) 45%,rgba(255,255,255,.06)) !important;
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.32),0 0 0 2px rgba(255,255,255,.15),0 6px 16px rgba(0,0,0,.25) !important;
+  transform:translate3d(0,-1px,0) scale(1.018);
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab.focused::after { opacity:0; }
+@media (prefers-reduced-motion:reduce) {
+  header.topbar > #s90c-view-tabs .s90c-view-tab { transition:none !important; }
+}
+#weather-results .pill {max-width:800px;margin:6px 6px 6px 0;font-size:23px;}
+
+/* V992.25 — Samsung source artwork or coloured text tile. No native icon. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card:not(.s90c-samsung-ready) {
+  background:var(--s90c-brand-bg,#252c39) !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card > img.s90c-samsung-artwork {
+  object-fit:cover !important;
+  transform-origin:50% 50%;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.moving > img.s90c-samsung-artwork {
+  clip-path:inset(0 round 20px);
+}
+
+
+/* V992.27 — one composited glass highlight glides between HOME / TUTTE LE APP. */
+header.topbar > #s90c-view-tabs #s90c-tab-indicator,
+header.topbar > #s90c-view-tabs #s90c-tab-focus-indicator {
+  position:absolute; left:0; top:7px; height:60px; box-sizing:border-box;
+  border-radius:21px; pointer-events:none;
+  -webkit-backface-visibility:hidden; backface-visibility:hidden;
+  transition: transform .23s cubic-bezier(.22,.75,.25,1),width .23s cubic-bezier(.22,.75,.25,1),opacity .14s ease;
+}
+header.topbar > #s90c-view-tabs #s90c-tab-indicator {
+  z-index:1;
+  border:1px solid rgba(255,255,255,.28);
+  background:linear-gradient(170deg,rgba(255,255,255,.25),rgba(255,255,255,.10) 50%,rgba(255,255,255,.035));
+  box-shadow:inset 0 1px 1px rgba(255,255,255,.28),0 4px 13px rgba(0,0,0,.13);
+}
+header.topbar > #s90c-view-tabs #s90c-tab-focus-indicator {
+  z-index:4; opacity:0;
+  border:2px solid rgba(255,255,255,.94);
+  box-shadow:0 0 0 2px rgba(255,255,255,.12),0 5px 16px rgba(0,0,0,.25);
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab {
+  z-index:2;
+  transition:color .19s ease,transform .19s cubic-bezier(.2,.75,.3,1) !important;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab.on,
+header.topbar > #s90c-view-tabs .s90c-view-tab.focused {
+  background:transparent !important;
+  border:1px solid transparent !important;
+  box-shadow:none !important;
+}
+header.topbar > #s90c-view-tabs .s90c-view-tab.focused {
+  transform:translate3d(0,-1px,0) scale(1.015);
+}
+/* The grid animates as a whole — no per-app animations or heavy live blur. */
+#grid.grid3.s90c-page-out-left,
+#grid.grid3.s90c-page-out-right {
+  opacity:0;
+  transition:opacity .085s ease-in,transform .085s ease-in;
+  pointer-events:none;
+}
+#grid.grid3.s90c-page-out-left {transform:translate3d(-12px,0,0);}
+#grid.grid3.s90c-page-out-right {transform:translate3d(12px,0,0);}
+#grid.grid3.s90c-page-in-right {
+  animation:s90cEnterRight .20s cubic-bezier(.17,.7,.23,1) both;
+}
+#grid.grid3.s90c-page-in-left {
+  animation:s90cEnterLeft .20s cubic-bezier(.17,.7,.23,1) both;
+}
+@keyframes s90cEnterRight {from{opacity:0;transform:translate3d(17px,0,0);}to{opacity:1;transform:translate3d(0,0,0);}}
+@keyframes s90cEnterLeft {from{opacity:0;transform:translate3d(-17px,0,0);}to{opacity:1;transform:translate3d(0,0,0);}}
+@media (prefers-reduced-motion:reduce) {
+  header.topbar > #s90c-view-tabs #s90c-tab-indicator,
+  header.topbar > #s90c-view-tabs #s90c-tab-focus-indicator,
+  header.topbar > #s90c-view-tabs .s90c-view-tab {transition:none !important;}
+  #grid.grid3.s90c-page-out-left,#grid.grid3.s90c-page-out-right {transition:none !important;}
+  #grid.grid3.s90c-page-in-right,#grid.grid3.s90c-page-in-left {animation:none !important;}
+}
+
+
+/* V992.28 — upstream PR #11 fallback visuals, only in ICONA. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback {
+  box-sizing:border-box; gap:19px !important; padding:22px !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .s90c-simpleicons-mark {
+  display:block; flex:0 0 auto; width:48%; height:48%;
+  max-width:200px; max-height:200px;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .s90c-simpleicons-mark > svg {
+  display:block; width:100%; height:100%; overflow:visible;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback.s90c-logo-only > .s90c-simpleicons-mark {
+  width:73%; height:63%; max-width:290px; max-height:245px;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback.s90c-large-logo > .s90c-simpleicons-mark {
+  width:85%; height:68%; max-width:340px; max-height:270px;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .s90c-native-fallback-icon {
+  display:block; flex:0 0 auto; width:54%; height:54%; max-width:220px; max-height:220px;
+  object-fit:contain; border-radius:14px;
+}
+/* YouTube and Spotify have dark labels on light background, like upstream. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .name {
+  color:inherit !important;
+}
+
+
+
+/* V992.29 — ICONA: grandi artwork e fallback; nessuna modifica a BOX Premium.
+ * I PNG Samsung riempiono la card, il Simple Icons fallback non e' piu'
+ * limitato a 200px su una tile da 420px. Manteniamo la proporzione SVG. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card > img.s90c-samsung-artwork {
+  position:absolute !important; top:0 !important; left:0 !important;
+  width:100% !important; height:100% !important; max-width:none !important; max-height:none !important;
+  display:block !important; object-fit:cover !important; object-position:center center !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback {
+  gap:7px !important; padding:9px !important;
+}
+/* Con etichetta, occupa la maggior parte della tessera lasciando posto al nome. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .s90c-simpleicons-mark {
+  width:86% !important; height:78% !important;
+  max-width:none !important; max-height:none !important;
+  min-width:0 !important; min-height:0 !important;
+  flex:0 1 auto !important;
+}
+/* Marchi senza nome: tutto il quadrato disponibile, senza ritaglio dell'SVG. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback.s90c-logo-only > .s90c-simpleicons-mark,
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback.s90c-large-logo > .s90c-simpleicons-mark {
+  width:95% !important; height:92% !important;
+  max-width:none !important; max-height:none !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .s90c-native-fallback-icon {
+  width:78% !important; height:74% !important;
+  max-width:none !important; max-height:none !important;
+  min-width:0 !important; min-height:0 !important;
+  flex:0 1 auto !important; object-fit:contain !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-app-fallback > .name {
+  padding:0 !important; flex:0 1 auto;
+}
+
+
+/* V992.30 — Tizen iconPath fallback as a full-bleed tile, WITHOUT a second
+   coloured frame or duplicated name. Limited to standard ICONA grid.
+   Samsung cache artwork always takes priority (fallback itself is hidden).
+   Logo-less/error cases retain the existing coloured text fallback. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-native-ready:not(.s90c-samsung-ready) {
+  background:#151923 !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-native-ready .s90c-app-fallback:not([hidden]) {
+  box-sizing:border-box !important; position:absolute !important;
+  inset:0 !important; width:100% !important; height:100% !important;
+  padding:0 !important; margin:0 !important; gap:0 !important;
+  display:block !important; border-radius:inherit !important; overflow:hidden !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-native-ready .s90c-app-fallback > img.s90c-native-fallback-icon {
+  box-sizing:border-box !important; display:block !important;
+  position:absolute !important; top:0 !important; left:0 !important;
+  width:100% !important; height:100% !important;
+  max-width:none !important; max-height:none !important;
+  min-width:0 !important; min-height:0 !important;
+  object-fit:cover !important; object-position:center center !important;
+  border:0 !important; border-radius:0 !important; padding:0 !important; margin:0 !important;
+  transform-origin:50% 50%; pointer-events:none;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-native-ready .s90c-app-fallback > .name {
+  display:none !important;
+}
+
+/* V992.31: NO 2.7x automatic zoom, never crop artwork or native icons. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card { overflow:hidden !important; }
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card > img.s90c-samsung-artwork,
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.moving > img.s90c-samsung-artwork {
+  box-sizing:border-box !important; inset:0 !important;
+  width:100% !important; height:100% !important;
+  object-fit:contain !important; object-position:center center !important;
+  max-width:100% !important; max-height:100% !important;
+  transform:none !important; transform-origin:center center !important;
+  border-radius:20px !important;
+}
+/* Keep reorder arrows visible: the art remains clipped independently. */
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.moving { overflow:visible !important; }
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.moving > img.s90c-samsung-artwork {
+  clip-path:inset(0 round 20px) !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card.s90c-native-ready .s90c-app-fallback > img.s90c-native-fallback-icon {
+  width:100% !important; height:100% !important;
+  object-fit:contain !important; object-position:center center !important;
+  transform:none !important; border-radius:20px !important;
+}
+html.v9-classic #grid.grid3 > .tile.s90c-standard-card .s90c-simpleicons-mark > svg {
+  overflow:hidden !important; max-width:100% !important; max-height:100% !important;
+}

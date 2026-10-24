@@ -1,0 +1,284 @@
+/* AeroTizen S90C V9.1: brand banners reproduce the original AeroTizen visual language.
+   V8 with 3 columns keeps its existing CSS pixel-for-pixel. */
+
+/* Original V8: expand the grid to 4/5 columns, leaving icons and focus effects intact. */
+html.v9-classic.v9-columns-4 #grid.grid3,
+html.v9-classic.v9-columns-5 #grid.grid3 {
+  justify-content: space-between !important;
+  column-gap: 20px !important;
+}
+html.v9-classic.v9-columns-4 #grid.grid3 > .tile,
+html.v9-classic.v9-columns-5 #grid.grid3 > .tile {
+  width: var(--v9-v8-cell-width) !important;
+  min-width: 0 !important;
+}
+
+/* Brand style: exact original brand colours/logo data, scaled to the selected columns. */
+html.v9-brand #grid.grid3 {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  align-content: flex-start !important;
+  column-gap: 24px !important;
+  row-gap: 24px !important;
+  width: 1792px !important;
+  margin: 8px 0 32px !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand #grid.grid3 > .tile.fire {
+  position: relative !important;
+  width: var(--v9-brand-cell-width) !important;
+  height: var(--v9-brand-cell-height) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  flex: 0 0 auto !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  padding: 12px !important;
+  gap: 14px !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: translateZ(0) !important;
+  transition: transform .17s ease-out, box-shadow .17s ease-out !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card {
+  background: var(--v9-brand-bg) !important;
+}
+html.v9-brand #grid.grid3 > .tile.fire {
+  background: radial-gradient(110% 120% at 50% 110%, #ff8a1e 0%, #c2380d 35%, #3a0d04 70%, #120402 100%) !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card .logo {
+  display: block !important;
+  width: min(31%, 150px) !important;
+  height: 58% !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+  border-radius: 0 !important;
+  transform: none !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.logo-only .logo {
+  width: 68% !important;
+  height: 70% !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.logo-big .logo {
+  width: 88% !important;
+  height: 85% !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card .name {
+  display: block !important;
+  flex: 0 1 auto !important;
+  font-size: 39px !important;
+  font-weight: 600 !important;
+  line-height: 1.12 !important;
+  max-width: 62% !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card .name { font-size: 30px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card .name { font-size: 23px !important; }
+html.v9-brand #grid.grid3 > .tile.v9-brand-card .v9-brand-fallback {
+  display: flex; flex: 0 0 auto; align-items: center; justify-content: center;
+  width: 25%; height: 62%; font-weight: 800; font-size: 50px; color: #fff;
+}
+html.v9-brand #grid.grid3 > .tile.fire { flex-direction: row !important; }
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon {
+  width: 34% !important;
+  height: 72% !important;
+  min-width: 0 !important;
+  flex: 0 0 34% !important;
+  transform: none !important;
+  border-radius: 14px !important;
+  box-shadow: none !important;
+}
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon svg { width: 100% !important; height: 100% !important; }
+html.v9-brand #grid.grid3 > .tile.fire .name {
+  font-size: 34px !important;
+  line-height: 1.12 !important;
+  height: auto !important;
+  max-width: 58% !important;
+  white-space: normal !important;
+  text-align: left !important;
+  margin: 0 !important;
+}
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.fire .name { font-size: 25px !important; }
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.focused,
+html.v9-brand #grid.grid3 > .tile.fire.focused {
+  transform: translateZ(0) scale(1.035) !important;
+  box-shadow: 0 0 0 4px #080b10, 0 0 0 9px #fff, 0 18px 40px rgba(0,0,0,.55) !important;
+  z-index: 6 !important;
+}
+html.v9-brand #grid.grid3 > .tile.fire.focused .fireplace-icon {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* BOX labels remain visible. ICONA shows text only when artwork is missing. */
+/* Settings: visible selected state and a focused control remain readable. */
+#v9-mode-picks .pill, #v9-col-picks .pill {
+  font-size: 24px; padding: 14px 22px;
+}
+#v9-mode-picks .pill.on, #v9-col-picks .pill.on.on {
+  color: #fff !important; background: #303c4e !important;
+}
+#v9-mode-picks .pill.focused, #v9-col-picks .pill.focused.focused {
+  color: #fff !important;
+  box-shadow: 0 0 0 3px #0d1118, 0 0 0 7px #fff !important;
+}
+
+/* ===========================================================================
+   S90C V9.2 – ORIGINAL AEROTIZEN BANNERS
+   Reference: helalaou/AeroTizen launcher/css/style.css and screenshots/move.png
+   Intentionally applies ONLY to Brand rettangolare (v9-brand).
+   V8 classic, settings, native Home, TV and HomeWatcher are untouched.
+   No remotely downloaded fonts, images or resources.
+   =========================================================================== */
+html.v9-brand .topbar,
+html.v9-brand main {
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+  font-weight: 400;
+}
+html.v9-brand #grid.grid3 {
+  gap: 30px 32px !important;
+  margin: 6px 0 40px !important;
+  align-content: flex-start !important;
+  justify-content: flex-start !important;
+}
+/* Exact source ratio at 3 columns: 576 × 300. Scale uniformly at 4/5. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand #grid.grid3 > .tile.fire {
+  width: 576px !important;
+  height: 300px !important;
+  border-radius: 10px !important;
+  padding: 0 14px !important;
+  gap: 22px !important;
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.fire {
+  width: 424px !important;
+  height: 221px !important;
+  gap: 16px !important;
+}
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.fire {
+  width: 332.8px !important;
+  height: 173px !important;
+  gap: 13px !important;
+}
+/* Logo sizes taken from original AeroTizen CSS at 3 columns. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card .logo {
+  width: 150px !important;
+  height: 150px !important;
+  min-width: 0 !important;
+  flex: 0 0 auto !important;
+  object-fit: contain !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.logo-only .logo {
+  width: 380px !important;
+  height: 190px !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.logo-big .logo {
+  width: 560px !important;
+  height: 280px !important;
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card .logo { width: 112px !important; height: 112px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.logo-only .logo { width: 280px !important; height: 140px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.logo-big .logo { width: 410px !important; height: 208px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card .logo { width: 86px !important; height: 86px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.logo-only .logo { width: 216px !important; height: 109px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.logo-big .logo { width: 315px !important; height: 158px !important; }
+/* Source typography: 60px, weight 500, not V9.1's 39px / weight 600. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card .name,
+html.v9-brand #grid.grid3 > .tile.fire .name {
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif !important;
+  font-size: 60px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.9px !important;
+  line-height: 1.1 !important;
+  max-width: 60% !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+  text-shadow: 0 2px 8px rgba(0,0,0,.35) !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card .name,
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.fire .name { font-size: 44px !important; letter-spacing: -0.6px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card .name,
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.fire .name { font-size: 34px !important; letter-spacing: -0.4px !important; }
+/* Focus like AeroTizen original screenshot, not on the square icon. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.focused,
+html.v9-brand #grid.grid3 > .tile.fire.focused {
+  transform: translateZ(0) scale(1.035) !important;
+  box-shadow: 0 0 0 4px #03050a, 0 0 0 9px #fff, 0 18px 40px rgba(0,0,0,.6) !important;
+  z-index: 6 !important;
+}
+/* Fireplace banner: only a clean golden flame, no square app-icon backing. */
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon {
+  width: 160px !important;
+  height: 160px !important;
+  min-width: 0 !important;
+  flex: 0 0 160px !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon svg { width: 100% !important; height: 100% !important; }
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon svg rect,
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon svg path:last-of-type { display: none !important; }
+html.v9-brand #grid.grid3 > .tile.fire .fireplace-icon svg path:first-of-type { fill: #ffd27a !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.fire .fireplace-icon { width: 118px !important; height: 118px !important; flex-basis: 118px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.fire .fireplace-icon { width: 90px !important; height: 90px !important; flex-basis: 90px !important; }
+/* S90C V9.2.3 – logo originale RaiPlay fornito dall'utente.
+   Lo sfondo coincide esattamente con i pixel originali (#05061e).
+   Nessun effetto focus sull'immagine: resta solo quello della tessera. */
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.raiplay-official {
+  background: #05061e !important;
+  padding: 0 12px !important;
+  gap: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.raiplay-official .raiplay-official-image {
+  display: block !important;
+  width: 90% !important;
+  height: 76% !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  flex: 0 1 auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  transform: none !important;
+  pointer-events: none !important;
+}
+html.v9-brand #grid.grid3 > .tile.v9-brand-card.raiplay-official .raiplay-official-fallback {
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 55px;
+  font-weight: 500;
+  color: #fff;
+  text-align: center;
+}
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card.raiplay-official .raiplay-official-fallback { font-size: 40px; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card.raiplay-official .raiplay-official-fallback { font-size: 32px; }

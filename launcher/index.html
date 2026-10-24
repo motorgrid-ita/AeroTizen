@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, height=1080">
+  <title>AeroTizen</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/v9-theme.css">
+  <link rel="stylesheet" href="css/s90c-settings-sections.css">
+  <link rel="stylesheet" href="css/s90c-compact-settings.css">
+  <link rel="stylesheet" href="css/s90c-network-status.css">
+  <link rel="stylesheet" href="css/s90c-performance-v97.css">
+  <link rel="stylesheet" href="css/s90c-settings-fast-v98.css">
+  <link rel="stylesheet" href="css/s90c-settings-reactive-v99.css">
+  <link rel="stylesheet" href="css/s90c-clock-v991.css">
+  <link rel="stylesheet" href="css/s90c-custom-v992.css">
+  <link rel="stylesheet" href="css/s90c-wall-categories-v9924.css">
+  <link rel="stylesheet" href="css/s90c-source-dock-v99213.css">
+  <link rel="stylesheet" href="css/s90c-app-banners-scroll-v99215.css">
+  <link rel="stylesheet" href="css/s90c-standard-samsung.css">
+  <link rel="stylesheet" href="css/s90c-header-visibility.css">
+  <link rel="stylesheet" href="css/s90c-status-organized-v99232.css">
+  <link rel="stylesheet" href="css/s90c-settings-polish-v99233.css">
+  <link rel="stylesheet" href="css/s90c-favourites-menu-v99243.css">
+  <link rel="stylesheet" href="css/s90c-settings-glass-light-v99244.css">
+  <link rel="stylesheet" href="css/s90c-settings-fast-flat-v99245.css">
+  <link rel="stylesheet" href="css/s90c-v99246-cleanup.css">
+  <link rel="stylesheet" href="css/s90c-v99251-square-fluidity.css">
+  <link rel="stylesheet" href="css/s90c-clock-layout-v99252.css">
+  <link rel="stylesheet" href="css/s90c-menu-glass-classic-home-v99253.css">
+  <link rel="stylesheet" href="css/s90c-menu-focus-v99255.css">
+  <link rel="stylesheet" href="css/s90c-glass-single-focus-v99256.css">
+</head>
+<body>
+  <div id="bg" class="bg"></div>
+  <div id="aero-weather-photo" aria-hidden="true"></div>
+  <!-- Layout inspired by LTvLauncher (github.com/leanbitlab-org/LtvLauncher); no code shared. -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <div id="s90c-action-focus" aria-hidden="true"></div>
+      <div id="gear" class="icon-btn" data-row="0" aria-label="Settings">
+        <svg viewBox="0 0 24 24"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.9a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.9a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5A3.5 3.5 0 1 1 13 8.5a3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)"/></svg>
+      </div>
+      <div id="samsung-home-shortcut" class="icon-btn" aria-label="Apri Home Samsung" title="Home Samsung">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.8 2.6 11a1 1 0 0 0 1.3 1.5L5 11.6V21h6v-6h2v6h6v-9.4l1.1.9a1 1 0 1 0 1.3-1.5L12 2.8z"/></svg>
+      </div>
+      <svg id="network" class="status-icon" viewBox="0 0 24 24" aria-label="Network"></svg>
+    </div>
+    <nav id="s90c-view-tabs" aria-label="Viste applicazioni">
+      <div id="s90c-tab-indicator" aria-hidden="true"></div>
+      <div id="s90c-tab-focus-indicator" aria-hidden="true"></div>
+      <div id="s90c-tab-home" class="s90c-view-tab on" role="button" aria-label="Home">
+        <svg class="s90c-tab-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7v9a1 1 0 0 1-1 1H14v-6h-4v6H4.5a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linejoin="round" stroke-linecap="round"/></svg>
+        <span>Home</span>
+      </div>
+      <div id="s90c-tab-all" class="s90c-view-tab" role="button" aria-label="Tutte le app">
+        <svg class="s90c-tab-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.65"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.65"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.65"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.65"/></svg>
+        <span>Tutte le app</span>
+      </div>
+    </nav>
+    <div class="topbar-right">
+      <span id="weather" class="weather" hidden></span>
+      <span id="date" class="date"></span>
+      <span id="time" class="time"></span>
+      <!-- S90C V9.9.1: ora grande, data e meteo verticale (nessun focus telecomando) -->
+      <div id="aero-v991-widget" role="status" aria-label="Ora, data e meteo">
+        <div class="aero-v991-digits" aria-label="Ora locale">
+          <span id="aero-v991-hours" class="aero-v991-digit">--</span>
+          <span id="aero-v991-minutes" class="aero-v991-digit">--</span>
+        </div>
+        <div id="aero-v991-date" class="aero-v991-date">—</div>
+        <div class="aero-v991-weather">
+          <span id="aero-v991-weather-icon" class="aero-v991-weather-icon"></span>
+          <span id="aero-v991-temp" class="aero-v991-temp">--°</span>
+          <span id="aero-v991-condition" class="aero-v991-condition">Meteo in aggiornamento</span>
+        </div>
+        <div id="aero-v991-city" class="aero-v991-city"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- V992.15: viewport fissa per far scomparire le app SOTTO la barra superiore. -->
+  <div id="s90c-home-viewport">
+    <main id="rows">
+      <div id="grid" class="grid3"></div>
+      <section class="row-wrap inputs-wrap">
+        <h2>Sorgenti</h2>
+        <div id="inputs" class="row small"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="editor" class="sheet" hidden>
+    <h2>Impostazioni</h2>
+    <h3>Stile della Home</h3>
+    <div id="v9-mode-picks" class="units"></div>
+    <h3>App per riga</h3>
+    <div id="v9-col-picks" class="units"></div>
+    <h3>Sfondo meteo realistico</h3>
+    <div id="aero-weather-modes" class="units"></div>
+    <h3>Sfondi animati</h3>
+    <div id="bg-anim" class="swatches"></div>
+    <div id="speed-row" class="speed-row" hidden></div>
+    <h3>Sfondi statici</h3>
+    <div id="bg-still" class="swatches"></div>
+    <h3>Temperatura</h3>
+    <div id="units" class="units"></div>
+    <h3>Località meteo</h3>
+    <div id="weather-location" class="units"></div>
+    <div id="weather-results" class="units"></div>
+    <h3>Visibilità meteo</h3>
+    <div id="weather-display" class="units"></div>
+    <h3>Mostra località meteo</h3>
+    <div id="weather-visibility" class="units"></div>
+    <h3>Impaginazione orologio</h3>
+    <div id="aero-clock-layouts" class="units"></div>
+    <h3>Stile orologio</h3>
+    <div id="aero-clock-styles" class="units"></div>
+    <h3>Data e ora</h3>
+    <div id="time-formats" class="units"></div>
+    <div id="date-formats" class="units"></div>
+    <h3>Mostra Wi-Fi</h3>
+    <div id="network-visibility" class="units"></div>
+    <h3>TV in diretta</h3>
+    <div id="live-tv-visibility" class="units" role="group" aria-label="Visibilità TV in diretta"></div>
+    <h3>Ingressi HDMI</h3>
+    <p class="hint">Riconosciute: mostra porte con segnale o dispositivi identificati da Samsung, anche in standby. Non mostra le HDMI vuote.</p>
+    <div id="input-visibility" class="units" role="group" aria-label="Visibilità degli ingressi HDMI"></div>
+    <h3>HDMI sempre visibili</h3>
+    <p class="hint">Eccezione per una porta che Samsung non identifica. Normalmente non serve impostarla.</p>
+    <div id="hdmi-force-visibility" class="units" role="group" aria-label="Porte HDMI da mostrare sempre"></div>
+    <h3>Nomi delle sorgenti</h3>
+    <div id="input-names" class="units"></div>
+    <h3>Applicazioni nella Home</h3>
+    <p class="hint">Seleziona le app da mostrare nella Home. Tieni premuto OK su un'app nella Home o in Tutte le app per aprire il menu: Sposta, Aggiungi o Rimuovi.</p>
+    <div id="all-apps" class="grid"></div>
+  </div>
+
+  <div id="fireplace" class="fireplace" hidden>
+    <canvas id="fire-canvas"></canvas>
+    <div class="hearth"></div>
+    <div id="fire-volume" class="fire-volume"></div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+  <script src="js/config.js"></script>
+  <script src="js/dom.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/clock.js"></script>
+  <script src="js/logos.js"></script>
+  <script src="js/backgrounds.js"></script>
+  <script src="js/weather.js"></script>
+  <script src="js/network.js"></script>
+  <script src="js/s90c-network-status.js"></script>
+  <script src="js/fireplace.js"></script>
+  <script src="js/brands.js"></script>
+  <script src="js/homewatch.js"></script>
+  <script src="js/apps.js"></script>
+  <script src="js/inputs.js"></script>
+  <script src="js/v9-theme.js"></script>
+  <script src="js/s90c-samsung-artwork.js"></script>
+  <script src="js/home-screen.js"></script>
+  <script src="js/settings-ui.js"></script>
+  <script src="js/s90c-settings-sections.js"></script>
+  <script src="js/s90c-compact-settings.js"></script>
+  <script src="js/s90c-settings-reactive-v99.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/s90c-clock-v991.js"></script>
+  <script src="js/s90c-custom-v992.js"></script>
+  <script src="js/s90c-wall-categories-v9924.js"></script>
+  <script src="js/s90c-header-visibility.js"></script>
+  <script src="js/i18n-en-v99247.js"></script>
+  <script src="js/i18n-v99247.js"></script>
+</body>
+</html>

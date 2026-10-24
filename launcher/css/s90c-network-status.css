@@ -1,0 +1,14 @@
+/* Same 64px optical box as the Home gear (40px icon centered inside it). */
+.topbar-left #network.status-icon {
+  box-sizing: border-box !important;
+  display: block !important;
+  width: 64px !important;
+  height: 64px !important;
+  padding: 12px !important;
+  flex: 0 0 64px !important;
+  align-self: center !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+  color: #f5f5f7 !important;
+}
+.topbar-left #network.status-icon.offline { color: #ff8787 !important; }

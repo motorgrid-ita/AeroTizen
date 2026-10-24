@@ -1,0 +1,77 @@
+/* S90C V992.43 - Lightweight Glass context menu.
+   No live backdrop-filter, no expensive fullscreen blur or scaling.
+   The fullscreen dimmer darkens the UI like Settings, with a single
+   opacity transition; menu and selection animate only opacity/translate. */
+.s90c-tile-menu-backdrop {
+  position:fixed; inset:0; z-index:99990;
+  background:rgba(5,8,16,.53);
+  opacity:0;
+  pointer-events:auto;
+  transition:opacity .13s ease-out;
+}
+.s90c-tile-menu-backdrop.is-open {opacity:1;}
+.s90c-tile-menu-backdrop.is-closing {opacity:0;pointer-events:none;}
+.s90c-tile-menu {
+  position:fixed;z-index:99992;
+  box-sizing:border-box;
+  width:382px;max-width:calc(100% - 48px);
+  display:flex;flex-direction:column;
+  padding:12px;
+  font-family:'SamsungOne','Roboto',Arial,sans-serif;
+  color:#fff;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.35);
+  /* Visually glass, but no filtered framebuffer copies. */
+  background:linear-gradient(160deg,#626a78 0%,#333b4a 13%,#232b39 51%,#151a25 100%);
+  box-shadow:inset 0 1px rgba(255,255,255,.24),0 12px 28px rgba(0,0,0,.40);
+  opacity:0;
+  transform:translate3d(0,7px,0);
+  transition:opacity .14s ease-out,transform .14s ease-out;
+}
+.s90c-tile-menu.is-open {opacity:1;transform:translate3d(0,0,0);}
+.s90c-tile-menu.is-closing {
+  opacity:0;transform:translate3d(0,4px,0);pointer-events:none;
+}
+/* One highlighted plate slides between fixed-height options. */
+.s90c-tile-menu-glider {
+  position:absolute;z-index:0;pointer-events:none;
+  top:16px;left:12px;right:12px;height:60px;
+  box-sizing:border-box;
+  border:2px solid rgba(255,255,255,.89);
+  border-radius:17px;
+  background:rgba(236,242,255,.18);
+  box-shadow:inset 0 1px rgba(255,255,255,.20);
+  transform:translate3d(0,0,0);
+  transition:transform .15s ease-out;
+}
+.s90c-tile-menu-action {
+  display:flex;position:relative;z-index:1;
+  flex:0 0 60px;align-items:center;
+  box-sizing:border-box;
+  height:60px;min-height:60px;
+  width:100%;margin-top:4px;
+  gap:12px;padding:9px 16px;
+  border:0;border-radius:17px;
+  background:transparent;
+  color:rgba(243,246,255,.79);
+  cursor:pointer;
+  font-family:inherit;font-size:22px;font-weight:600;
+  transition:color .10s linear;
+}
+.s90c-tile-menu-action.selected,
+.s90c-tile-menu-action:hover {color:#fff;}
+.s90c-tile-menu-action-icon {
+  display:block;box-sizing:border-box;
+  width:26px;height:26px;flex:0 0 26px;
+  color:inherit;
+}
+.s90c-tile-menu-action-icon svg {
+  display:block;width:26px;height:26px;
+  fill:none;stroke:currentColor;stroke-width:1.75;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.s90c-tile-menu-action-label {min-width:0;flex:1;white-space:nowrap;}
+@media (prefers-reduced-motion:reduce) {
+ .s90c-tile-menu-backdrop,.s90c-tile-menu,
+ .s90c-tile-menu-glider,.s90c-tile-menu-action {transition:none !important;}
+}

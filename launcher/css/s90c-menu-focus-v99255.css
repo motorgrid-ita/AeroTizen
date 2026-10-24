@@ -1,0 +1,64 @@
+/* AeroTizen V992.55: the SAME small-menu satin focus language across
+   the header shortcuts, Settings categories and all focusable Settings options.
+   No blur, no transitions of the Settings frame, no changes to Home positions. */
+.topbar-left { position: relative; }
+.topbar-left > #s90c-action-focus {
+  position: absolute; top: 0; left: 0;
+  z-index: 0; pointer-events: none; opacity: 0;
+  box-sizing: border-box; border: 2px solid rgba(255,255,255,.90);
+  border-radius: 20px; background: rgba(236,242,255,.18);
+  box-shadow: inset 0 1px rgba(255,255,255,.20);
+  transform: translate3d(0,0,0);
+  transition: transform .15s ease-out, opacity .10s linear;
+}
+.topbar-left > #s90c-action-focus.is-visible { opacity:1; }
+.topbar-left > #gear, .topbar-left > #samsung-home-shortcut {
+  position: relative; z-index: 1;
+  border: 2px solid transparent; box-sizing: border-box;
+  transition: color .10s linear !important;
+}
+.topbar-left > #gear.focused, .topbar-left > #samsung-home-shortcut.focused {
+  background: transparent !important; box-shadow: none !important;
+  outline: none !important; transform: none !important; color: #fff;
+}
+/* The inner Settings focus is a single translating glass outline, so each
+   control keeps its original dimensions/background and handlers. */
+#editor.s90c-settings-ready .s90c-settings-scroll { position: relative !important; }
+#editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider {
+  position: absolute; top: 0; left: 0; z-index: 12; pointer-events: none;
+  box-sizing: border-box; width: 1px; height: 1px;
+  border: 2px solid rgba(255,255,255,.91); border-radius: 15px;
+  background: rgba(236,242,255,.055);
+  box-shadow: inset 0 1px rgba(255,255,255,.20);
+  opacity: 0; transform: translate3d(0,0,0);
+  transition: transform .15s ease-out, opacity .10s linear;
+}
+#editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider.is-visible { opacity: 1; }
+#editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider.no-motion { transition: opacity .10s linear !important; }
+/* The moving outline takes the focus border's job. These selectors only
+   remove duplicate borders/shadows; they do not change geometry or alignment. */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane .swatch.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused,
+#editor.s90c-settings-ready .s90c-section-pane .aero-wall-tab.focused,
+#editor.s90c-settings-ready .s90c-section-pane #v9-mode-picks > .s90c-style-choice.focused {
+  outline: none !important;
+  box-shadow: none !important;
+  transition: color .10s linear,background-color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane .aero-wall-tab.focused,
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused {
+  border-color: transparent !important;
+  transform: none !important;
+}
+/* Keep selected/on states visible when focus moves elsewhere. */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.on:not(.focused) {
+  background: rgba(236,242,255,.14) !important;
+  color: #fff !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .topbar-left > #s90c-action-focus,
+  #editor.s90c-settings-ready .s90c-settings-scroll > .s90c-content-glider,
+  .topbar-left > #gear, .topbar-left > #samsung-home-shortcut { transition: none !important; }
+}

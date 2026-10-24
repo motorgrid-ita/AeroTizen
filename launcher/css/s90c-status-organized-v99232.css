@@ -1,0 +1,45 @@
+/* S90C V992.32 — compact groups for Meteo e orologio.
+   Do not affect wallpaper settings, input dock, artwork, or home cards. */
+#editor .s90c-status-content { width: 100%; display: block; }
+#editor .s90c-status-card {
+  box-sizing: border-box; background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.11);
+  border-radius: 19px; padding: 23px 24px 13px;
+  margin: 0 2px 20px 0;
+}
+#editor .s90c-status-card-head { margin-bottom: 21px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.1); }
+#editor .s90c-status-card-head h4 { margin: 0 0 4px; color: #fff; font-weight: 650; font-size: 27px; }
+#editor .s90c-status-card-head p { margin: 0; font-size: 17px; color: #aeb8c9; }
+#editor .s90c-status-field { margin-bottom: 18px; min-width: 0; }
+#editor .s90c-status-field h3 { font-size: 19px !important; font-weight: 550 !important; color: #d0d8e6 !important; margin: 0 0 9px !important; }
+#editor .s90c-status-field .units {
+  box-sizing: border-box; margin: 0 !important; padding: 1px 8px 7px;
+  width: 100% !important; max-width: 100%; gap: 11px !important;
+  display: grid !important; align-items: stretch;
+}
+#editor .s90c-status-field .pill.unit {
+  box-sizing: border-box; min-width: 0; width: 100%; margin: 0 !important;
+  display: flex; justify-content: center; align-items: center;
+  min-height: 49px; padding: 11px 13px !important; font-size: 18px !important;
+  text-align: center; overflow-wrap: break-word;
+}
+#editor .s90c-status-field #weather-display,
+#editor .s90c-status-field #weather-visibility,
+#editor .s90c-status-field #network-visibility { grid-template-columns: repeat(2, minmax(0,1fr)); }
+#editor .s90c-status-field #units,
+#editor .s90c-status-field #time-formats { grid-template-columns: repeat(3, minmax(0,1fr)); }
+#editor .s90c-status-field #date-formats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+#editor .s90c-status-field #aero-clock-styles { grid-template-columns: repeat(4, minmax(0,1fr)); }
+#editor .s90c-status-field #aero-clock-styles > .pill.unit { min-width: 0 !important; min-height: 108px; flex-direction: column; }
+#editor .s90c-status-field #weather-location,
+#editor .s90c-status-field #weather-results { grid-template-columns: minmax(0,1fr); }
+#editor .s90c-status-field #weather-location .name-pill { justify-content: flex-start; gap: 10px; }
+#editor .s90c-status-field #weather-location input {
+  box-sizing: border-box; width: 100% !important; min-width: 0 !important;
+  max-width: 400px !important; flex: 1 1 auto;
+}
+#editor .s90c-status-field #weather-results:empty { display: none !important; }
+#editor .s90c-status-field #weather-results { margin-top: 3px !important; }
+#editor .s90c-status-field #weather-results > .hint { font-size: 17px; }
+#editor .s90c-status-field #aero-clock-styles .aero-clock-choice > small { font-size: 15px; }
+#editor .s90c-status-network { margin-bottom: 0; }

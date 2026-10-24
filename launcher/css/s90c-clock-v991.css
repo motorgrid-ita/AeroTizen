@@ -1,0 +1,93 @@
+/* AeroTizen S90C V9.9.1 - CLOCK VERTICALE: prova TV, nessun effetto meteo di sfondo. */
+/* Separato da V9.9: non cambia i controller Samsung, il telecomando o gli script Home. */
+html, body { overflow: hidden; }
+.topbar {
+  height: 325px !important;
+  align-items: flex-start !important;
+  padding-top: 26px !important;
+}
+.topbar-left { margin-top: 13px; }
+.topbar-right { margin-left: auto; gap: 0; }
+/* Manteniamo i nodi V9.9 per il clock e il meteo: sono osservati dal widget. */
+.topbar-right > #weather, .topbar-right > #date, .topbar-right > #time {
+  position: absolute !important;
+  overflow: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+#aero-v991-widget {
+  width: 470px;
+  flex: 0 0 470px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  text-align: right;
+  color: #f3f7ff;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  text-shadow: 0 3px 16px rgba(0,0,0,.6);
+  pointer-events: none;
+  contain: layout style;
+}
+#aero-v991-widget .aero-v991-digits {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: "SamsungOne", "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-size: 114px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -5px;
+  line-height: .87;
+  white-space: nowrap;
+}
+#aero-v991-widget .aero-v991-digit { display:block; min-width: 160px; }
+#aero-v991-widget .aero-v991-date {
+  font-size: 30px;
+  line-height: 1.15;
+  font-weight: 400;
+  margin-top: 13px;
+  white-space: nowrap;
+}
+#aero-v991-widget .aero-v991-weather {
+  margin-top: 14px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  min-height: 32px;
+  font-size: 24px;
+  line-height: 1.1;
+  font-weight: 400;
+  color: #e8eff8;
+}
+#aero-v991-widget .aero-v991-weather-icon { display:flex; align-items:center; width:33px; height:33px; }
+#aero-v991-widget .aero-v991-weather-icon svg { display:block; width:33px; height:33px; }
+#aero-v991-widget .aero-v991-temp { font-size:31px; font-weight:400; white-space:nowrap; }
+#aero-v991-widget .aero-v991-condition { white-space:nowrap; }
+#aero-v991-widget .aero-v991-city { font-size:18px; line-height:1.2; margin-top:5px; color:rgba(235,241,249,.82); white-space:nowrap; }
+/* Recuperiamo spazio verticale per le app SENZA ridurre larghezze, colonne o focus. */
+#grid.grid3 > .tile { height: 242px !important; }
+html.v9-brand #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand #grid.grid3 > .tile.fire { height: 242px !important; }
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand.v9-columns-4 #grid.grid3 > .tile.fire { height: 202px !important; }
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.v9-brand-card,
+html.v9-brand.v9-columns-5 #grid.grid3 > .tile.fire { height: 165px !important; }
+#inputs .tile { height: 100px !important; }
+/* Non forziamo background o animazioni: rimangono le preferenze V9.9. */
+
+
+/* AeroTizen V992.12 - SOLO DISTANZA VERTICALE DELLA HOME.
+   Sposta app e Sorgenti piu' in basso di 32 px, lascia fermo il clock.
+   La posizione rimane nel flusso del layout: nessuna alterazione di focus. */
+body:not(.previewing) main#rows {
+  padding-top: 52px; /* 20 px originali effettivi + 32 px aggiuntivi */
+}

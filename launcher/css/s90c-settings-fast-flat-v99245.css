@@ -1,0 +1,85 @@
+/* AeroTizen S90C V992.45 — light settings expansion + single-layer Meteo/Orologio.
+   Deliberately CSS ONLY: all app rows, handlers, arrow focus, click/OK/BACK,
+   source and weather options preserve original DOM and layout controls. */
+
+/* Expand by switching geometry once, not animating a transformed full-screen
+   layer while Tizen has to recalculate the hundreds of settings children. */
+#editor.sheet.s90c-settings-ready .s90c-settings-frame {
+  animation: none !important;
+  transition: none !important;
+  will-change: auto !important;
+  transform: none !important;
+  background: #202936 !important;
+  box-shadow: 0 16px 38px rgba(0,0,0,.46), inset 0 1px rgba(255,255,255,.16) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-sidebar {
+  background: #27313f !important;
+  box-shadow: none !important;
+  transition: none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-main {
+  background: #202936 !important;
+  box-shadow: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-main {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+#editor.s90c-settings-ready.s90c-menu-expanded .s90c-settings-main {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* Keep only a short scrim fade at initial opening; no full-screen blur. */
+#editor.sheet.s90c-settings-ready {
+  animation-duration: .10s !important;
+}
+
+/* Meteo e orologio: these three logical groups are simple sections in the
+   SAME settings panel, not bordered cards stacked inside a second dialog. */
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-content {
+  width: 100% !important;
+  padding-top: 2px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card {
+  margin: 0 !important;
+  padding: 2px 0 20px !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card + .s90c-status-card {
+  border-top: 1px solid rgba(234,240,255,.16) !important;
+  padding-top: 24px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card-head {
+  border: 0 !important;
+  padding: 0 !important;
+  margin: 0 0 18px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card-head h4 {
+  margin: 0 !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  line-height: 1.24 !important;
+  color: #f6f8ff !important;
+}
+/* Redundant explanatory subtitles doubled the panel headers and made it
+   look like yet another menu; labels on each option remain unchanged. */
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-card-head p {
+  display: none !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-field {
+  margin-bottom: 18px !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane[data-section-pane="status"] .s90c-status-field h3 {
+  margin: 0 0 8px !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  color: rgba(228,236,251,.86) !important;
+}
+/* Existing button grids and focus outlines intentionally untouched. */

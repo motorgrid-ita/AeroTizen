@@ -1,0 +1,184 @@
+/* AeroTizen S90C V992.44 — Settings in the lightweight glass style of the
+   V992.43 favourite action menu. Pure presentation: DO NOT resize rows,
+   rearrange controls, change scrolling/focus order or introduce blur filters.
+   Static gradients; cheap opacity/colour transitions; safe on Tizen TV. */
+
+/* Keep the original Settings overlay and both collapsed/expanded layouts. */
+#editor.sheet.s90c-settings-ready {
+  background:rgba(5,8,16,.46) !important;
+}
+body.editing:not(.previewing) .topbar,
+body.editing:not(.previewing) main {
+  filter:none !important;
+  opacity:1 !important;
+  /* The #editor scrim supplies the dimming; no full-screen blur/repaint. */
+}
+#editor.s90c-settings-ready .s90c-settings-frame {
+  border:1px solid rgba(255,255,255,.35) !important;
+  background:linear-gradient(160deg,#454f60 0%,#303949 15%,#222b39 55%,#151b26 100%) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.22),0 16px 38px rgba(0,0,0,.46) !important;
+  /* Preserve instant panel resize from s90c-settings-reactive-v99.css. */
+}
+#editor.s90c-settings-ready .s90c-settings-frame::before {
+  background:#354050 !important;
+  border-color:rgba(255,255,255,.28) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-sidebar {
+  background:linear-gradient(155deg,#414b5a 0%,#293342 30%,#171f2b 100%) !important;
+  border-right:1px solid rgba(255,255,255,.11) !important;
+  box-shadow:none !important;
+}
+#editor.s90c-settings-ready.s90c-menu-collapsed .s90c-settings-sidebar {
+  border-right:0 !important;
+}
+#editor.s90c-settings-ready .s90c-settings-main {
+  background:linear-gradient(145deg,#242e3c 0%,#19212e 55%,#151b25 100%) !important;
+  box-shadow:inset 1px 0 rgba(255,255,255,.025) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-kicker,
+#editor.s90c-settings-ready .s90c-settings-content-kicker {
+  color:rgba(226,235,250,.65) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-sidebar h2,
+#editor.s90c-settings-ready .s90c-settings-active-title {
+  color:#fff !important;
+  text-shadow:none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-line,
+#editor.s90c-settings-ready .s90c-settings-content-head {
+  border-color:rgba(255,255,255,.14) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-line {
+  background:rgba(255,255,255,.14) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-help {
+  border-color:rgba(255,255,255,.12) !important;
+  color:rgba(226,235,250,.62) !important;
+}
+
+/* Category list. Selection echoes the bright rounded plate of the small menu. */
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry {
+  color:rgba(243,246,255,.86) !important;
+  background:transparent !important;
+  border-color:transparent !important;
+  box-shadow:none !important;
+  transform:none !important;
+  transition:background-color .10s linear,color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.s90c-current-section:not(.focused) {
+  color:#fff !important;
+  background:rgba(236,242,255,.10) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused {
+  color:#fff !important;
+  border:2px solid rgba(255,255,255,.90) !important;
+  border-radius:17px !important;
+  background:rgba(236,242,255,.18) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.20) !important;
+  transform:none !important;
+  z-index:2 !important;
+}
+#editor.s90c-settings-ready .s90c-section-icon {color:#eef3ff !important;}
+#editor.s90c-settings-ready .s90c-section-label strong {color:inherit !important;}
+#editor.s90c-settings-ready .s90c-section-label small,
+#editor.s90c-settings-ready .s90c-section-chevron {color:rgba(221,230,245,.68) !important;}
+
+/* Action controls. Do not alter padding, width, grids, or min-height: their
+   geometry is used by the existing D-pad navigation (offsetTop/visualRows). */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill {
+  color:rgba(243,246,255,.86) !important;
+  background:rgba(236,242,255,.065) !important;
+  border:2px solid rgba(255,255,255,.13) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.06) !important;
+  transition:background-color .10s linear,color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.on {
+  color:#fff !important;
+  background:rgba(236,242,255,.18) !important;
+  border-color:rgba(255,255,255,.34) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.17) !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused,
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.on.focused,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill.focused {
+  color:#fff !important;
+  background:rgba(236,242,255,.22) !important;
+  border-color:rgba(255,255,255,.94) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.20) !important;
+  transform:none !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .name-pill .port {color:rgba(233,240,254,.78) !important;}
+#editor.s90c-settings-ready .s90c-section-pane .name-pill input {
+  color:#fff !important;border-bottom-color:rgba(255,255,255,.35) !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .name-pill.focused input,
+#editor.s90c-settings-ready .s90c-section-pane .name-pill input:focus {
+  border-bottom-color:#fff !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .swatch.focused,
+#editor.s90c-settings-ready .s90c-section-pane .slider.focused {
+  border-color:rgba(255,255,255,.94) !important;
+  box-shadow:0 0 0 2px rgba(255,255,255,.90) !important;
+  transform:none !important;
+}
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice {
+  background:rgba(236,242,255,.065) !important;
+  border-color:rgba(255,255,255,.16) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.07) !important;
+}
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice.on {
+  background:rgba(236,242,255,.16) !important;
+  border-color:rgba(255,255,255,.40) !important;
+}
+#editor.s90c-settings-ready #v9-mode-picks > .s90c-style-choice.focused {
+  background:rgba(236,242,255,.20) !important;
+  border-color:#fff !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.20) !important;
+  transform:none !important;
+}
+
+/* Apps chooser keeps four columns and existing 64px artwork. */
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile {
+  background:rgba(236,242,255,.07) !important;
+  border-color:rgba(255,255,255,.11) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.07) !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.on {
+  background:rgba(236,242,255,.16) !important;
+  border-color:rgba(255,255,255,.27) !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane #all-apps > .tile.focused {
+  opacity:1 !important;
+  background:rgba(236,242,255,.20) !important;
+  border-color:rgba(255,255,255,.95) !important;
+  box-shadow:inset 0 1px rgba(255,255,255,.18) !important;
+  transform:none !important;
+  z-index:3 !important;
+}
+/* Group panels use the same static light-on-charcoal styling. */
+#editor.s90c-settings-ready .s90c-status-card {
+  background:rgba(236,242,255,.045) !important;
+  border-color:rgba(255,255,255,.13) !important;
+}
+#editor.s90c-settings-ready .s90c-status-card-head {border-color:rgba(255,255,255,.12) !important;}
+#editor.s90c-settings-ready .s90c-status-card-head h4,
+#editor.s90c-settings-ready .s90c-section-pane h3 {color:#f4f7ff !important;}
+#editor.s90c-settings-ready .s90c-status-card-head p,
+#editor.s90c-settings-ready .s90c-section-pane .hint {color:rgba(225,234,249,.76) !important;}
+#editor.s90c-settings-ready .s90c-settings-close {
+  background:rgba(236,242,255,.10) !important;
+  color:#fff !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-close:hover,
+#editor.s90c-settings-ready .s90c-settings-close:focus {
+  background:rgba(236,242,255,.19) !important;
+}
+/* Keep instant remote scrolling; never smooth-scroll the settings grids. */
+#editor.s90c-settings-ready .s90c-settings-scroll,
+#editor.s90c-settings-ready .s90c-settings-menu {scroll-behavior:auto !important;}
+@media (prefers-reduced-motion:reduce) {
+  #editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry,
+  #editor.s90c-settings-ready .s90c-section-pane .pill.unit {transition:none !important;}
+}

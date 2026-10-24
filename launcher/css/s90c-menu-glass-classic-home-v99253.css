@@ -1,0 +1,109 @@
+/* V992.53: same lightweight satin/glider design as the long-OK menu.
+   No backdrop-filter, no box resizing transitions, no navigation changes. */
+#editor.s90c-settings-ready .s90c-settings-frame {
+  border: 1px solid rgba(255,255,255,.35) !important;
+  background: linear-gradient(160deg,#626a78 0%,#333b4a 13%,#232b39 51%,#151a25 100%) !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.24),0 12px 28px rgba(0,0,0,.40) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-sidebar {
+  background: transparent !important;
+  border-color: rgba(255,255,255,.12) !important;
+}
+#editor.s90c-settings-ready .s90c-settings-main {
+  background: rgba(10,16,28,.17) !important;
+  box-shadow: none !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu {
+  position: relative !important;
+  isolation: isolate;
+}
+/* Same 2px satin border, rounded plate, and 150ms transform as V992.43. */
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-settings-glider {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 4px;
+  width: calc(100% - 8px);
+  box-sizing: border-box;
+  height: 76px;
+  border: 2px solid rgba(255,255,255,.89);
+  border-radius: 17px;
+  background: rgba(236,242,255,.18);
+  box-shadow: inset 0 1px rgba(255,255,255,.20);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate3d(0,0,0);
+  transition: transform .15s ease-out,opacity .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-settings-glider.is-visible {opacity:1;}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-settings-glider.is-content {
+  opacity: .46;
+}
+/* Never draw an old per-row focus frame on top of the translating plate. */
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.s90c-current-section {
+  position: relative !important;
+  z-index: 1 !important;
+  background: transparent !important;
+  border: 2px solid transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+  transition: color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry .s90c-section-icon,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry .s90c-section-label strong,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry .s90c-section-chevron {
+  color: rgba(243,246,255,.79) !important;
+  transition: color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused .s90c-section-icon,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused .s90c-section-label strong,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused .s90c-section-chevron,
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.s90c-current-section .s90c-section-label strong {
+  color: #fff !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry .s90c-section-label small {
+  color: rgba(225,234,249,.69) !important;
+  transition: color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry.focused .s90c-section-label small {
+  color: rgba(255,255,255,.90) !important;
+}
+/* Same quiet satin choice states for the details pane. Only colour changes;
+   the other preview/button controls preserve their existing geometry. */
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.focused {
+  border-color: rgba(255,255,255,.89) !important;
+  background: rgba(236,242,255,.18) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px rgba(255,255,255,.20) !important;
+  transform: none !important;
+  transition: background-color .10s linear,color .10s linear,border-color .10s linear !important;
+}
+#editor.s90c-settings-ready .s90c-section-pane .pill.unit.on:not(.focused) {
+  background: rgba(236,242,255,.11) !important;
+  color: #fff !important;
+}
+/* V992.53: ONLY CLASSIC clock + HOME. No changes whatsoever to custom clock
+   positions or All Apps. Rows keep their native dimensions and focus order.
+   Flex distributes spare height to grid; source dock stays at page bottom.
+   When app rows exceed available height, main grows naturally and still scrolls. */
+body.s90c-clock-classic:not(.s90c-all-apps):not(.previewing) #s90c-home-viewport > main#rows {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(1080px - 132px - 20px);
+  box-sizing: border-box;
+}
+body.s90c-clock-classic:not(.s90c-all-apps):not(.previewing) #s90c-home-viewport #grid.grid3 {
+  flex: 1 0 auto;
+  align-content: center !important;
+}
+body.s90c-clock-classic:not(.s90c-all-apps):not(.previewing) #s90c-home-viewport .inputs-wrap {
+  flex: 0 0 auto;
+  align-self: stretch;
+}
+@media (prefers-reduced-motion:reduce) {
+  #editor.s90c-settings-ready .s90c-settings-menu > .s90c-settings-glider,
+  #editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry,
+  #editor.s90c-settings-ready .s90c-settings-menu > .s90c-section-entry * {transition:none !important;}
+}
