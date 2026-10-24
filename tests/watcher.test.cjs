@@ -513,6 +513,60 @@ test('Frame TVs keep the Art guard after a watched app closes', () => {
   assert.equal(h.artReplies.length, 1);
 });
 
+
+test('physical Home is reclaimed from a never-visible app when Samsung Home is confirmed foreground', () => {
+  const h = harness({ capability: false }); h.api.onStart(); h.advance(8000);
+  h.statuses.set('AppA', { running: true, visible: false }); // e.g. Samsung Cobalt YouTube
+  h.control('/apps?ids=AppA'); h.control('/watch?id=AppA');
+  h.statuses.set(SELF, { running: true, visible: false });
+  h.advance(3500);
+  assert.equal(h.launches.length, 1, 'unseen app must never be interrupted by status alone');
+  h.statuses.set('com.samsung.tv.csfs', { running: true, visible: true });
+  h.advance(3500);
+  assert.equal(h.launches.length, 2, 'confirmed native Home should return to AeroTizen');
+  assert.ok(h.state().guard.history.some(x => x.kind === 'home-foreground'));
+});
+
+test('unsupported Samsung Home status cannot falsely reclaim an unseen app', () => {
+  for (const nativeStatus of ['error', { running: true, visible: false }]) {
+    const h = harness({ capability: false }); h.api.onStart(); h.advance(8000);
+    h.statuses.set('AppA', { running: true, visible: false });
+    h.statuses.set('com.samsung.tv.csfs', nativeStatus);
+    h.control('/apps?ids=AppA'); h.control('/watch?id=AppA');
+    h.statuses.set(SELF, { running: true, visible: false });
+    h.advance(16000);
+    assert.equal(h.launches.length, 1, 'unconfirmed Home status must not interrupt playback');
+  }
+});
+
+test('native Samsung Home shortcut /leave remains a deliberate watcher escape', () => {
+  const h = harness({ capability: false }); h.api.onStart(); h.advance(8000);
+  h.control('/leave');
+  h.statuses.set('com.samsung.tv.csfs', { running: true, visible: true });
+  h.advance(16000);
+  assert.equal(h.launches.length, 1);
+  assert.equal(h.state().leaving, true);
+  h.control('/home');
+  assert.equal(h.state().leaving, false);
+});
+
+test('Frame TV physical Home detection preserves two independent fresh Art checks', () => {
+  const h = ready();
+  h.statuses.set('AppA', { running: true, visible: false });
+  h.control('/apps?ids=AppA'); h.control('/watch?id=AppA');
+  h.statuses.set(SELF, { running: true, visible: false });
+  h.advance(4200);
+  assert.equal(h.launches.length, 0);
+  h.statuses.set('com.samsung.tv.csfs', { running: true, visible: true });
+  h.advance(3500);
+  assert.equal(h.launches.length, 0);
+  assert.equal(h.artReplies.length, 1, 'first fresh Art check is required');
+  h.answerArt('off'); h.advance(0);
+  assert.equal(h.artReplies.length, 1, 'second fresh Art check is required');
+  h.answerArt('off'); h.advance(0);
+  assert.equal(h.launches.length, 1, 'only two guarded passes may authorize relaunch');
+});
+
 let failed = 0;
 for (const [name, fn] of tests) {
   try { fn(); console.log('PASS ' + name); }
