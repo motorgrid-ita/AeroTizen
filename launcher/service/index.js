@@ -18,6 +18,9 @@ var APP_GRACE = 2500;
 var WATCH_STOP_GRACE = 1500;    // a watched app must stay stopped this long before it's dropped
 var WATCH_COVER_GRACE = 10000;  // an app the launcher opened may take this long to cover it
 var UNSEEN_SCAN = 5000;         // same pace as the visible snapshot: other apps while one is unseen
+var NATIVE_HOME_ID = 'com.samsung.tv.csfs'; // optional system-app status; absent on some TVs
+var HOME_PROBE = 1100;          // low-frequency check only for apps never reporting visible
+var HOME_STABLE = 800;         // require independent observations before reclaim
 var BOOT_DELAY = 3000;
 var BOOT_FALLBACK = 15000;      // launch anyway if the TV type is still unknown
 var started = false;
@@ -60,6 +63,7 @@ function invalidate(reason) {
 // Call whenever state.watched changes: what we learned about the previous app doesn't carry over.
 function resetWatchedTiming() {
   state.watchedHiddenSince = 0; state.watchedRan = false; state.watchedStoppedSince = 0;
+  state.homeSeenSince = 0; state.homeProbeAt = 0;
 }
 function resetHiddenTiming() {
   state.hiddenSince = 0; state.watchedHiddenSince = 0; state.watchedStoppedSince = 0;
@@ -203,16 +207,28 @@ function recheck(candidate, cb) {
     if (candidate.watched) {
       appStatus(candidate.watched, function (watched) {
         if (!current(candidate)) { return; }
-        if (!watched || watched.visible || !state.seen) {
+        if (!watched || watched.visible || (!state.seen && !candidate.homeForeground)) {
           cancel(candidate, 'watched app visible or status unavailable'); return;
         }
-        // Also check other apps: a cast can start while a watched app closes.
-        snapshot(function (result) {
-          if (!current(candidate)) { return; }
-          if (!result.complete) { cancel(candidate, 'app inventory unavailable'); return; }
-          if (standAside(result, candidate.watched)) { return; }
-          ready();
-        });
+        function checkOtherApps() {
+          snapshot(function (result) {
+            if (!current(candidate)) { return; }
+            if (!result.complete) { cancel(candidate, 'app inventory unavailable'); return; }
+            if (standAside(result, candidate.watched)) { return; }
+            ready();
+          });
+        }
+        if (candidate.homeForeground) {
+          // Frame models require native Samsung Home to remain foreground
+          // throughout the Art-Mode-safe double-recheck path.
+          appStatus(NATIVE_HOME_ID, function (home) {
+            if (!current(candidate)) { return; }
+            if (!home || !home.visible) {
+              cancel(candidate, 'native Home no longer foreground'); return;
+            }
+            checkOtherApps();
+          });
+        } else { checkOtherApps(); }
       });
     } else {
       snapshot(function (result) {
@@ -224,11 +240,12 @@ function recheck(candidate, cb) {
     }
   });
 }
-function launchSelf(why) {
+function launchSelf(why, homeForeground) {
   if (pending || state.leaving || stopped || !permitted()) { return; }
   if (!isFrame()) { launchNow(why); return; }
   if (Date.now() - state.lastLaunch < 2000) { return; }
-  var candidate = { epoch: state.epoch, watched: state.watched, reason: why, timer: null };
+  var candidate = { epoch: state.epoch, watched: state.watched, reason: why,
+    homeForeground: homeForeground === true, timer: null };
   pending = candidate;
   state.guard.pending = { reason: why, at: Date.now() };
   record('checking', why);
@@ -245,14 +262,26 @@ function launchSelf(why) {
         // Let a veto frame already buffered after this reply cancel the candidate.
         setTimeout(function () {
           if (!current(candidate) || !permitted()) { return; }
-          clearTimeout(candidate.timer); pending = null; state.guard.pending = null;
-          state.lastLaunch = Date.now(); state.watched = null; state.seen = false;
-          state.guard.lastBlocked = null; state.guard.launchCalls += 1;
-          record('launch', why);
-          try {
-            tizen.application.launch(SELF, function () { state.last = 'relaunched: ' + why; },
-              function (e) { state.last = 'relaunch failed: ' + (e && e.message); });
-          } catch (e) { state.last = 'relaunch threw: ' + e.message; }
+          function commit() {
+            if (!current(candidate) || !permitted()) { return; }
+            clearTimeout(candidate.timer); pending = null; state.guard.pending = null;
+            state.lastLaunch = Date.now(); state.watched = null; state.seen = false;
+            state.guard.lastBlocked = null; state.guard.launchCalls += 1;
+            record('launch', why);
+            try {
+              tizen.application.launch(SELF, function () { state.last = 'relaunched: ' + why; },
+                function (e) { state.last = 'relaunch failed: ' + (e && e.message); });
+            } catch (e) { state.last = 'relaunch threw: ' + e.message; }
+          }
+          if (candidate.homeForeground) {
+            appStatus(NATIVE_HOME_ID, function (home) {
+              if (!current(candidate)) { return; }
+              if (!home || !home.visible) {
+                cancel(candidate, 'native Home disappeared before commit'); return;
+              }
+              commit();
+            });
+          } else { commit(); }
         }, 0);
       });
     });
@@ -297,26 +326,46 @@ function tick() {
       var id = state.watched;
       appStatus(id, function (watched) {
         if (!valid() || state.watched !== id || !watched) { done(); return; }
-        if (watched.visible) { state.seen = true; state.watchedHiddenSince = 0; }
+        if (watched.visible) {
+          state.seen = true; state.watchedHiddenSince = 0; state.homeSeenSince = 0;
+        }
         else if (state.seen) {
           if (!state.watchedHiddenSince) { state.watchedHiddenSince = Date.now(); }
           if (!isFrame() || Date.now() - state.watchedHiddenSince >= FRAME_HIDDEN_GRACE) { launchSelf('home pressed in ' + id); }
         } else if (watched.running) {
           state.watchedRan = true; state.watchedStoppedSince = 0;
-          if (Date.now() - (state.unseenScanAt || 0) >= UNSEEN_SCAN) {
-            // Some apps (YouTube, some third-party players) never report themselves visible.
-            // Meanwhile, follow any app that does, e.g. one opened from Samsung Home, so Home in
-            // it still returns.
-            state.unseenScanAt = Date.now();
-            snapshot(function (result) {
-              if (valid() && state.watched === id && result.visible && result.visible !== id) {
-                record('unseen', id + ' never reported visible; following ' + result.visible);
-                standAside(result, id);
+          // Cobalt/YouTube on some Samsung TVs never reports visible=true.
+          // Check native Home ONLY while observing this kind of unseen app.
+          // Async /api/v2/ replies must finish before this scan is released.
+          function continueUnseenScan() {
+            if (Date.now() - (state.unseenScanAt || 0) >= UNSEEN_SCAN) {
+              state.unseenScanAt = Date.now();
+              snapshot(function (result) {
+                if (valid() && state.watched === id && result.visible && result.visible !== id) {
+                  record('unseen', id + ' never reported visible; following ' + result.visible);
+                  standAside(result, id);
+                }
+                done();
+              });
+            } else { done(); }
+          }
+          if (Date.now() - state.watchAt >= APP_GRACE &&
+              Date.now() - (state.homeProbeAt || 0) >= HOME_PROBE) {
+            state.homeProbeAt = Date.now();
+            appStatus(NATIVE_HOME_ID, function (home) {
+              if (!valid() || state.watched !== id) { done(); return; }
+              if (!home || !home.visible) { state.homeSeenSince = 0; }
+              else if (!state.homeSeenSince) { state.homeSeenSince = Date.now(); }
+              else if (Date.now() - state.homeSeenSince >= HOME_STABLE) {
+                record('home-foreground', 'reclaim from unseen ' + id);
+                launchSelf('physical Home from unseen ' + id, true);
               }
-              done();
+              continueUnseenScan();
             });
             return;
           }
+          continueUnseenScan();
+          return;
         } else if (state.watchedRan) {
           // It ran and has stayed stopped, so it closed and can't be covering the launcher.
           // Without this, an app that never reports itself visible held the watcher forever.
