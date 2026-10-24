@@ -334,37 +334,38 @@ function tick() {
           if (!isFrame() || Date.now() - state.watchedHiddenSince >= FRAME_HIDDEN_GRACE) { launchSelf('home pressed in ' + id); }
         } else if (watched.running) {
           state.watchedRan = true; state.watchedStoppedSince = 0;
-          // Cobalt/YouTube on some Samsung TVs remains running but ALWAYS
-          // reports visible=false. Never infer Home from that alone. When
-          // the local API expressly confirms the native Samsung Home surface
-          // as foreground twice, the physical HOME press is observable.
+          // Cobalt/YouTube on some Samsung TVs never reports visible=true.
+          // Check native Home ONLY while observing this kind of unseen app.
+          // Async /api/v2/ replies must finish before this scan is released.
+          function continueUnseenScan() {
+            if (Date.now() - (state.unseenScanAt || 0) >= UNSEEN_SCAN) {
+              state.unseenScanAt = Date.now();
+              snapshot(function (result) {
+                if (valid() && state.watched === id && result.visible && result.visible !== id) {
+                  record('unseen', id + ' never reported visible; following ' + result.visible);
+                  standAside(result, id);
+                }
+                done();
+              });
+            } else { done(); }
+          }
           if (Date.now() - state.watchAt >= APP_GRACE &&
               Date.now() - (state.homeProbeAt || 0) >= HOME_PROBE) {
             state.homeProbeAt = Date.now();
             appStatus(NATIVE_HOME_ID, function (home) {
-              if (!valid() || state.watched !== id) { return; }
-              if (!home || !home.visible) { state.homeSeenSince = 0; return; }
-              if (!state.homeSeenSince) { state.homeSeenSince = Date.now(); return; }
-              if (Date.now() - state.homeSeenSince >= HOME_STABLE) {
+              if (!valid() || state.watched !== id) { done(); return; }
+              if (!home || !home.visible) { state.homeSeenSince = 0; }
+              else if (!state.homeSeenSince) { state.homeSeenSince = Date.now(); }
+              else if (Date.now() - state.homeSeenSince >= HOME_STABLE) {
                 record('home-foreground', 'reclaim from unseen ' + id);
                 launchSelf('physical Home from unseen ' + id, true);
               }
-            });
-          }
-          if (Date.now() - (state.unseenScanAt || 0) >= UNSEEN_SCAN) {
-            // Some apps (YouTube, some third-party players) never report themselves visible.
-            // Meanwhile, follow any app that does, e.g. one opened from Samsung Home, so Home in
-            // it still returns.
-            state.unseenScanAt = Date.now();
-            snapshot(function (result) {
-              if (valid() && state.watched === id && result.visible && result.visible !== id) {
-                record('unseen', id + ' never reported visible; following ' + result.visible);
-                standAside(result, id);
-              }
-              done();
+              continueUnseenScan();
             });
             return;
           }
+          continueUnseenScan();
+          return;
         } else if (state.watchedRan) {
           // It ran and has stayed stopped, so it closed and can't be covering the launcher.
           // Without this, an app that never reports itself visible held the watcher forever.
