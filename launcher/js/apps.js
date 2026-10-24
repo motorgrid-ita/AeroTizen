@@ -78,8 +78,28 @@
       } catch (e) { A.toast('Could not open ' + label); }
       return;
     }
+    function failed() {
+      if (A.homewatch.resume) { A.homewatch.resume(); }
+      A.toast('Could not open ' + label);
+    }
+    function launchApp() {
+      try { tz.application.launch(app.id, null, failed); }
+      catch (error) { failed(); }
+    }
+    var isYouTube = /^youtube$/i.test(String(app.name || '').replace(/^\\s+|\\s+$/g, ''));
+    if (isYouTube && A.homewatch.watchReady) {
+      // Original Cobalt on some Samsung TVs can become foreground before an
+      // asynchronous fire-and-forget /watch reaches the background service.
+      A.homewatch.watchReady(app.id, launchApp, function () {
+        // When the service is unavailable, preserve upstream launch
+        // behaviour instead of blocking YouTube indefinitely.
+        A.homewatch.watch(app.id);
+        launchApp();
+      });
+      return;
+    }
     A.homewatch.watch(app.id);
-    tz.application.launch(app.id, null, function () { A.toast('Could not open ' + label); });
+    launchApp();
   };
 
   apps.openStore = function () {
