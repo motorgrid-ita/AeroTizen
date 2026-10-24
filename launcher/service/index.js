@@ -16,6 +16,8 @@
 // The launcher talks to this service over http://127.0.0.1:47790.
 
 var http = require('http');
+var createFrameGate = require('./frame-gate');
+var createArtMode = require('./artmode');
 
 var SELF = 'DclHome001.Home';
 var PORT = 47790;
@@ -51,9 +53,9 @@ function snapshot(cb) {
   });
 }
 
-function launchSelf(why) {
-  // Rate-limited so a failing relaunch can't loop. The TV's local API ignores launch
-  // requests from the TV itself, so this uses the Tizen application API.
+// Original V992.56 relaunch code. The Frame-only authorization gate below
+// never changes this function or its timeouts on a confirmed non-Frame TV.
+function launchOriginal(why) {
   if (Date.now() - state.lastLaunch < 2000) { return; }
   state.lastLaunch = Date.now();
   state.watched = null;
@@ -63,6 +65,54 @@ function launchSelf(why) {
   } catch (e) {
     state.last = 'relaunch threw: ' + e.message;
   }
+}
+
+function frameRecheck(done) {
+  if (state.leaving) { done(false); return; }
+  var id = state.watched, seen = state.seen, inventory = state.apps.slice();
+  appStatus(SELF, function (self) {
+    if (state.leaving || !self || self.visible) { done(false); return; }
+    function checkInventory() {
+      var left = inventory.length, safe = true;
+      if (!left) { done(true); return; }
+      inventory.forEach(function (appId) {
+        appStatus(appId, function (status) {
+          // Frame models must not guess if the local application status API
+          // is unavailable or another application becomes foreground.
+          if (!status || typeof status.visible !== 'boolean' ||
+              typeof status.running !== 'boolean' || status.visible ||
+              (status.running && appId !== id && !state.running[appId])) {
+            safe = false;
+          }
+          if (--left === 0) { done(safe && !state.leaving); }
+        });
+      });
+    }
+    if (!id) { checkInventory(); return; }
+    if (!seen) { done(false); return; }
+    appStatus(id, function (watched) {
+      if (!watched || watched.visible || state.watched !== id ||
+          state.leaving) { done(false); return; }
+      checkInventory();
+    });
+  });
+}
+
+var bootDue = false, bootRetry = null;
+var frameGate = createFrameGate({
+  http: http, createArtMode: createArtMode,
+  isLeaving: function () { return state.leaving; },
+  recheck: frameRecheck,
+  onReady: function () {
+    // Preserve the original 3-second boot on ordinary TVs. A Frame that
+    // resolves later cannot be launched until Art Mode is freshly off.
+    if (bootDue && !state.leaving && !state.lastLaunch) { launchSelf('boot'); }
+  }
+});
+
+function launchSelf(why) {
+  if (Date.now() - state.lastLaunch < 2000) { return; }
+  frameGate.allow(why, function () { launchOriginal(why); });
 }
 
 var busy = false;
@@ -75,6 +125,7 @@ function tick() {
     if (!me) { return; }
     var now = Date.now();
     if (me.visible) {
+      frameGate.invalidate();
       state.selfVisible = true; state.hiddenSince = 0; state.watched = null;
       if (now - (state.snapAt || 0) > 5000) { state.snapAt = now; snapshot(function (r) { state.running = r; }); }
       return;
@@ -96,12 +147,14 @@ function tick() {
     if (now - state.hiddenSince < 250 || now - state.watchAt < 2500) { return; }
     snapshot(function (r) {
       if (r.__visible) {
+        frameGate.invalidate();
         state.watched = r.__visible; state.seen = true; delete r.__visible; state.running = r;
         state.last = 'stand aside: ' + state.watched + ' is on screen';
         return;
       }
       for (var id in r) {
         if (r[id] && !state.running[id]) {
+          frameGate.invalidate();
           state.watched = id; state.seen = false; state.running = r;
           state.last = 'stand aside: ' + id + ' started';
           return;
@@ -117,21 +170,36 @@ module.exports.onStart = function () {
   http.createServer(function (req, res) {
     var url = require('url').parse(req.url, true), q = url.query;
     if (url.pathname === '/watch') {
+      frameGate.invalidate();
       state.watched = q.id || null; state.seen = false; state.leaving = false; state.watchAt = Date.now();
     } else if (url.pathname === '/apps') {
+      frameGate.invalidate();
       state.apps = (q.ids || '').split(',').filter(Boolean);
     } else if (url.pathname === '/leave') {
+      frameGate.invalidate();
       state.leaving = true; state.watched = null;
     } else if (url.pathname === '/home') {
+      frameGate.invalidate();
       state.leaving = false; state.watched = null;
     }
     res.writeHead(200, { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' });
     res.end(JSON.stringify(state));
   }).listen(PORT, '127.0.0.1');
+  frameGate.start();
   setInterval(tick, 300);
-  // Started at boot (on-boot="true"): open the launcher so the TV comes up on it.
-  setTimeout(function () { launchSelf('boot'); }, 3000);
+  // Normal TVs keep the proven 3-second boot. On Frame, a fresh off reply
+  // must authorize startup; retrying does not bypass the Art Mode guard.
+  setTimeout(function () {
+    bootDue = true;
+    launchSelf('boot');
+    bootRetry = setInterval(function () {
+      if (!state.lastLaunch && !state.leaving) { launchSelf('boot'); }
+    }, 3000);
+  }, 3000);
 };
 
 module.exports.onRequest = function () {};
-module.exports.onExit = function () {};
+module.exports.onExit = function () {
+  if (bootRetry) { clearInterval(bootRetry); bootRetry = null; }
+  frameGate.stop();
+};
