@@ -24,8 +24,33 @@
     } catch (e) { /* service unavailable: Home simply goes to Samsung's screen */ }
   }
 
+  function watchReady(appId, ready, failed) {
+    // The fire-and-forget /watch can race with the TV opening an app on
+    // older firmware. Await ACK for the apps known to expose that race
+    // (notably Samsung's preloaded Cobalt YouTube).
+    if (!tz) { ready(); return; }
+    var normalized = A.catalog.preloadedStoreId(appId) || appId;
+    var settled = false, req;
+    function finish(ok) {
+      if (settled) { return; }
+      settled = true;
+      if (ok) { ready(); }
+      else if (failed) { failed(); }
+    }
+    try {
+      req = new XMLHttpRequest();
+      req.open('GET', cfg.SERVICE_URL + '/watch?id=' + encodeURIComponent(normalized), true);
+      req.timeout = 1500;
+      req.onload = function () { finish(req.status >= 200 && req.status < 300); };
+      req.onerror = req.ontimeout = function () { finish(false); };
+      req.send();
+    } catch (error) { finish(false); }
+  }
+
   A.homewatch = {
     start: start,
+    watchReady: watchReady,
+    resume: function () { tell('/home'); },
     // The launcher is about to open `appId`; Home inside it should come back here.
     watch: function (appId) { tell('/watch?id=' + encodeURIComponent(A.catalog.preloadedStoreId(appId) || appId)); },
     // Every real app, so the service can tell a cast/launch from elsewhere apart from Home.
