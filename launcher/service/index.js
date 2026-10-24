@@ -326,7 +326,9 @@ function tick() {
       var id = state.watched;
       appStatus(id, function (watched) {
         if (!valid() || state.watched !== id || !watched) { done(); return; }
-        if (watched.visible) { state.seen = true; state.watchedHiddenSince = 0; }
+        if (watched.visible) {
+          state.seen = true; state.watchedHiddenSince = 0; state.homeSeenSince = 0;
+        }
         else if (state.seen) {
           if (!state.watchedHiddenSince) { state.watchedHiddenSince = Date.now(); }
           if (!isFrame() || Date.now() - state.watchedHiddenSince >= FRAME_HIDDEN_GRACE) { launchSelf('home pressed in ' + id); }
