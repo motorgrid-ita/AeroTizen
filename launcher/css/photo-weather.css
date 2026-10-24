@@ -1,0 +1,28 @@
+/* V992.56 local weather photography: zero frame-by-frame animation. */
+#weather-photo.weather-photo {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  z-index: 0;
+  pointer-events: none;
+  background: #0a0f18 center center / cover no-repeat;
+}
+#weather-photo.weather-photo.active:not([hidden]) { display: block; }
+#weather-photo.weather-photo[hidden], body.tv #weather-photo {
+  display: none !important;
+}
+#weather-photo.weather-photo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,.18), transparent 35%, rgba(0,0,0,.28));
+}
+/* Controls must remain above photographs; Settings keeps its own layer. */
+body > .topbar, body > .content-viewport {
+  position: relative;
+  z-index: 1;
+}
