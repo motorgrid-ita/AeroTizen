@@ -34,6 +34,8 @@ AeroTizen.config = {
   DEFAULTS: {
     home: null,  // null selects defaults on first launch; [] keeps an empty Home.
     cardSize: 'big',
+    homeCardMode: 'square',
+    homeCardColumns: null, // Use existing Big/Small counts until explicitly changed.
     background: 'aurora',
     speed: 1,
     showWeather: true,
