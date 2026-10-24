@@ -151,4 +151,11 @@
 
   A.homewatch.openSamsungHome = openSamsungHome;
   A.homewatch.openNativeLiveTV = openNativeLiveTV;
+
+  // Ported from the working launcher: returning from a Samsung system app
+  // can reload the page without a visibilitychange event. The existing
+  // upstream service must then leave its paused /leave state.
+  if (window.addEventListener) {
+    window.addEventListener('load', rearmWatcher);
+  }
 })(window.AeroTizen);
