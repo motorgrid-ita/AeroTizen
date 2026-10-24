@@ -9,6 +9,7 @@ const inputSource = fs.readFileSync(path.join(__dirname, '../launcher/js/inputs.
 
 function harness({ launchFails = false, noAppControl = false } = {}) {
   const http = [], launched = [], switched = [], shown = [], timers = [], toasts = [];
+  const windowListeners = {};
   function Request() {
     this.status = 0;
     this.open = (method, url) => { this.method = method; this.url = url; };
@@ -51,6 +52,7 @@ function harness({ launchFails = false, noAppControl = false } = {}) {
     documentElement: { style: {} }
   };
   const window = {
+    addEventListener(name, callback) { windowListeners[name] = callback; },
     setTimeout(fn, delay) { timers.push({ fn, delay }); return timers.length; },
     Backgrounds: { hide() {} }
   };
@@ -66,7 +68,7 @@ function harness({ launchFails = false, noAppControl = false } = {}) {
   window.AeroTizen = A;
   vm.runInNewContext(nativeSource, { window, document, XMLHttpRequest: Request });
   vm.runInNewContext(inputSource, { window, document, XMLHttpRequest: Request });
-  return { A, http, launched, switched, shown, timers, toasts, document, bodyClasses };
+  return { A, http, launched, switched, shown, timers, toasts, document, bodyClasses, windowListeners };
 }
 
 test('Samsung Home waits for HomeWatcher /leave acknowledgement before launch', () => {
@@ -159,4 +161,12 @@ test('loading order keeps native handoff available before the Inputs module', ()
   const nativePos = html.indexOf('src="js/native-navigation.js"');
   assert.ok(nativePos > html.indexOf('src="js/homewatch.js"'));
   assert.ok(nativePos < html.indexOf('src="js/inputs.js"'));
+});
+
+test('page load rearms HomeWatcher after returning from native Samsung apps', () => {
+  const h = harness();
+  assert.equal(typeof h.windowListeners.load, 'function');
+  assert.equal(h.http.length, 0);
+  h.windowListeners.load();
+  assert.equal(h.http[0].url, 'http://127.0.0.1:47790/home');
 });
