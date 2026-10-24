@@ -29,7 +29,17 @@ function setup(){
     createServer(fn){handler=fn;return {listen(){}};}
   };
   const context=vm.createContext({
-    require(name){if(name==='http')return http;if(name==='url')return url;throw Error(name)},
+    require(name){
+      if(name==='http')return http;
+      if(name==='url')return url;
+      if(name==='./artmode')return () => ({start(){},stop(){},fresh(cb){cb('off')}});
+      if(name==='./frame-gate')return args => ({
+        start(){ args.onReady('normal'); },
+        allow(_why,ready){ ready(); },
+        invalidate(){}, stop(){}
+      });
+      throw Error(name);
+    },
     module:{exports:{}},
     Date:{now:()=>now},
     setTimeout(){},
