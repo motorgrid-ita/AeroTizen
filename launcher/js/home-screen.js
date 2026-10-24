@@ -12,8 +12,19 @@
 
   function render() {
     var grid = A.$('grid'), home = A.settings.home, size = A.settings.cardSize === 'small' ? 'small' : 'big';
-    COLS = cfg.CARD_COLUMNS[size];
-    grid.className = 'app-grid cards-' + size;
+    var mode = A.settings.homeCardMode === 'rectangle' ? 'rectangle' : 'square';
+    var requested = Number(A.settings.homeCardColumns);
+    var explicit = requested === 3 || requested === 4 || requested === 5;
+    COLS = explicit ? requested : cfg.CARD_COLUMNS[size];
+    grid.className = 'app-grid cards-' + size +
+      (mode === 'rectangle' ? ' cards-rectangle' : '') +
+      (explicit ? ' cards-cols-' + COLS : '');
+    if (mode === 'rectangle') {
+      // V992.56's original horizontal 576×300 banner ratio.
+      var width = (1792 - (COLS - 1) * 24) / COLS;
+      grid.style.setProperty('--v992-card-width', width.toFixed(2) + 'px');
+      grid.style.setProperty('--v992-card-height', (width * 300 / 576).toFixed(2) + 'px');
+    }
     grid.textContent = '';
     if (page === 'home') {
       home = home.filter(function (id) { return id === cfg.FIREPLACE_ID || A.apps.byId(id); });
@@ -36,10 +47,11 @@
         tile.setAttribute('aria-label', 'Fireplace');
         tile.title = 'Fireplace';
         tile.innerHTML = A.tiles.ICONS.flame;
+        tile.appendChild(A.el('div', 'rectangle-fire-label', 'Fireplace'));
         tile.onclick = A.apps.playFireplace;
       } else {
         var app = A.apps.byId(id);
-        tile = A.tiles.app(app, '', function () { A.apps.launch(app); });
+        tile = A.tiles.app(app, 'home-display', function () { A.apps.launch(app); });
       }
       tile.dataset.id = id;
       grid.appendChild(tile);
