@@ -47,7 +47,7 @@ Combined fork CI: [run #40124174636](https://github.com/motorgrid-ita/AeroTizen/
 
 1. Maintainer code review, upstream CI approval and merge decisions.
 2. Actual TV validation of Cobalt, Samsung Home, native channel controls, physical HOME/standby, HDMI reports and Frame Art Mode, on separately authorized isolated QA builds with rollback.
-3. TV visual/performance acceptance for the integrated UI and long-session cache behavior. The screenshot request in [the #26 review discussion](https://github.com/helalaou/AeroTizen/pull/26#issuecomment-6387988514) remains open; no rendered launcher screenshots were produced in this environment.
+3. TV visual/performance acceptance for the integrated UI and long-session cache behavior. Four native V992.56 reference screenshots are now published in [PR #26](https://github.com/helalaou/AeroTizen/pull/26), with explicit reference-only labels. Remove from Home inside All apps remains to be captured; proposed-branch TV visual acceptance is still pending.
 4. Provenance/redistribution review for bundled PNG/JPEG assets; integrity alone does not establish licensing rights.
 5. Other model/firmware physical HOME support only after independent read-only baseline, exact guard and tested restore. Do not weaken #33 or turn it into a universal writer.
 
@@ -59,6 +59,10 @@ Previous detailed status is preserved in [the archive](docs/archive/INTEGRATION_
 
 Rechecked all ten upstream PR discussions on 24 October 2026. The only concrete request is metacurb's request for screenshots on #26. No code-change review request is currently recorded.
 
-[Capture checklist and English captions](https://github.com/motorgrid-ita/AeroTizen/blob/integration/v99256-combined-qa/docs/V99256_REVIEW_SCREENSHOTS.md) are prepared. Required states: Home actions, Add to Home from All apps, and Remove from Home from All apps. Actual images remain to be supplied; V992.56 TV photos must be labelled as reference evidence, not as proof of the upstream port.
+[Capture checklist and English captions](https://github.com/motorgrid-ita/AeroTizen/blob/integration/v99256-combined-qa/docs/V99256_REVIEW_SCREENSHOTS.md) are prepared. Required states: Home actions, Add to Home from All apps, and Remove from Home from All apps. Four unchanged 1920 × 1080 digital PNGs are now attached to the PR description: Home overview, Home actions, reorder mode and Add to Home from All apps. They are labelled as V992.56 reference evidence, not proof of the upstream adaptation. A separate Remove from Home capture inside All apps remains pending.
 
 The QA branch's subsequent documentation-only commit does not change the source tree validated by CI run #40124174636. Read the fork PR checks for its latest automatic documentation-head CI run.
+
+## Native capture result — 24 October 2026
+
+The owner supplied six native 1920 × 1080 PNG captures. Four non-redundant images are published in [PR #26](https://github.com/helalaou/AeroTizen/pull/26) and indexed in the [reference gallery](https://github.com/motorgrid-ita/AeroTizen/blob/integration/v99256-combined-qa/docs/screenshots/v99256-reference/README.md). This confirms successful reference screenshot acquisition, not completion of upstream hardware QA. HomeWatcher recovery was confirmed in the preceding owner-supplied log before the revised capture attempt; its post-session state has not been read back.
