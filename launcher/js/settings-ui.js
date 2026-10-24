@@ -41,7 +41,7 @@
       var enabled = item[0] === 'auto';
       var selected = (S.photoWeather === true) === enabled;
       var key = 'photo-weather:' + item[0];
-      var control = pill(key, item[1], selected, function () {
+      var control = pill(key, A.i18n ? A.i18n.label(key, item[1]) : item[1], selected, function () {
         S.photoWeather = enabled;
         focusKey = key;
         changed(function () {
