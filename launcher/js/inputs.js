@@ -114,6 +114,12 @@
   };
 
   inputs.show = function (s) {
+    // Native TV owns channel selection while HDMI keeps the existing
+    // TVWindow path; HOME continues through the background watcher.
+    if (s && s.type === 'TV' && A.homewatch &&
+        typeof A.homewatch.openNativeLiveTV === 'function') {
+      return A.homewatch.openNativeLiveTV(s.raw || s);
+    }
     if (!tz || !tz.tvwindow) { return A.toast('Would switch to ' + inputs.label(s)); }
     try {
       tz.tvwindow.setSource(s.raw || s, function () {
