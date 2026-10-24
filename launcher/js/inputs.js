@@ -59,6 +59,12 @@
   };
 
   inputs.show = function (s) {
+    // Native Live TV owns channel switching and remote control; HDMI sources
+    // continue through the existing embedded TVWindow path.
+    if (s && s.type === 'TV' && A.homewatch &&
+        typeof A.homewatch.openNativeLiveTV === 'function') {
+      return A.homewatch.openNativeLiveTV(s.raw || s);
+    }
     if (!tz || !tz.tvwindow) { return A.toast('Would switch to ' + inputs.label(s)); }
     try {
       tz.tvwindow.setSource(s.raw || s, function () {
