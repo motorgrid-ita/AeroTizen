@@ -554,6 +554,55 @@ test('native mode survives restart with no API polling, Art client or boot launc
   assert.equal(restarted.art.starts, 0);
 });
 
+for (const launchFails of [false, true]) {
+  test('native Live TV handoff preserves native Home routing when launch ' +
+    (launchFails ? 'fails' : 'succeeds'), () => {
+    const h = ready();
+    h.handoff('hold'); h.handoff('native');
+    const before = h.state().homeControl;
+    const requests = h.requests.length;
+    const launches = [], tuned = [], messages = [];
+    const document = { hidden: false };
+    const A = {
+      config: { SERVICE_URL: 'http://127.0.0.1:47790' },
+      homewatch: {}, toast: message => messages.push(message),
+      tizen: {
+        application: { launch(id, success, failure) {
+          launches.push(id);
+          if (launchFails) failure({ name: 'Denied' });
+          else { document.hidden = true; success(); }
+        } },
+        tvwindow: { setSource(value, success) { tuned.push(value); success(); } }
+      }
+    };
+    function Request() {
+      this.open = (method, address) => { this.path = new URL(address).pathname; };
+      this.send = () => {
+        this.responseText = JSON.stringify(h.control(this.path));
+        this.status = 200;
+        this.onload();
+      };
+    }
+    vm.runInNewContext(fs.readFileSync(__dirname + '/../launcher/js/native-navigation.js', 'utf8'), {
+      window: { AeroTizen: A, addEventListener() {}, setTimeout(fn) { fn(); } },
+      document, XMLHttpRequest: Request
+    });
+    const tuner = { type: 'TV', number: 1 };
+    assert.equal(A.homewatch.openNativeLiveTV(tuner), true);
+    assert.deepEqual(tuned, [tuner]);
+    assert.deepEqual(launches, ['org.tizen.tv-viewer']);
+    if (launchFails) assert.match(messages[0], /Could not open Live TV/);
+    else assert.equal(messages.length, 0);
+    // Returning from a system app must not resume the legacy watcher in native mode.
+    document.hidden = false;
+    A.homewatch.resume();
+    h.advance(60000);
+    assert.deepEqual(h.state().homeControl, before);
+    assert.equal(h.requests.length, requests);
+    assert.equal(h.launches.length, 0);
+  });
+}
+
 test('a pending handoff survives restart with the watcher suppressed', () => {
   const h = ready(); h.handoff('hold');
   const restarted = harness({ stored: h.stored, capability: false });
