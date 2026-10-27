@@ -1,4 +1,4 @@
-# S90C native Live TV integration candidate
+# S90C native Live TV integration results
 
 This fork-only test branch combines upstream PR #49 at
 `3c2320052b68a0f23b8966059e3771e25b3a1a90` with PR #37 at
@@ -23,18 +23,41 @@ It is not an additional upstream pull request and does not change either PR bran
 
 On the S90C, PR #49 alone passed physical HOME, YouTube and Prime Video returns,
 native automatic startup, and restoration of both HOME-only and HOME-plus-boot
-configurations across full power disconnects. The original settings are currently
-restored, with the PR #49 launcher still installed.
+configurations across full power disconnects, before the combined launcher test.
 
 The embedded Live TV path in PR #49 alone did not support channel changes; BACK
 returned to the launcher, whereas physical HOME did not. An external CLI launch
 of the native viewer was not confirmed. That transport does not test the in-app
 Tizen launch API used here.
 
-The combined build has **not yet passed hardware acceptance**. Required checks:
-native Live TV channel changes and physical HOME return, re-entry, a handoff after
-HDMI selection, Samsung Home escape, YouTube/Prime regression, boot and restore.
-Do not claim recovery with the launcher absent until separately tested.
+On 27 October 2026, the owner confirmed these checks on combined commit
+`7ba7fad0fdcfb6a5714ef5a91b3444edcdb5f6e0`, after applying HOME-only native routing
+and disconnecting power for 60 seconds:
+
+- Native Live TV opens, channel changes work, physical HOME returns to AeroTizen,
+  and Live TV can be reopened.
+- YouTube and Prime Video playback and physical HOME returns work.
+- The compiled Preact Settings action **Use Samsung Home instead** leaves Samsung
+  Home visible; physical HOME returns to AeroTizen.
+
+The signed combined WGT has SHA-256
+`aeaff5f8acf882ee0b1c9a8538854cd5ca316920569566711809f2f9db416dc7`.
+Physical HOME in these checks is provided by PR #49, not PR #37 alone.
+The TV currently runs this combined launcher with native HOME enabled and
+automatic startup disabled.
+
+Still untested on the combined build: HDMI-to-TV switching, boot, restore,
+Frame/Art behavior, and recovery with the launcher absent. The Samsung Home check
+used a wait before physical HOME; immediate Samsung-menu HOME is not a claimed pass.
+
+Combined CI passed lint/typecheck/build, release packaging, 150 JavaScript tests
+(including 41 watcher integration checks), 346 Python tests on 3.10/3.12/3.13,
+and all 10 Chromium browser tests:
+https://github.com/motorgrid-ita/AeroTizen/actions/runs/40495595391
+
+PR #49 subsequently advanced to `bf0f7846c0b09574cf12568b6b558b95a924b8f0`, adding
+Windows test fixes and read-only service diagnostics. The hardware results above
+do not cover those newer changes.
 
 ## PC and TV procedure
 
@@ -47,8 +70,9 @@ author certificate as the installed app. Verify signatures and file digests
 before installation. Run browser tests with a local Python command supported by
 the host; a single worker avoided local-server connection failures on Windows.
 
-The TV currently has stock native assignments. Update the installed launcher
-without uninstalling it, then check its service protocol and perform an offline
+For the completed test, the TV first had stock native assignments. The installed
+launcher was updated without uninstalling it. For future updates, restore and
+verify stock state first, then check the service protocol and perform an offline
 HOME-only apply preview with the existing baseline. Native changes require an
 explicit guided write step. Verify apply across a 60-second power disconnect
 before testing Live TV. Do not include automatic startup in the first handoff test.
