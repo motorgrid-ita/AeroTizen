@@ -1,7 +1,7 @@
 # S90C native Live TV integration results
 
 This fork-only test branch combines upstream PR #49 at
-`3c2320052b68a0f23b8966059e3771e25b3a1a90` with PR #37 at
+`bf0f7846c0b09574cf12568b6b558b95a924b8f0` with PR #37 at
 `cfc8ba380bde2338e5dcddd080ae076f3e3701c2`.
 It is not an additional upstream pull request and does not change either PR branch.
 
@@ -55,9 +55,10 @@ Combined CI passed lint/typecheck/build, release packaging, 150 JavaScript tests
 and all 10 Chromium browser tests:
 https://github.com/motorgrid-ita/AeroTizen/actions/runs/40495595391
 
-PR #49 subsequently advanced to `bf0f7846c0b09574cf12568b6b558b95a924b8f0`, adding
-Windows test fixes and read-only service diagnostics. The hardware results above
-do not cover those newer changes.
+This branch now also includes PR #49 at `bf0f7846c0b09574cf12568b6b558b95a924b8f0`,
+adding Windows test fixes and read-only service diagnostics. The hardware results
+above belong to the older `7ba7fad` build and do not cover those newer changes.
+The native writer and launcher service are unchanged by this update.
 
 ## PC and TV procedure
 
@@ -79,3 +80,25 @@ before testing Live TV. Do not include automatic startup in the first handoff te
 
 This branch does not change firmware, the reference branch, original backup,
 certificates, or the existing upstream pull requests.
+
+## Preparing the current PC tools
+
+Use a separate checkout under the existing PC test workspace. With Python 3.11
+or newer, run `tools/prepare_integration_pc.py --expected-commit EXACT_COMMIT`.
+The tool checks that both pinned PR heads are ancestors of that exact clean
+checkout. It verifies the existing archive and baseline hashes, creates the
+separate `.venv-integration-current` environment, builds both managed helpers,
+and runs Ruff, lint, typecheck/build, JavaScript, Python and browser tests.
+Playwright must already have its matching Chromium installed on the PC.
+
+The browser server uses the isolated Python executable with one worker, keeping
+the original project configuration unchanged. The tool then checks release
+packaging and offline apply/restore previews, signs the compiled launcher using
+temporary copies of the preserved author/distributor certificates, and verifies
+both signatures, all referenced digests and complete file coverage. It writes
+`PC_UPDATE_RESULT.json` and a build log in a new `pc_update_*` directory.
+
+No TV discovery, connection, installation, native write or backup replacement is
+performed. The old `.venv`, source directories, signed packages and complete
+baseline/transaction folder remain available. A failing check stops preparation
+and reports the log location; it does not alter the installed TV version.
