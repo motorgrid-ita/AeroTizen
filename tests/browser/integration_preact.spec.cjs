@@ -1,0 +1,44 @@
+const { test, expect } = require('@playwright/test');
+
+test('Glass composes clock, card, standby, wallpaper and native-command preferences without losing remote focus', async ({ page }, info) => {
+  const errors=[]; page.on('pageerror', error=>errors.push(error.message));
+  await page.route('https://**/*', route=>route.fulfill({body:'{}'}));
+  await page.route('http://127.0.0.1:47790/**', route=>route.fulfill({body:'{}'}));
+  await page.addInitScript(()=>{
+    if(!localStorage.getItem('aerotizen.settings.v1')) localStorage.setItem('aerotizen.settings.v1',JSON.stringify({glassSettings:true,clockLayout:'custom',aeroClockStyle:'bold',homeCardMode:'rectangle',homeCardColumns:4,hideDisconnectedHdmi:true,showWeather:false,background:'black',home:['demo0','demo1','demo2','demo3','demo4'],inputNames:{'HDMI 2':'Custom console'}}));
+  });
+  await page.goto('/'); await page.waitForFunction(()=>AeroTizen.apps.ready && AeroTizen.inputs.sources.length===4);
+  await expect(page.locator('#aero-v991-widget')).toBeVisible();
+  await expect(page.locator('#grid')).toHaveClass(/cards-rectangle cols-4/);
+  await expect(page.locator('#inputs')).toContainText('PC');
+  await expect(page.locator('#inputs')).not.toContainText('Custom console');
+  await page.locator('#gear').click();
+  await page.locator('[data-key="section:status"]').click();
+  await page.locator('[data-key="clock-styles:minimal"]').click();
+  await page.locator('[data-key="section:sources"]').click();
+  await page.locator('[data-key="hdmi-keep:2:true"]').click();
+  await page.locator('[data-key="section:appearance"]').click();
+  await page.locator('[data-key="home-card-columns:5"]').click();
+  await page.locator('[data-key="section:wallpaper"]').click();
+  await page.locator('[data-key="wallpaper-categories:photo"]').click();
+  await page.locator('[data-key="weather-photo-choice:true"]').click();
+  expect(await page.evaluate(()=>AeroTizen.settings.weatherPhoto)).toBe(true);
+  await page.locator('[data-key="weather-photo-choice:false"]').click();
+  await page.keyboard.press('Escape'); await page.keyboard.press('Escape');
+  await expect(page.locator('#editor')).toBeHidden();
+  await expect(page.locator('#grid .focused')).toHaveCount(1);
+  await expect(page.locator('#inputs')).toContainText('Custom console');
+  await expect(page.locator('#aero-v991-widget')).toHaveClass('style-minimal');
+  await page.evaluate(()=>{window.selectedInput=null; AeroTizen.inputs.show=source=>{selectedInput=source.type+':'+source.number;};});
+  await page.getByRole('button',{name:'Custom console',exact:true}).click();
+  expect(await page.evaluate(()=>selectedInput)).toBe('HDMI:2');
+  await page.screenshot({path:info.outputPath('glass-combined-home.png')});
+  await page.reload();
+  expect(await page.evaluate(()=>[AeroTizen.settings.homeCardColumns,AeroTizen.settings.aeroClockStyle,AeroTizen.settings.hdmiKeepVisible['2'],AeroTizen.settings.weatherPhoto])).toEqual([5,'minimal',true,false]);
+  await page.locator('#gear').click(); await page.locator('[data-key="section:appearance"]').click();
+  await page.locator('[data-key="settings-appearance:false"]').click();
+  await expect(page.locator('#editor')).not.toHaveClass(/aero-settings-open/);
+  await page.keyboard.press('Escape'); await expect(page.locator('#editor')).toBeHidden();
+  await expect(page.locator('#aero-v991-widget')).toBeVisible();
+  expect(errors).toEqual([]);
+});

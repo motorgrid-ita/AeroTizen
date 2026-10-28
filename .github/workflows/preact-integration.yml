@@ -1,0 +1,47 @@
+name: Preact integration validation
+
+on:
+  push:
+    branches: [integration/preact-contributions]
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ github.sha }}
+
+  hardware-package:
+    needs: integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: python tools/build_release.py launcher --output dist/release-check
+      - name: Record exact unsigned source and package
+        run: |
+          python - <<'PY'
+          import hashlib, json, subprocess
+          from pathlib import Path
+          folder = Path('dist/release-check')
+          widget = next(folder.glob('*.wgt'))
+          metadata = json.loads((folder / 'launcher-release.json').read_text())
+          metadata.update(source_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+                          signed=False, hardware_tested=False)
+          assert metadata['sha256'] == hashlib.sha256(widget.read_bytes()).hexdigest()
+          (folder / 'build-provenance.json').write_text(json.dumps(metadata, indent=2) + '\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preact-s90c-unsigned-${{ github.sha }}
+          path: dist/release-check/
+          retention-days: 14
