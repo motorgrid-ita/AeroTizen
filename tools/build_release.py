@@ -62,6 +62,19 @@ def build_launcher(root, output, tag=None):
         raise ValueError("Compiled launcher is missing; run npm ci and npm run build first")
     if (launcher / "config.xml").read_bytes() != (source / "config.xml").read_bytes():
         raise ValueError("Compiled launcher config.xml is stale; run npm run build again")
+    # Public builds cannot silently acquire private/uncleared brand image packs.
+    for directory in ("assets/brands", "assets/artwork-local", "assets/artwork-verified"):
+        if (launcher / directory).exists():
+            raise ValueError(
+                "Public artwork requires a reviewed allowlist; unexpected directory: " + directory
+            )
+    profile = launcher / "js/artwork-profile.js"
+    if (
+        profile.exists()
+        and re.sub(r"//[^\n]*", "", profile.read_text(encoding="utf-8")).strip()
+        != "window.AeroTizen.artworkProfile = {};"
+    ):
+        raise ValueError("Public releases must use the empty artwork profile")
     files = [launcher / name for name in ("config.xml", "index.html", "icon.png", "licenses/preact.txt")]
     for directory, suffix in (("css", ".css"), ("js", ".js"), ("service", ".js")):
         files.extend((launcher / directory).rglob(f"*{suffix}"))

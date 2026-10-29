@@ -258,3 +258,19 @@ def test_weather_release_refuses_missing_runtime_asset_or_provenance(launcher, t
     with pytest.raises(ValueError, match="Runtime file"):
         build.build_launcher(launcher, tmp_path / "output")
     assert not (tmp_path / "output").exists()
+
+
+@pytest.mark.parametrize("directory", ["assets/brands", "assets/artwork-local", "assets/artwork-verified"])
+def test_public_release_rejects_unreviewed_artwork_packs(launcher, tmp_path, directory):
+    folder = launcher / "dist/launcher" / directory
+    folder.mkdir(parents=True)
+    (folder / "unapproved.png").write_bytes(b"unapproved")
+    with pytest.raises(ValueError, match="reviewed allowlist"):
+        build.build_launcher(launcher, tmp_path / "release")
+
+
+def test_public_release_rejects_private_or_appended_profile_code(launcher, tmp_path):
+    profile = launcher / "dist/launcher/js/artwork-profile.js"
+    profile.write_text("window.AeroTizen.artworkProfile = {}; window.privateData = true;")
+    with pytest.raises(ValueError, match="empty artwork profile"):
+        build.build_launcher(launcher, tmp_path / "release")

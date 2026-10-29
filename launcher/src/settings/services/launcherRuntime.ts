@@ -1,8 +1,10 @@
+import type { ArtworkProfile } from '../../shared/artwork/selectArtwork';
 import type { ContinueSource, AppPresentation, Background, Clock, InstalledApp, LauncherConfig, SettingsBridge, SettingsSource, WeatherLocation } from '../types';
 
 export interface InputSource { type: string; number?: number; editName?: string }
 
 export interface LauncherRuntime {
+  artworkProfile?: ArtworkProfile;
   config: LauncherConfig;
   i18n?: { t(value: string): string };
   settings: SettingsSource;

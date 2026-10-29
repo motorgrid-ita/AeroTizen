@@ -1,3 +1,4 @@
+import { ArtworkSettings } from './sections/ArtworkSettings';
 import { SettingsDrawer } from './glass/GlassSettings';
 import { RemoteControl } from './components/RemoteControl';
 import { useMemo } from 'preact/hooks';
@@ -23,7 +24,7 @@ export const Settings = ({ active, previewing, openedAt }: { active: boolean; pr
       describeApp={services.describeApp} fireplaceId={services.config.FIREPLACE_ID} />
   ), [settings.home, apps, actions, active, services]);
   return <SettingsDrawer panes={{
-      appearance: <DisplaySettings settings={settings} actions={actions} clock={services.clock} openedAt={openedAt} section="appearance" />,
+      appearance: <><DisplaySettings settings={settings} actions={actions} clock={services.clock} openedAt={openedAt} section="appearance" /><ArtworkSettings settings={settings} actions={actions} apps={apps} profile={window.AeroTizen.artworkProfile || {}} /></>,
       apps: <>{appMenu}<ContinueWatchingSettings settings={settings} actions={actions} sources={continueSources} message={continueMessage} active={active} describeApp={services.describeApp} /><RemoteControl id="escape" class="escape" focusKey="escape" role="button" onClick={actions.useSamsungHome}>{services.translate('Use Samsung Home instead')}</RemoteControl></>,
       wallpaper: <BackgroundSettings settings={settings} actions={actions} config={services.config} backgrounds={services.backgrounds} />,
       status: <><WeatherSettings settings={settings} actions={actions} active={active} /><DisplaySettings settings={settings} actions={actions} clock={services.clock} openedAt={openedAt} section="status" /></>,

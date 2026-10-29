@@ -60,6 +60,10 @@
       if (saved.favorites && !saved.home) { saved.home = saved.favorites; }  // earlier field name
       Object.keys(data).forEach(function (k) { if (saved[k] !== undefined) { data[k] = saved[k]; } });
     } catch (e) { /* corrupt or unavailable storage: keep defaults */ }
+    data.artworkStyle = data.artworkStyle === 'studio' ? 'studio' : 'native';
+    data.artworkDisabled = Array.isArray(data.artworkDisabled) ? data.artworkDisabled.filter(function (id, i, all) {
+      return typeof id === 'string' && /^[A-Za-z0-9_.-]{1,200}$/.test(id) && all.indexOf(id) === i;
+    }).slice(0, 500) : [];
     data.continueWatching = data.continueWatching === true;
     data.continueWatchingApps = Array.isArray(data.continueWatchingApps) ? data.continueWatchingApps.filter(function (id, index, all) {
       return typeof id === 'string' && /^[A-Za-z0-9_.-]{1,200}$/.test(id) && all.indexOf(id) === index;

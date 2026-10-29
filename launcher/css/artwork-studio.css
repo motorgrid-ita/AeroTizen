@@ -1,0 +1,11 @@
+/* Original AeroTizen vector/CSS composition; no third-party logo or font asset. */
+.artwork-studio .studio-surface { position:absolute; top:0;right:0;bottom:0;left:0; overflow:hidden; border-radius:inherit; color:#fff; background:linear-gradient(135deg,#283851,#111b2b 58%,#34444c); }
+.artwork-studio .studio-orbit { position:absolute; width:85%; height:130%; top:-45%; right:-48%; border:1px solid rgba(208,224,255,.16); border-radius:50%; box-shadow:0 0 0 22px rgba(208,224,255,.025),0 0 0 46px rgba(208,224,255,.02); }
+.artwork-studio .studio-image { position:absolute; width:68%; height:62%; top:9%; left:16%; object-fit:contain; }
+.artwork-studio .studio-image[hidden] { display:none; }
+.artwork-studio .studio-name { position:absolute; left:8%; right:8%; bottom:8%; text-align:center; font-family:Arial,sans-serif; font-size:clamp(20px,1.7vw,34px); font-weight:600; line-height:1.15; max-height:2.3em; overflow:hidden; overflow-wrap:break-word; text-shadow:0 2px 6px #000; }
+.cards-rectangle .artwork-studio .studio-image { width:35%; height:72%; top:14%; left:6%; }
+.cards-rectangle .artwork-studio .studio-name { left:47%; right:6%; top:50%; bottom:auto; transform:translateY(-50%); text-align:left; }
+.glass-ui .artwork-studio .studio-surface { background:linear-gradient(135deg,#37465c,#1e2838 58%,#46515e); }
+@supports not (font-size:clamp(20px,1.7vw,34px)) { .artwork-studio .studio-name { font-size:28px; } .cols-5 .artwork-studio .studio-name { font-size:22px; } }
+@media (prefers-reduced-motion:reduce) { .artwork-studio .studio-surface { transition:none; } }

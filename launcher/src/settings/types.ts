@@ -11,6 +11,7 @@ export interface WeatherLocation {
   name: string; label?: string; latitude: number; longitude: number; country_code?: string;
 }
 export interface SettingsValues {
+  artworkStyle: 'native' | 'studio'; artworkDisabled: string[];
   home: string[]; homeCardMode: 'square' | 'rectangle'; homeCardColumns: number | null; glassSettings: boolean; clockLayout: 'classic' | 'custom'; aeroClockStyle: 'vertical' | 'horizontal' | 'minimal' | 'bold'; cardSize: CardSize; background: string; speed: number;
   weatherPhoto: boolean; showWeather: boolean; showTime: boolean; showNetwork: boolean; tempUnit: TemperatureUnit;
   weatherLocation: WeatherLocation | null; weatherShowLocation: boolean;
@@ -18,7 +19,8 @@ export interface SettingsValues {
   continueWatching: boolean; continueWatchingApps: string[];
   showLiveTv: boolean; hideDisconnectedHdmi: boolean; hdmiKeepVisible: Record<string, boolean>; inputNames: Record<string, string>;
 }
-export type SettingsSnapshot = Readonly<Omit<SettingsValues, 'home' | 'inputNames' | 'weatherLocation' | 'continueWatchingApps' | 'hdmiKeepVisible'>> & {
+export type SettingsSnapshot = Readonly<Omit<SettingsValues, 'home' | 'inputNames' | 'weatherLocation' | 'continueWatchingApps' | 'hdmiKeepVisible' | 'artworkDisabled'>> & {
+  readonly artworkDisabled: readonly string[];
   readonly home: readonly string[];
   readonly continueWatchingApps: readonly string[];
   readonly hdmiKeepVisible: Readonly<Record<string, boolean>>;
@@ -82,6 +84,8 @@ export interface SettingsServices {
   showPreviewMessage(): void; hidePreviewMessage(): void;
 }
 export interface SettingsActions {
+  setArtworkStyle(style: SettingsValues['artworkStyle']): void;
+  setArtworkOverride(id: string, enabled: boolean): void;
   setGlassSettings(enabled: boolean): void;
   setWeatherPhoto(enabled: boolean): void;
   setContinueWatching(enabled: boolean): void; toggleContinueApp(id: string): void;
