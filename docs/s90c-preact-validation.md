@@ -303,3 +303,13 @@ normalizes Settings choices and square app icons. Home Square/Rectangle and
 column choices must not change Settings icon geometry or node identity. These
 changes preserve all artwork source URLs and native services. Physical acceptance
 of this follow-up remains pending; a wider artwork/card redesign is separate.
+
+### Card controls, HDMI fields and motion follow-up
+
+The owner accepted the previous theme consistency correction. Follow-up fixes hide
+Big/Small when an explicit 3/4/5-column layout is selected (the saved size remains
+available in Follow card size), contain HDMI name fields inside their controls,
+add short transform-only Continue Watching focus motion with reduced-motion
+support, and soften the top content fade while adding a 40 px bottom fade. The
+header is not masked and selected-row clearance is preserved. These latest changes
+require a new physical S90C check; previous owner confirmation does not cover them.
