@@ -12,3 +12,7 @@
 
 .artwork-studio .studio-initial { position:absolute; left:30%; top:19%; width:40%; height:40%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(224,235,255,.25); border-radius:24px; color:#d8e3f1; background:rgba(224,235,255,.055); font:normal 76px Arial,sans-serif; }
 .cards-rectangle .artwork-studio .studio-initial { left:9%; top:23%; width:27%; height:54%; font-size:64px; }
+
+/* A supplied landscape canvas is already a composition, not a square logo. */
+.artwork-studio [data-artwork-composition="banner"] .studio-image { top:0;left:0;width:100%;height:100%;object-fit:contain; }
+.artwork-studio [data-artwork-composition="banner"] .studio-name { top:auto;bottom:5%;left:4%;right:auto;max-width:75%;transform:none;padding:5px 10px;border-radius:7px;background:rgba(0,0,0,.55);font-size:22px; }

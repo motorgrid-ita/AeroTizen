@@ -72,3 +72,14 @@ test('reviewed-package logo omission keeps generic names, Settings and app launc
  await focusApp(page,'demo0');await page.keyboard.press('Enter');await expect(page.locator('#toast')).toContainText('Would open YouTube');
  expect(errors).toEqual([]);
 });
+
+test('personal landscape compositions occupy the full card without stretching a square fallback',async({page})=>{
+ await page.route('**/assets/artwork-local/landscape.png',r=>r.fulfill({contentType:'image/png',body:fs.readFileSync(path.join(__dirname,'../fixtures/artwork/neutral-rectangle.png'))}));
+ await start(page,{demo8:{rectangle:{src:'assets/artwork-local/landscape.png',width:1280,height:720}}});
+ await appearance(page);await page.locator('[data-key="home-card-mode:rectangle"]').click();await page.locator('[data-key="artwork-style:studio"]').click();await close(page);
+ const app=page.locator('#grid [data-id="demo8"]');await expect(app.locator('.studio-surface')).toHaveAttribute('data-artwork-composition','banner');
+ const geometry=await app.locator('.studio-image').evaluate(n=>({fit:getComputedStyle(n).objectFit,width:n.clientWidth,parent:n.parentElement.clientWidth,naturalWidth:n.naturalWidth,naturalHeight:n.naturalHeight}));
+ expect(geometry).toEqual({fit:'contain',width:geometry.parent,parent:geometry.parent,naturalWidth:1280,naturalHeight:720});
+ await appearance(page);await page.locator('[data-key="home-card-mode:square"]').click();await close(page);
+ await expect(app.locator('.studio-surface')).toHaveAttribute('data-artwork-composition','icon');
+});

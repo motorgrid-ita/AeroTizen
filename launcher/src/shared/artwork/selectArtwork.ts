@@ -15,6 +15,6 @@ export const selectArtwork = (app: InstalledApp, native: readonly string[], shap
   const localFile = enabled && !disabled.includes(app.id) ? safe(own(local, app.id)?.[shape]) : undefined;
   const bundledFile = enabled ? safe(own(bundled, app.id)?.[shape]) : undefined;
   const preferred = localFile || bundledFile;
-  return { sources: [...new Set([...(preferred ? [preferred.src] : []), ...native])], preferred,
+  return { shape, sources: [...new Set([...(preferred ? [preferred.src] : []), ...native])], preferred,
     origin: localFile ? 'local' : bundledFile ? 'verified' : 'samsung' } as const;
 };
