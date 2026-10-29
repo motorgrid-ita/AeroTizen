@@ -38,7 +38,7 @@ test('Glass composes clock, card, standby, wallpaper and native-command preferen
   await page.locator('#gear').click(); await page.locator('[data-key="section:appearance"]').click();
   await page.locator('[data-key="settings-appearance:false"]').click();
   await expect(page.locator('#editor')).not.toHaveClass(/aero-settings-open/);
-  await page.keyboard.press('Escape'); await expect(page.locator('#editor')).toBeHidden();
+  await page.keyboard.press('Escape'); await page.keyboard.press('Escape'); await expect(page.locator('#editor')).toBeHidden();
   await expect(page.locator('#aero-v991-widget')).toBeVisible();
   expect(errors).toEqual([]);
 });

@@ -1,3 +1,4 @@
+const {openCategory,closeSettings}=require('./drawer_helpers.cjs');
 const { test, expect } = require('@playwright/test');
 test('Square and Rectangle retain native artwork sources while 3/4/5-column navigation and persistence work', async ({ page }, info) => {
   const errors = []; page.on('pageerror', error => errors.push(error.message));
@@ -6,10 +7,10 @@ test('Square and Rectangle retain native artwork sources while 3/4/5-column navi
   await page.goto('/'); await page.waitForFunction(() => AeroTizen.apps.ready);
   for (const mode of ['square','rectangle']) {
     for (const columns of [3,4,5]) {
-      await page.locator('#gear').click();
+      await page.locator('#gear').click(); await openCategory(page,'appearance');
       await page.locator(`[data-key="home-card-mode:${mode}"]`).click();
       await page.locator(`[data-key="home-card-columns:${columns}"]`).click();
-      await page.keyboard.press('Escape'); await page.locator('#home-tab').click(); await page.locator('#apps-tab').click();
+      await closeSettings(page); await page.locator('#home-tab').click(); await page.locator('#apps-tab').click();
       await expect(page.locator('#grid')).toHaveClass(new RegExp('cards-' + mode));
       const tiles = page.locator('#grid > .tile');
       const positions = await tiles.evaluateAll(nodes=>nodes.slice(0,6).map(node=>({top:node.offsetTop,width:node.offsetWidth,height:node.offsetHeight})));

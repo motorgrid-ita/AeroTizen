@@ -119,7 +119,8 @@ observed latency. A PC simulation is not a physical remote or Samsung API test.
 4. **Live TV:** select the dock tile, change channels with CH+/CH- and number keys,
    verify TV owns remote focus, then physical HOME returns to AeroTizen. Repeat with
    Back and after re-entering TV. Report any overlay/remote-focus failure distinctly.
-5. **Glass:** Settings > Settings appearance > Glass. Traverse all five categories
+5. **Shared drawer and themes:** Settings > Home appearance > Interface appearance > Glass.
+   Repeat the category controls in Classic too. Traverse all five categories
    with Up/Down, Right/OK, Left at the content edge and Back. Check text input, IME,
    close button, focus glider alignment, single borders, clipping and smooth movement.
    Return to Classic and verify original controls remain reachable.
@@ -273,3 +274,21 @@ A browser regression activates the real wallpaper layer and checks the paint
 order of unfocused header controls, status content and the viewport in both
 Classic and Glass, including Settings and native-TV hiding. Hardware retest
 of this correction remains pending.
+
+## Hardware findings: scroll fade, custom clock clearance and shared drawer
+
+The owner confirmed that the weather-layer correction restored header visibility.
+Subsequent acceptance found a missing upper scroll fade, insufficient clearance
+below the custom clock/city and off-centre tabs. Restore the screen-fixed viewport
+fade only while scrolled; keep the header outside the mask. Let the actual custom
+clock height reserve layout space, including local fonts and weather/city content,
+and centre its tabs independently of the clock width. No additional measurement
+polling, observer or timer is required.
+
+The category drawer is common functionality for both Classic and Glass. The
+appearance preference must not switch to an unrelated linear Settings screen.
+Both themes use the same category controls, D-pad scopes, Back/Left behaviour and
+existing settings services. Classic paints neutral opaque surfaces and violet
+focus; Glass paints the satin surfaces. Compact/custom clock layout remains a
+separate preference. Automated geometry and category checks do not establish
+physical TV acceptance of these corrections; owner retest remains pending.

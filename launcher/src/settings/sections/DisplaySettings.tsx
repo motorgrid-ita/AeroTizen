@@ -12,7 +12,7 @@ export const DisplaySettings = ({ settings, actions, clock, openedAt, section }:
       {!section || section === 'status' ? <>
       <h3>Clock layout</h3>
       <Choice id="clock-layouts" label="Clock layout" value={settings.clockLayout}
-        options={[['classic', 'Classic AeroTizen'], ['custom', 'Custom clock']]} onSelect={actions.setClockLayout} />
+        options={[['classic', 'Compact clock'], ['custom', 'Custom clock']]} onSelect={actions.setClockLayout} />
       <div hidden={settings.clockLayout !== 'custom'}>
         <h3>Clock style</h3>
         <Choice id="clock-styles" label="Clock style" value={settings.aeroClockStyle}
@@ -36,8 +36,8 @@ export const DisplaySettings = ({ settings, actions, clock, openedAt, section }:
       </div>
       </> : null}
       {!section || section === 'appearance' ? <>
-      <h3>Settings appearance</h3>
-      <Choice id="settings-appearance" label="Settings appearance" value={settings.glassSettings === true}
+      <h3>Interface appearance</h3>
+      <Choice id="settings-appearance" label="Interface appearance" value={settings.glassSettings === true}
         options={[[false, 'Classic'], [true, 'Glass']]} onSelect={actions.setGlassSettings} />
       <h3>Network indicator</h3>
       <Choice id="network-visibility" label="Network indicator visibility" value={settings.showNetwork !== false}
