@@ -54,3 +54,17 @@ def test_signed_or_duplicate_packages_are_not_silently_modified(tmp_path):
         archive.writestr("author-signature.xml", "<Signature/>")
     with pytest.raises(ValueError, match="unsigned"):
         local.prepare(package, manifest, tmp_path / "no.wgt", True)
+
+
+@pytest.mark.parametrize("name", ["assets/brands/any.png", "assets/artwork-local/any.png", "icons/new.svg"])
+def test_release_artwork_gate_rejects_unreviewed_image_files(tmp_path, name):
+    gate_spec = importlib.util.spec_from_file_location(
+        "artwork_gate", Path(__file__).parents[1] / "tools/check_artwork_release.py"
+    )
+    gate = importlib.util.module_from_spec(gate_spec)
+    gate_spec.loader.exec_module(gate)
+    package = tmp_path / "bad.wgt"
+    with zipfile.ZipFile(package, "w") as archive:
+        archive.writestr(name, "unreviewed")
+    with pytest.raises(ValueError, match="Unreviewed"):
+        gate.validate(package)

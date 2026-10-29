@@ -53,6 +53,7 @@ def prepare(package, manifest, output, acknowledge=False):
                     raise ValueError("Only single-frame PNG images up to 16 megapixels are accepted")
                 image.load()
                 image = image.convert("RGBA")
+                image.info.clear()
                 image.thumbnail((1024, 1024) if shape == "square" else (1280, 720), Image.Resampling.LANCZOS)
                 buffer = io.BytesIO()
                 image.save(buffer, "PNG", optimize=True)

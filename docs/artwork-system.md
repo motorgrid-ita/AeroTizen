@@ -4,7 +4,7 @@ Related to upstream Issue #56. This partially addresses it: no third-party HD lo
 
 ## Selection and rendering
 
-Default **Samsung artwork** preserves the current candidate order and Settings/CW icons. Opt into **Studio cards and local overrides** in Settings > Home appearance > App artwork. Home app cards use exact installed application IDs and independently select the current shape:
+Default **Samsung artwork** preserves the current device candidate order and standard Settings/CW geometry. The reviewed test WGT excludes legacy bundled logo paths; missing native artwork falls back to plain text rather than an uncleared vector. Opt into **Studio cards and local overrides** in Settings > Home appearance > App artwork. Home app cards use exact installed application IDs and independently select the current shape:
 
 1. An enabled personal profile entry for that exact ID and shape.
 2. An individually cleared bundled entry (currently empty, deliberately).
@@ -13,7 +13,7 @@ Default **Samsung artwork** preserves the current candidate order and Settings/C
 
 Images use contain, never a square-to-landscape stretch or aggressive crop. Studio Rectangle places the unaltered image on the left and name on the right. The Square design centres the image above its label. Both appearances retain existing card focus/remote behavior; Settings and Continue Watching icons remain standard and independent of Home shape. No native application icon/database is overwritten. A low-resolution native icon stays low-resolution; CSS cannot invent detail. Studio gives it purposeful spacing rather than pretending it is HD.
 
-The existing image-sequence hook provides loaded-image caching, deferred loading for inactive grids, timeout/error fallback and stale callback cleanup. Source sequences deduplicate; no network client or persistent polling timer is added. Keys remain exact app IDs and image sources. One-off image attempt deadlines retain the existing 2-second bound.
+Large custom files defer their first load until near the viewport using guarded IntersectionObserver, disconnecting after entry or cleanup. Firmware without that API uses the existing active-grid loading behavior. The existing image-sequence hook provides loaded-image caching, deferred loading for inactive grids, timeout/error fallback and stale callback cleanup. Source sequences deduplicate; no network client or persistent polling timer is added. Keys remain exact app IDs and image sources. One-off image attempt deadlines retain the existing 2-second bound.
 
 ## Personal images: PC packaging, not TV filesystem access
 
@@ -48,6 +48,8 @@ After installing the owner-signed build, choose Studio. Local/Samsung choices ap
 
 ## Release and licensing boundary
 
-`docs/artwork-licensing-audit.md` documents all nine reference PNGs. None is in this public contribution. Existing upstream `logos.js` is not newly licensed or certified here; this patch preserves the default behavior and does not expand its path set. Studio uses a newly written generic fallback instead. The gate rejects private, brand and unreviewed verified image-pack directories in public builds. Do not promote an asset to the empty verified registry without exact-file evidence and an allowlist/packaging change reviewed together.
+`docs/artwork-licensing-audit.md` documents all nine reference PNGs. None is in this public contribution. Existing source `logos.js` is not newly licensed or certified here. The optional `--reviewed-artwork` packaging mode omits its file and script tag, so the public artwork test WGT falls back to plain names when device images are unavailable. Regular source previews remain unchanged. CI verifies the reviewed package; ordinary unrelated release commands retain their existing defaults. Studio uses a newly written generic fallback instead. The gate rejects private, brand and unreviewed verified image-pack directories in public builds. Do not promote an asset to the empty verified registry without exact-file evidence and an allowlist/packaging change reviewed together.
 
 Original neutral CSS and SVG design masters are MIT, with the repository notice retained. App names identify installed apps and do not imply endorsement. Brand rights and user-image rights are not relicensed by this repository. Permission enquiries have not been sent.
+
+For reviewed public test packages, use `python tools/build_release.py launcher --reviewed-artwork --output dist/artwork-check`, then `python tools/check_artwork_release.py dist/artwork-check/aerotizen-launcher-2.4.0.wgt`. The checked WGT omits legacy `logos.js`; source previews and unrelated regular release defaults are preserved.

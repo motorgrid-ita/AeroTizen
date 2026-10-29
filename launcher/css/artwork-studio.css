@@ -9,3 +9,6 @@
 .glass-ui .artwork-studio .studio-surface { background:linear-gradient(135deg,#37465c,#1e2838 58%,#46515e); }
 @supports not (font-size:clamp(20px,1.7vw,34px)) { .artwork-studio .studio-name { font-size:28px; } .cols-5 .artwork-studio .studio-name { font-size:22px; } }
 @media (prefers-reduced-motion:reduce) { .artwork-studio .studio-surface { transition:none; } }
+
+.artwork-studio .studio-initial { position:absolute; left:30%; top:19%; width:40%; height:40%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(224,235,255,.25); border-radius:24px; color:#d8e3f1; background:rgba(224,235,255,.055); font:normal 76px Arial,sans-serif; }
+.cards-rectangle .artwork-studio .studio-initial { left:9%; top:23%; width:27%; height:54%; font-size:64px; }

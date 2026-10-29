@@ -8,6 +8,7 @@ export const AppArtwork = ({ app, brand, active, selection, studio = false }: { 
   const icon = useImageSequence((studio ? !artwork.src : brand.useAppIcon) && app.icon ? [app.icon] : [], active);
   if (studio) { return <div class="studio-surface" data-artwork-origin={artwork.loaded && artwork.src === selection?.preferred?.src ? selection?.origin : artwork.loaded ? 'samsung' : 'generic'}>
     <div class="studio-orbit" aria-hidden="true" />
+    {!artwork.loaded && !icon.src ? <div class="studio-initial" aria-hidden="true">{brand.title.slice(0, 1).toUpperCase()}</div> : null}
     {artwork.src ? <img key={artwork.src} class="studio-image" alt="" src={artwork.src} hidden={!artwork.loaded}
       onLoad={artwork.onLoad} onError={artwork.onError} /> : icon.src ? <img key={icon.src} class="studio-image" alt="" src={icon.src} onLoad={icon.onLoad} onError={icon.onError} /> : null}
     <div class="studio-name">{brand.title}</div>

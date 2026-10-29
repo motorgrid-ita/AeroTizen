@@ -1,3 +1,4 @@
+import { useArtworkVisibility } from './useArtworkVisibility';
 import { selectArtwork } from '../../shared/artwork/selectArtwork';
 import { useMemo } from 'preact/hooks';
 import { useStore } from '../../shared/hooks/useStore';
@@ -11,10 +12,11 @@ export const AppCard = ({ env, app, active }: { env: HomeEnvironment; app: Insta
   const settings = useStore(env.settings);
   const studio = settings.artworkStyle === 'studio';
   const selection = selectArtwork(app, brand.artwork, settings.homeCardMode, studio, settings.artworkDisabled, env.runtime.artworkProfile);
+  const near = useArtworkVisibility(env.nodes, 'app:' + app.id, active && studio && Boolean(selection.preferred));
   const state = useStore(env.state), moving = state.moving === app.id;
   return <HomeControl env={env} controlKey={'app:' + app.id} dataId={app.id} registered={active} className={'tile app-tile' + (moving ? ' moving' : '') + (studio ? ' artwork-studio' : '')}
     title={brand.title} style={{ background: brand.background }}>
-    <AppArtwork app={app} brand={brand} active={active} selection={selection} studio={studio} />
+    <AppArtwork app={app} brand={brand} active={active && near} selection={selection} studio={studio} />
     {moving ? <MoveArrows env={env} id={app.id} /> : null}
   </HomeControl>;
 };

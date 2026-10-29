@@ -10,7 +10,7 @@ Read the exact integration commit from `git rev-parse HEAD`; do not substitute P
 npm.cmd ci --no-audit --no-fund
 npm.cmd run lint
 npm.cmd run build
-& $python tools/build_release.py launcher --output dist/artwork-check
+& $python tools/build_release.py launcher --reviewed-artwork --output dist/artwork-check
 Get-FileHash -Algorithm SHA256 dist/artwork-check/aerotizen-launcher-2.4.0.wgt
 ```
 

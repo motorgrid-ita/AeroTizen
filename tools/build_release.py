@@ -45,7 +45,7 @@ def write_checksums(path, assets):
     path.write_text("".join(f"{checksum(asset)}  {asset.name}\n" for asset in assets), encoding="utf-8")
 
 
-def build_launcher(root, output, tag=None):
+def build_launcher(root, output, tag=None, reviewed_artwork=False):
     source = root / "launcher"
     launcher = root / "dist/launcher"
     widget = ET.parse(source / "config.xml").getroot()
@@ -94,6 +94,8 @@ def build_launcher(root, output, tag=None):
     ):
         if launcher / name not in files:
             raise ValueError(f"Launcher is missing required runtime file {name}")
+    if reviewed_artwork:
+        files = [source for source in files if source != launcher / "js/logos.js"]
     for source in files:
         if not source.is_file() or source.resolve() != source.absolute():
             raise ValueError(f"Runtime file must be a regular file without symlinks: {source}")
@@ -109,7 +111,10 @@ def build_launcher(root, output, tag=None):
             info.create_system = 3
             info.external_attr = 0o100644 << 16
             info.compress_type = zipfile.ZIP_DEFLATED
-            archive.writestr(info, source.read_bytes())
+            data = source.read_bytes()
+            if reviewed_artwork and source == launcher / "index.html":
+                data = data.replace(b'  <script src="js/logos.js"></script>\n', b"")
+            archive.writestr(info, data)
     manifest = output / "launcher-release.json"
     metadata = {
         "schema_version": 1,
@@ -120,6 +125,8 @@ def build_launcher(root, output, tag=None):
         "asset": package.name,
         "sha256": checksum(package),
     }
+    if reviewed_artwork:
+        metadata["artwork_policy"] = "device-local-and-original"
     manifest.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
     write_checksums(output / "SHA256SUMS", [package, manifest])
     return package
@@ -257,10 +264,18 @@ def main():
     parser.add_argument("component", choices=("launcher", "cli"))
     parser.add_argument("--output", type=Path, default=ROOT / "dist")
     parser.add_argument("--tag", help="Check that the release tag matches the component version")
+    parser.add_argument(
+        "--reviewed-artwork", action="store_true", help="Omit uncleared legacy logo paths from a launcher WGT"
+    )
     args = parser.parse_args()
     try:
-        builder = build_launcher if args.component == "launcher" else build_cli
-        package = builder(ROOT, args.output.resolve(), args.tag)
+        if args.reviewed_artwork and args.component != "launcher":
+            raise ValueError("--reviewed-artwork applies only to launcher packages")
+        package = (
+            build_launcher(ROOT, args.output.resolve(), args.tag, args.reviewed_artwork)
+            if args.component == "launcher"
+            else build_cli(ROOT, args.output.resolve(), args.tag)
+        )
     except (KeyError, ValueError, OSError, ET.ParseError, subprocess.SubprocessError) as error:
         parser.exit(1, f"Release build failed: {error}\n")
     print(package)
