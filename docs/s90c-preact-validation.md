@@ -292,3 +292,14 @@ existing settings services. Classic paints neutral opaque surfaces and violet
 focus; Glass paints the satin surfaces. Compact/custom clock layout remains a
 separate preference. Automated geometry and category checks do not establish
 physical TV acceptance of these corrections; owner retest remains pending.
+
+## Acceptance follow-up: consistent themes and standard Settings icons
+
+After installing the layout correction, the owner reported inconsistent choice
+sizes, focus colours that did not follow the selected appearance, an unthemed
+Continue Watching row and nonstandard Settings app thumbnails. New CSS shares
+focus colours across surfaces, adds the Glass Continue Watching surface, and
+normalizes Settings choices and square app icons. Home Square/Rectangle and
+column choices must not change Settings icon geometry or node identity. These
+changes preserve all artwork source URLs and native services. Physical acceptance
+of this follow-up remains pending; a wider artwork/card redesign is separate.
