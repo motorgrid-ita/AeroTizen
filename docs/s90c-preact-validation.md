@@ -313,3 +313,14 @@ add short transform-only Continue Watching focus motion with reduced-motion
 support, and soften the top content fade while adding a 40 px bottom fade. The
 header is not masked and selected-row clearance is preserved. These latest changes
 require a new physical S90C check; previous owner confirmation does not cover them.
+
+### Page and theme motion follow-up
+
+After the preceding build, the owner requested smoother scroll fade and page
+changes, stable Home/All apps placement across themes and Samsung Home access in
+both appearances. Verify: upward/downward scroll including reversals; rapid
+Home/All apps/Back navigation while entry motion is running; unchanged tab and
+shortcut placement in Classic/Glass with compact and custom clocks; remote access
+to Samsung Home; focused cards outside the fade regions; unchanged app/HDMI launch,
+Continue Watching and weather artwork. Compare with the custom reference's cached
+one-shot page reveal. Automated checks are preparation, not hardware acceptance.
