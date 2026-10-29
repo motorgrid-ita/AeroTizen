@@ -3,7 +3,9 @@
 This review revisits the implementation rather than treating a green CI run as proof
 of complete parity. It compares upstream `c4b649b`, the preserved reference tree
 `c9c34bf`, the focused PR trees and the combined integration. No TV operation is part
-of this review. Physical acceptance of the new renderer is still pending.
+of this review. A later owner-confirmed motion/header/focus acceptance is recorded in
+[the S90C acceptance report](s90c-preact-acceptance-2026-10-29.md); historical review
+findings below do not expand that exact-build hardware scope.
 
 ## Confirmed findings and corrections
 
@@ -50,3 +52,12 @@ for each requested area. It does not establish that every possible firmware path
 is correct. Hardware-dependent items, unsigned-package signing and the explicit
 banner/translation scope boundaries above remain open. Earlier S90C confirmations
 apply to their earlier exact builds, not to this Preact renderer.
+
+
+## Later owner acceptance — 2026-10-29
+
+The owner confirmed the supplied motion/header/theme/focus checklist after an
+in-place installation of runtime `aec386a5672c989e77a685cda042eae20e40848f`.
+See [the exact build, successful CI and remaining physical coverage limits](s90c-preact-acceptance-2026-10-29.md).
+This supersedes earlier blanket pending wording for those specific checks; it does
+not certify every firmware path or each standalone feature branch.

@@ -59,13 +59,22 @@ The extra integration-only workflow also publishes a source-pinned unsigned WGT 
 only after CI succeeds. Signing remains a PC-only step. This workflow runs on this validation branch and calls the
 existing CI workflow. It is not part of any feature PR against upstream main.
 
-## Remaining acceptance
+## Owner acceptance and remaining coverage
 
-Samsung S90C hardware acceptance of this renderer is pending. Previous HOME, native
-handoff and weather test confirmations apply only to their earlier tested builds.
-They are not claims about this migration. Samsung-only artwork, device standby data,
-physical HOME/Back, TV channel focus, app returns, font rendering, animation latency,
-standby/cold-boot behavior and older-device performance need physical checks.
-See [the S90C procedure](s90c-preact-validation.md). Private signing configuration is
-available only on the owner's PC; an unsigned reproducible WGT is not installable as
-an owner-signed package until that local signing/verification step is completed.
+The owner installed the signed combined runtime at
+`aec386a5672c989e77a685cda042eae20e40848f` and confirmed the supplied scroll,
+Home/All apps/Back, Classic/Glass header/Samsung shortcut and Settings-focus checks.
+The in-place installer verified version 2.4.0 and unchanged native Home/startup
+bindings and original baseline. The exact signed hash, focused PR heads and
+coverage limits are recorded in [the acceptance report](s90c-preact-acceptance-2026-10-29.md).
+The exact runtime CI passed 212 Node and 71 browser tests, the Python/Windows
+matrix and WGT packaging.
+
+This confirmation applies to the combined build, not separate installations of all
+focused PRs. Device-specific HDMI standby inventories, all layout/locale/weather/feed
+combinations, fresh native app/channel return and boot tests, other Samsung models
+and older-device performance are not newly certified by that four-point acceptance.
+Earlier native Home/handoff/weather passes remain scoped to their earlier builds.
+See [the S90C procedure](s90c-preact-validation.md) for additional owner-run checks.
+No TV operation was performed by the contributor automation. Reference and previous
+integration branches, native bindings and owner backups remain preserved.

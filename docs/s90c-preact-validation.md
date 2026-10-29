@@ -1,6 +1,10 @@
 # Samsung S90C: Preact integration acceptance
 
-Status: **not installed or hardware-tested by the contributor automation**.
+Status: **owner-confirmed acceptance of the motion/header/focus checks on 2026-10-29**.
+Tested runtime: `aec386a5672c989e77a685cda042eae20e40848f`, package `2.4.0`.
+See [the exact build, owner evidence and coverage limits](s90c-preact-acceptance-2026-10-29.md).
+The contributor automation did not operate the TV. Earlier pending statements below
+are historical findings; the linked acceptance record is the current status.
 Target: Samsung QE65S90CATXZT, ARMv7, Tizen 9.0.0. The existing native HOME
 binding must remain unchanged. No Home apply/restore, boot apply, uninstall,
 firmware update or Samsung settings change is required by this UI test.
