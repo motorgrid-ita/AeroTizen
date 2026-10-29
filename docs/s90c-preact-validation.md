@@ -260,3 +260,16 @@ transport is the previously used upstream API; final success still depends on th
 TV's package verifier and firmware. Keep local logs private and redact identifiers
 before sharing results on GitHub. A failed update must not trigger an automatic
 uninstall, Home remap, boot change or recovery operation.
+
+## Hardware finding: Classic header covered by weather photos
+
+On the initial combined Preact build, the S90C owner reported that unfocused
+header controls and status content disappeared in Classic mode. The weather
+layer used z-index 0, while its foreground CSS still matched only direct body
+children. The Preact mount introduced a wrapper, so those rules no longer
+matched. Preserve the legacy selectors and include the Preact header and
+content viewport explicitly; do not force visibility or change HOME policy.
+A browser regression activates the real wallpaper layer and checks the paint
+order of unfocused header controls, status content and the viewport in both
+Classic and Glass, including Settings and native-TV hiding. Hardware retest
+of this correction remains pending.
