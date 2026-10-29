@@ -19,6 +19,10 @@ def validate(package):
     with zipfile.ZipFile(package) as archive:
         if "js/logos.js" in archive.namelist():
             raise ValueError("Unreviewed legacy logo paths; build with --reviewed-artwork")
+        if "css/artwork-studio.css" in archive.namelist():
+            css = archive.read("css/artwork-studio.css").decode().replace("\r\n", "\n")
+            if (ROOT / "LICENSE").read_text().strip() not in css:
+                raise ValueError("Original artwork is missing the repository MIT notice")
         for name in archive.namelist():
             if name.startswith(("assets/brands/", "assets/artwork-local/", "assets/artwork-verified/")):
                 raise ValueError("Unreviewed artwork pack: " + name)
