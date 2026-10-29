@@ -4,7 +4,7 @@ Related to upstream Issue #56. This partially addresses it: no third-party HD lo
 
 ## Selection and rendering
 
-Default **Samsung artwork** preserves the current device candidate order and standard Settings/CW geometry. The reviewed test WGT excludes legacy bundled logo paths; missing native artwork falls back to plain text rather than an uncleared vector. Opt into **Studio cards and local overrides** in Settings > Home appearance > App artwork. Home app cards use exact installed application IDs and independently select the current shape:
+Default **Samsung artwork** preserves the current device candidate order and standard Settings/CW geometry. The reviewed test WGT excludes legacy bundled logo paths; missing native artwork falls back to plain text rather than an uncleared vector. Opt into **Studio cards and local overrides** in Settings > App artwork. Home app cards use exact installed application IDs and independently select the current shape:
 
 1. An enabled personal profile entry for that exact ID and shape.
 2. An individually cleared bundled entry (currently empty, deliberately).

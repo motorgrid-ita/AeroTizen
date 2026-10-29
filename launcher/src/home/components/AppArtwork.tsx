@@ -8,7 +8,9 @@ export const AppArtwork = ({ app, brand, active, selection, studio = false }: { 
   const icon = useImageSequence((studio ? !artwork.src : brand.useAppIcon) && app.icon ? [app.icon] : [], active);
   const banner = artwork.loaded && artwork.src === selection?.preferred?.src && selection?.shape === 'rectangle' &&
     Boolean(selection.preferred && selection.preferred.width / selection.preferred.height >= 1.4);
-  if (studio) { return <div class="studio-surface" data-artwork-composition={banner ? 'banner' : 'icon'} data-artwork-origin={artwork.loaded && artwork.src === selection?.preferred?.src ? selection?.origin : artwork.loaded ? 'samsung' : 'generic'}>
+  // Stable decorative palettes identify cards without reproducing brand artwork.
+  const palette = [...app.id].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 0) % 6;
+  if (studio) { return <div class="studio-surface" data-studio-palette={palette} data-artwork-composition={banner ? 'banner' : 'icon'} data-artwork-origin={artwork.loaded && artwork.src === selection?.preferred?.src ? selection?.origin : artwork.loaded ? 'samsung' : 'generic'}>
     <div class="studio-orbit" aria-hidden="true" />
     {!artwork.loaded && !icon.src ? <div class="studio-initial" aria-hidden="true">{brand.title.slice(0, 1).toUpperCase()}</div> : null}
     {artwork.src ? <img key={artwork.src} class="studio-image" alt="" src={artwork.src} hidden={!artwork.loaded}

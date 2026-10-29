@@ -33,7 +33,7 @@ After update: launch `DclHome001.Home` using the existing CLI, save a fresh `hom
 ## Artwork checklist
 
 - Default Samsung mode is visually unchanged. Compare source candidates/resolution and app launching with the rollback build.
-- Enable Studio in Settings > Home appearance > App artwork. Confirm readable labels and correct aspect ratios in Square and Rectangle at 3, 4 and 5 apps/row; check Big/Small only in Follow card size.
+- Enable Studio in Settings > App artwork. Confirm readable labels and correct aspect ratios in Square and Rectangle at 3, 4 and 5 apps/row; check Big/Small only in Follow card size.
 - Compare Classic/Glass, focused/unfocused, top/bottom rows, app move arrows, rapid D-pad, Home/All apps reversal and Settings return. No clipping, double borders or lost focus.
 - Check short/long app names, sharp Samsung originals, transparent custom PNGs, very wide/tall images, a missing Rectangle override and a failed/corrupt file. No stretching; fallback remains usable.
 - If a personal profile is installed, inspect each exact app mapping and shape. Disable/re-enable individual overrides. Uninstalled apps must have no controls or artwork requests. Reload/restart and confirm preferences persist.
@@ -46,3 +46,18 @@ After update: launch `DclHome001.Home` using the existing CLI, save a fresh `hom
 Record exact package/source hash, app ID, layout/columns, theme and whether personal overrides are enabled. Reproduce first with Samsung mode. Use existing app inventory and Home status CLI commands; do not publish device-identity JSON unredacted. No screenshot/debugger connection is started automatically.
 
 First rollback: choose Samsung artwork, or disable a single local override. No installation or native write required. If necessary, owner-authorized in-place reinstall of the preserved signed working WGT using the same guarded updater; verify Home/startup unchanged again. Do not uninstall, reset bindings or overwrite backups. Saved new preference keys are ignored by the older runtime. Report pass/fail only after owner observation.
+
+## First artwork device session — owner feedback
+
+The owner installed reviewed source `2a8d4d35e1494cbfac933710c874d26337eb9aff`
+on the S90C. Installation and unchanged native HOME/startup values were verified.
+The owner reported that the artwork settings did not reach the bottom and that
+the initial Studio presentation lacked the visual impact of purpose-made cards.
+This is partial feedback, not hardware acceptance of the artwork feature.
+
+The follow-up separates App artwork into a dedicated category, scrolls remote
+focus in both the category list and content, and adds original decorative card
+palettes. Test long personal-override lists through the final control with the
+D-pad. Recheck full-canvas personal landscape images and native icon proportions.
+The new appearance still requires owner review; no additional brand logo rights
+are implied and no new third-party images are bundled.
