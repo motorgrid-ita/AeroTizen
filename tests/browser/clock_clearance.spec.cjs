@@ -25,6 +25,13 @@ for (const glassSettings of [false, true]) {
       // Keep the exact pixel guard; do not disable motion or loosen the comparison.
       await expect.poll(() => page.locator('.topbar').evaluate(node => node.getAnimations({subtree:true})
         .filter(animation => animation.playState === 'running' && animation.effect.getComputedTiming().endTime !== Infinity).length)).toBe(0);
+      // Compare settled header pixels, not an incidental initial text-colour transition.
+      // Motion behavior is asserted separately; the scroll comparison stays pixel-exact.
+      await page.locator('.topbar').evaluate(async node => {
+        await Promise.all(node.getAnimations({subtree:true})
+          .filter(animation => animation.effect.getComputedTiming().iterations !== Infinity)
+          .map(animation => animation.finished.catch(() => {})));
+      });
       const headerBefore = await page.screenshot();
       await page.screenshot({path:info.outputPath('clock-clearance.png')});
       await expect(page.locator('.content-viewport')).not.toHaveClass(/is-scrolled/);

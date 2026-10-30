@@ -1,3 +1,4 @@
+import { TranslatedText } from '../../shared/TranslatedText';
 import { useState } from 'preact/hooks';
 import { flushSync } from 'preact/compat';
 import { Choice } from '../components/Choice';
@@ -38,13 +39,13 @@ export const BackgroundSettings = ({ settings, actions, config, backgrounds: lis
         options={[['photo', 'Weather photos'], ['solid', 'Solid colour'], ['gradient', 'Gradients'], ['animated', 'Animated backgrounds']]}
         onSelect={category => { flushSync(() => setFilter(category)); navigation.invalidate(); }} />}
       <div hidden={!show('photo')}>
-      <h3>Dynamic weather wallpapers</h3>
+      <h3><TranslatedText>Dynamic weather wallpapers</TranslatedText></h3>
       <Choice id="weather-photo-choice" value={settings.weatherPhoto} label="Dynamic weather wallpapers"
         options={[[false, 'Off'], [true, 'Automatic (weather)']]} onSelect={actions.setWeatherPhoto} />
       <p class="hint">Nine AI-generated scenes follow the weather and time of day. Off restores your selected background.</p>
       </div>
       <div hidden={!show('animated')}>
-      <h3>Animated backgrounds</h3>
+      <h3><TranslatedText>Animated backgrounds</TranslatedText></h3>
       <div id="bg-anim" class="swatches">{swatches(true)}</div>
       <div id="speed-row" class="speed-row" hidden={!animated}>
         {animated ? <>
@@ -64,7 +65,7 @@ export const BackgroundSettings = ({ settings, actions, config, backgrounds: lis
       </div>
       </div>
       <div hidden={filter !== 'solid' && filter !== 'gradient'}>
-      <h3>Still backgrounds</h3>
+      <h3><TranslatedText>Still backgrounds</TranslatedText></h3>
       <div id="bg-still" class="swatches">{swatches(false)}</div>
       </div>
     </>

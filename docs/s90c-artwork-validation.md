@@ -4,14 +4,14 @@ Target: QE65S90CATXZT, ARMv7, Tizen 9. This contribution has not passed physical
 
 ## Build identity
 
-Read the exact integration commit from `git rev-parse HEAD`; do not substitute PR merge refs. Launcher remains 2.4.0. The published PR/build record supplies the source SHA and unsigned WGT SHA-256. The private signed WGT has a different hash: record it after signing and verify both XML signatures and every referenced digest with the existing owner-tested signing verifier. Keep certificates/passwords local and reuse the existing author identity; no credentials are available to contributor automation.
+Read the exact integration commit from `git rev-parse HEAD`; do not substitute PR merge refs. The refreshed launcher is 2.5.0. The published PR/build record supplies the source SHA and unsigned WGT SHA-256. The private signed WGT has a different hash: record it after signing and verify both XML signatures and every referenced digest with the existing owner-tested signing verifier. Keep certificates/passwords local and reuse the existing author identity; no credentials are available to contributor automation.
 
 ```powershell
 npm.cmd ci --no-audit --no-fund
 npm.cmd run lint
 npm.cmd run build
 & $python tools/build_release.py launcher --reviewed-artwork --output dist/artwork-check
-Get-FileHash -Algorithm SHA256 dist/artwork-check/aerotizen-launcher-2.4.0.wgt
+Get-FileHash -Algorithm SHA256 dist/artwork-check/aerotizen-launcher-2.5.0.wgt
 ```
 
 Optional personal artwork preparation is documented in `artwork-system.md`. It happens before signing. Public unsigned WGT contains no local overrides; Studio generic/native composition can be tested without them. The original nine branded PNGs are not supplied or authorized by this procedure.
