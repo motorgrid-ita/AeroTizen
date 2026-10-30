@@ -137,3 +137,17 @@ tested sources. The new Glass compatibility fix, other TV models, real standby,
 remote latency, reboot persistence and post-uninstall restore are not certified
 by browser tests. No TV connection, installation, HOME/startup or firmware change
 was performed by the development/automated validation work.
+
+## New hardware feedback received during final verification
+
+Metacurb tested PR #30 and reported uneven header icon spacing, a clipped
+Continue Watching focus outline and a stretched single-source dock:
+https://github.com/helalaou/AeroTizen/pull/30#issuecomment-6523169407
+
+The follow-up uses equal header slots with explicit margins, reserves 32px
+for the complete transformed focus ring, and uses existing compact dock styling
+for fewer than five visible sources. Six browser regressions cover both themes
+and one/two/four/five sources. This merge preserves the existing clock, HDMI,
+locale and artwork implementations. Its new CI must be checked independently.
+The preceding TV test is not acceptance of the correction; USB testing remains
+pending. See docs/pr30-hardware-validation.md for the specific recheck.
