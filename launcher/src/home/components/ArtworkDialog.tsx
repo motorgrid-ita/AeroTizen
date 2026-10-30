@@ -8,8 +8,11 @@ type Screen = 'choices' | 'files' | 'preview';
 interface BrowserState { screen: Screen; shape: CardShape; path?: string; items: UsbItem[]; preview?: PreparedArtwork; busy: boolean; message: string; selected: number }
 export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; library: UsbArtwork; appId: string }) => {
   const { apps, ready } = useStore(env.inventory);
+  const { homeCardMode } = useStore(env.settings);
+  const shape: CardShape = homeCardMode === 'rectangle' ? 'rectangle' : 'square';
+  const shapeLabel = shape === 'square' ? 'Square' : 'Rectangle';
   const app = apps.find(app => app.id === appId);
-  const [view, setView] = useState<BrowserState>({ screen: 'choices', shape: 'square', items: [], busy: false, message: '', selected: 0 });
+  const [view, setView] = useState<BrowserState>({ screen: 'choices', shape, items: [], busy: false, message: '', selected: 0 });
   const root = useRef<HTMLDivElement>(null), generation = useRef(0);
   const installed = () => env.inventory.getSnapshot().ready && env.inventory.getSnapshot().apps.some(item => item.id === appId);
   const close = () => { generation.current++; env.closeArtwork(); };
@@ -47,10 +50,8 @@ export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; l
     return { message: (shape === 'square' ? 'Square' : 'Rectangle') + ' restored to Samsung artwork.' };
   });
   const buttons = view.busy ? [{ label: 'Cancel', action: close }] : view.screen === 'choices' ? [
-    { label: 'Choose Square from USB', action: () => browse('square') },
-    { label: 'Choose Rectangle from USB', action: () => browse('rectangle') },
-    { label: 'Reset Square to Samsung', action: () => reset('square') },
-    { label: 'Reset Rectangle to Samsung', action: () => reset('rectangle') },
+    { label: 'Choose ' + shapeLabel + ' from USB', action: () => browse(shape) },
+    { label: 'Reset ' + shapeLabel + ' to Samsung', action: () => reset(shape) },
     { label: 'Close', action: close }
   ] : view.screen === 'preview' ? [
     { label: 'Use this image', action: save }, { label: 'Choose another image', action: back }, { label: 'Cancel', action: close }
@@ -66,7 +67,7 @@ export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; l
   useLayoutEffect(() => {
     const target = root.current?.querySelectorAll<HTMLButtonElement>('button')[Math.min(view.selected, buttons.length - 1)];
     target?.focus({ preventScroll: true });
-    const host = root.current?.querySelector('.artwork-dialog-options');
+    const host = root.current;
     if (target && host?.contains(target)) {
       const a = target.getBoundingClientRect(), b = host.getBoundingClientRect();
       if (a.bottom > b.bottom - 12) { host.scrollTop += a.bottom - b.bottom + 12; }
@@ -96,7 +97,7 @@ export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; l
   }, [library, view.screen]);
   return <div class="artwork-dialog-backdrop"><div ref={root} class="artwork-dialog" role="dialog" aria-modal="true" aria-labelledby="artwork-dialog-title">
     <div class="artwork-dialog-heading"><span>{env.translate('CUSTOM ARTWORK')}</span><h2 id="artwork-dialog-title">{app?.name || appId}</h2></div>
-    <p class="artwork-dialog-hint">{env.translate(view.screen === 'choices' ? 'Choose a complete image for each card shape. Samsung artwork remains the fallback.' : view.screen === 'files' ? 'Static PNG only · up to 6 MiB / 16 megapixels. No image is saved until you confirm.' : 'The complete image keeps its proportions. Confirm only if you have the right to use it.')}</p>
+    <p class="artwork-dialog-hint">{env.translate(view.screen === 'choices' ? 'Choose a complete image for the current card layout. Samsung artwork remains the fallback.' : view.screen === 'files' ? 'Static PNG only · up to 6 MiB / 16 megapixels. No image is saved until you confirm.' : 'The complete image keeps its proportions. Confirm only if you have the right to use it.')}</p>
     {!library.available ? <p role="status">{env.translate('USB import is unavailable here. Personal PC packages remain supported.')}</p> : null}
     {view.path ? <p class="artwork-dialog-path">{view.path}</p> : null}
     {view.preview && view.screen === 'preview' ? <div class={'artwork-dialog-preview preview-' + view.shape}><img src={'data:image/png;base64,' + view.preview.data} alt={env.translate('Selected artwork preview')} /></div> : null}

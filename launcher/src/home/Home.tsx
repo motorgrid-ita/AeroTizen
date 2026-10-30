@@ -57,6 +57,6 @@ export const Home = ({ env }: { env: HomeEnvironment }) => {
           </HomeControl>;
         })}
       </div></section>
-    </div></main></div></div><TileMenu env={env} />{artworkApp && env.artwork ? <ArtworkDialog key={artworkApp} env={env} library={env.artwork} appId={artworkApp} /> : null}
+    </div></main></div></div><TileMenu env={env} />{artworkApp && env.artwork ? <ArtworkDialog key={artworkApp + ':' + settings.homeCardMode} env={env} library={env.artwork} appId={artworkApp} /> : null}
   </>;
 };

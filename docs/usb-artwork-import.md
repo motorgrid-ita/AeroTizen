@@ -142,3 +142,18 @@ explicitly rejected its aesthetics. **This USB import and new full-card renderin
 have not been tested on a physical TV.** Browser filesystem doubles verify flow,
 metadata and cancellation; they do not prove Samsung's private-file URI rendering,
 USB permissions, real throughput or reboot durability. See the updated S90C checklist.
+
+## S90C dialog follow-up
+
+The owner installed the 2.5.0 preview at `32c52e8`; installation and unchanged
+HOME/startup bindings were verified. The owner reported incomplete downward
+scrolling in Custom artwork and requested actions limited to the active layout.
+This is a defect report, not overall hardware acceptance.
+
+Custom artwork now offers import and Samsung reset only for the current Square
+or Rectangle layout. Switching layout preserves both independent saved images.
+The modal uses explicit legacy-compatible positioning, a viewport-bounded single
+scroll container and D-pad focus scrolling for the entire contents, including
+preview confirmation. A layout change remounts the dialog and cancels stale work.
+Browser checks cover both appearances, both shapes, preview controls and the
+last file of a long USB directory at 1280×720; physical S90C retesting is pending.

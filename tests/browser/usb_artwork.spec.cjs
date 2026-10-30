@@ -1,14 +1,15 @@
 const {test,expect}=require('@playwright/test');
 const fs=require('node:fs');
 const png=fs.readFileSync('tests/fixtures/artwork/neutral-square.png').toString('base64');
-async function start(page,{denied=false,missing=false}={}){
+async function start(page,{denied=false,missing=false,shape='square',glass=false,many=false}={}){
  const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://**/*',r=>r.fulfill({body:'{}'}));
  await page.route('http://127.0.0.1:47790/**',r=>r.fulfill({body:'{}'}));
- await page.addInitScript(({png,denied,missing})=>{
-  if(!localStorage.getItem('aerotizen.settings.v1'))localStorage.setItem('aerotizen.settings.v1',JSON.stringify({home:['demo0','demo1'],background:'black',showWeather:false}));
+ await page.addInitScript(({png,denied,missing,shape,glass,many})=>{
+  if(!localStorage.getItem('aerotizen.settings.v1'))localStorage.setItem('aerotizen.settings.v1',JSON.stringify({home:['demo0','demo1'],background:'black',showWeather:false,homeCardMode:shape,glassSettings:glass}));
   const data=JSON.parse(localStorage.getItem('mock.artwork.files')||'{}');
   const files={'wgt-private':null,'removable_sda1':null,'removable_sda1/Art':null,'removable_sda1/Art/Cinema.png':png,...data};let mounted=!missing,listener;
+  if(many)for(let i=0;i<40;i++)files['removable_sda1/Art/Image-'+String(i).padStart(2,'0')+'.png']=png;
   const persist=()=>localStorage.setItem('mock.artwork.files',JSON.stringify(Object.fromEntries(Object.entries(files).filter(([key])=>key.startsWith('wgt-private/')))));
   const file=(path,mode)=>{
    if(!(path in files))throw {name:'NotFoundError'};
@@ -26,7 +27,7 @@ async function start(page,{denied=false,missing=false}={}){
    addStorageStateChangeListener(changed){listener=changed;return 1;},removeStorageStateChangeListener(){listener=undefined;}
   }};
   window.removeMockUsb=()=>{mounted=false;listener?.({label:'removable_sda1',state:'REMOVED'});};
- },{png,denied,missing});
+ },{png,denied,missing,shape,glass,many});
  await page.goto('/');await page.waitForFunction(()=>AeroTizen.apps.ready);return errors;
 }
 async function open(page,all=false){
@@ -53,7 +54,7 @@ test('Home imports a previewed Square only on confirmation and restores selectio
  expect(errors).toEqual([]);
 });
 test('All Apps supports independent Rectangle import, per-shape reset and remote Back',async({page})=>{
- const errors=await start(page);await open(page,true);await preview(page,'Rectangle');
+ const errors=await start(page,{shape:'rectangle'});await open(page,true);await preview(page,'Rectangle');
  await page.getByRole('button',{name:'Use this image',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
  const id=await page.locator('#grid>.focused').getAttribute('data-id');expect(id).toBe('demo8');
  expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('aerotizen.artwork.usb.v1')).images.demo8.rectangle.width)).toBe(720);
@@ -79,7 +80,7 @@ test('dialog D-pad focus is bounded and native launch keys cannot leak into Home
  await start(page);await open(page);
  for(let i=0;i<12;i++)await page.keyboard.press('ArrowDown');
  await expect(page.getByRole('button',{name:'Close',exact:true})).toBeFocused();
- await page.keyboard.press('ArrowUp');await expect(page.getByRole('button',{name:'Reset Rectangle to Samsung',exact:true})).toBeFocused();
+ await page.keyboard.press('ArrowUp');await expect(page.getByRole('button',{name:'Reset Square to Samsung',exact:true})).toBeFocused();
  await page.keyboard.press('Escape');await expect(page.locator('#grid [data-id="demo0"]')).toHaveClass(/focused/);
 });
 
@@ -94,4 +95,45 @@ test('cached inventory cannot authorize USB import before installed-app discover
  await page.evaluate(()=>{AeroTizen.apps.ready=false;AeroTizen.homeScreen.refreshApps();});
  await expect(page.getByRole('dialog')).toHaveCount(0);
  expect(await page.evaluate(()=>localStorage.getItem('aerotizen.artwork.usb.v1'))).toBeNull();
+});
+
+for(const shape of ['square','rectangle'])for(const glass of [false,true])test(`only ${shape} actions in ${glass?'Glass':'Classic'}; full dialog scrolls on a short screen`,async({page})=>{
+ await page.setViewportSize({width:1280,height:720});
+ const errors=await start(page,{shape,glass,many:true});await open(page);
+ const label=shape==='square'?'Square':'Rectangle',other=shape==='square'?'Rectangle':'Square';
+ await expect(page.getByRole('button',{name:'Choose '+label+' from USB',exact:true})).toBeVisible();
+ await expect(page.getByRole('button',{name:'Choose '+other+' from USB',exact:true})).toHaveCount(0);
+ await expect(page.getByRole('button',{name:'Reset '+other+' to Samsung',exact:true})).toHaveCount(0);
+ await preview(page,label);
+ for(let i=0;i<4;i++)await page.keyboard.press('ArrowDown');
+ await expect(page.getByRole('button',{name:'Cancel',exact:true})).toBeFocused();
+ const inside=()=>page.evaluate(()=>{const a=document.activeElement.getBoundingClientRect(),b=document.querySelector('.artwork-dialog').getBoundingClientRect();return a.top>=b.top&&a.bottom<=b.bottom&&b.top>=0&&b.bottom<=innerHeight;});
+ expect(await inside()).toBe(true);
+ await page.keyboard.press('Escape');
+ for(let i=0;i<50;i++)await page.keyboard.press('ArrowDown');
+ await expect(page.getByRole('button',{name:'Image-39.png',exact:true})).toBeFocused();
+ expect(await inside()).toBe(true);
+ expect(await page.locator('.artwork-dialog').evaluate(el=>el.scrollTop)).toBeGreaterThan(0);
+ for(let i=0;i<50;i++)await page.keyboard.press('ArrowUp');
+ await expect(page.getByRole('button',{name:'Up one folder',exact:true})).toBeFocused();
+ expect(await inside()).toBe(true);
+ await page.keyboard.press('Escape');await page.keyboard.press('Escape');await page.keyboard.press('Escape');
+ await expect(page.locator('#grid [data-id="demo0"]')).toHaveClass(/focused/);
+ expect(errors).toEqual([]);
+});
+
+test('changing card layout preserves the other imported shape and reset remains shape-specific',async({page})=>{
+ await start(page);await open(page);await preview(page);
+ await page.getByRole('button',{name:'Use this image',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
+ const square=await page.evaluate(()=>JSON.parse(localStorage.getItem('aerotizen.artwork.usb.v1')).images.demo0.square);
+ await page.evaluate(()=>{const settings=JSON.parse(localStorage.getItem('aerotizen.settings.v1'));settings.homeCardMode='rectangle';localStorage.setItem('aerotizen.settings.v1',JSON.stringify(settings));});
+ await page.reload();await page.waitForFunction(()=>AeroTizen.apps.ready);
+ await open(page);await preview(page,'Rectangle');
+ await page.getByRole('button',{name:'Use this image',exact:true}).click();await expect(page.getByRole('dialog')).toHaveCount(0);
+ expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('aerotizen.artwork.usb.v1')).images.demo0.square)).toEqual(square);
+ await open(page);await page.getByRole('button',{name:'Reset Rectangle to Samsung',exact:true}).click();
+ await expect(page.getByRole('status')).toContainText('Rectangle restored');
+ expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('aerotizen.artwork.usb.v1')).images.demo0.square)).toEqual(square);
+ await page.keyboard.press('Escape');await page.reload();await page.waitForFunction(()=>AeroTizen.apps.ready);
+ expect(await page.evaluate(()=>JSON.parse(localStorage.getItem('aerotizen.artwork.usb.v1')).disabled)).toContain('demo0:rectangle');
 });
