@@ -1,0 +1,85 @@
+/*
+MIT License
+
+Copyright (c) 2026 Hamza El Alaoui
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+/* Original AeroTizen vector/CSS composition; no third-party logo or font asset. */
+.artwork-studio .studio-surface { position:absolute; top:0;right:0;bottom:0;left:0; overflow:hidden; border-radius:inherit; color:#fff; background:linear-gradient(135deg,#283851,#111b2b 58%,#34444c); }
+.artwork-studio .studio-orbit { position:absolute; width:85%; height:130%; top:-45%; right:-48%; border:1px solid rgba(208,224,255,.16); border-radius:50%; box-shadow:0 0 0 22px rgba(208,224,255,.025),0 0 0 46px rgba(208,224,255,.02); }
+.artwork-studio .studio-image { position:absolute; width:68%; height:62%; top:9%; left:16%; object-fit:contain; }
+.artwork-studio .studio-image[hidden] { display:none; }
+.artwork-studio .studio-name { position:absolute; left:8%; right:8%; bottom:8%; text-align:center; font-family:Arial,sans-serif; font-size:clamp(20px,1.7vw,34px); font-weight:600; line-height:1.15; max-height:2.3em; overflow:hidden; overflow-wrap:break-word; text-shadow:0 2px 6px #000; }
+.cards-rectangle .artwork-studio .studio-image { width:35%; height:72%; top:14%; left:6%; }
+.cards-rectangle .artwork-studio .studio-name { left:47%; right:6%; top:50%; bottom:auto; transform:translateY(-50%); text-align:left; }
+
+@supports not (font-size:clamp(20px,1.7vw,34px)) { .artwork-studio .studio-name { font-size:28px; } .cols-5 .artwork-studio .studio-name { font-size:22px; } }
+@media (prefers-reduced-motion:reduce) { .artwork-studio .studio-surface { transition:none; } }
+
+.artwork-studio .studio-initial { position:absolute; left:30%; top:19%; width:40%; height:40%; display:flex; align-items:center; justify-content:center; border:1px solid rgba(224,235,255,.25); border-radius:24px; color:#d8e3f1; background:rgba(224,235,255,.055); font:normal 76px Arial,sans-serif; }
+.cards-rectangle .artwork-studio .studio-initial { left:9%; top:23%; width:27%; height:54%; font-size:64px; }
+
+/* A supplied landscape canvas is already a composition, not a square logo. */
+.artwork-studio [data-artwork-composition="banner"] .studio-image { top:0;left:0;width:100%;height:100%;object-fit:contain; }
+.artwork-studio [data-artwork-composition="banner"] .studio-name { top:auto;bottom:5%;left:4%;right:auto;max-width:75%;transform:none;padding:5px 10px;border-radius:7px;background:rgba(0,0,0,.55);font-size:22px; }
+
+/* Original editorial surfaces: device images stay sharp and contained. */
+.artwork-studio .studio-surface { background:radial-gradient(ellipse at 85% 5%,rgba(122,170,228,.48),transparent 65%),linear-gradient(145deg,#172942,#070e1b); }
+.artwork-studio [data-studio-palette="1"] { background:radial-gradient(ellipse at 85% 5%,rgba(182,125,201,.45),transparent 65%),linear-gradient(145deg,#30213d,#100d1d); }
+.artwork-studio [data-studio-palette="2"] { background:radial-gradient(ellipse at 85% 5%,rgba(100,190,167,.42),transparent 65%),linear-gradient(145deg,#143d3b,#081919); }
+.artwork-studio [data-studio-palette="3"] { background:radial-gradient(ellipse at 85% 5%,rgba(226,159,99,.42),transparent 65%),linear-gradient(145deg,#432a24,#180f13); }
+.artwork-studio [data-studio-palette="4"] { background:radial-gradient(ellipse at 85% 5%,rgba(135,145,222,.48),transparent 65%),linear-gradient(145deg,#242a4f,#0b1023); }
+.artwork-studio [data-studio-palette="5"] { background:radial-gradient(ellipse at 85% 5%,rgba(165,183,201,.40),transparent 65%),linear-gradient(145deg,#2a3442,#0d141d); }
+.artwork-studio .studio-orbit { width:115%;height:180%;top:-112%;right:-34%;border-color:rgba(255,255,255,.20);box-shadow:0 0 0 26px rgba(255,255,255,.025),0 0 0 64px rgba(255,255,255,.018); }
+.artwork-studio .studio-image { filter:drop-shadow(0 8px 12px rgba(0,0,0,.28)); }
+.artwork-studio .studio-name { letter-spacing:.015em; }
+.glass-ui .artwork-studio .studio-surface { box-shadow:inset 0 1px 0 rgba(255,255,255,.23),inset 0 -1px 0 rgba(0,0,0,.25); }
+.cards-rectangle .artwork-studio .studio-image { width:43%;height:76%;left:4%;top:12%; }
+.cards-rectangle .artwork-studio .studio-name { left:53%;right:6%;font-size:clamp(20px,1.6vw,32px); }
+.artwork-studio [data-artwork-composition="banner"] .studio-image { filter:none; }
+
+.cards-rectangle .artwork-studio [data-artwork-composition="banner"] .studio-image { top:0;left:0;width:100%;height:100%; }
+.cards-rectangle .artwork-studio [data-artwork-composition="banner"] .studio-name { top:auto;bottom:5%;left:4%;right:auto;transform:none; }
+
+/* Complete artwork is the composition: never shrink it into an icon/name row. */
+.artwork-studio [data-artwork-composition="canvas"] .studio-image,
+.cards-rectangle .artwork-studio [data-artwork-loaded="true"] .studio-image { top:0;left:0;width:100%;height:100%;object-fit:contain;filter:none; }
+.artwork-studio [data-artwork-loaded="true"] .studio-name,
+.artwork-studio [data-artwork-loaded="true"] .studio-orbit { display:none; }
+
+.artwork-dialog-backdrop { position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center; }
+.artwork-dialog { box-sizing:border-box;width:1020px;max-width:calc(100% - 80px);max-height:calc(100vh - 80px);overflow-y:auto;padding:32px 40px;border-radius:22px;color:#f7f8fa;background:#17171c;display:flex;flex-direction:column;box-shadow:0 18px 60px rgba(0,0,0,.6);font:24px Arial,sans-serif; }
+.artwork-dialog-heading span { font-size:16px;letter-spacing:3px;color:#bdb8d2; }
+.artwork-dialog-heading h2 { margin:8px 0 14px;font-size:34px; }
+.artwork-dialog-hint { font-size:20px;line-height:1.4;margin:0 0 14px;color:#d3d4df; }
+.artwork-dialog-path { font-size:18px;overflow-wrap:break-word;margin:0 0 8px; }
+.artwork-dialog-status { font-size:20px;line-height:1.35;min-height:28px;margin:10px 0; }
+.artwork-dialog > * { flex-shrink:0; }
+.artwork-dialog-options { padding:8px; }
+.artwork-dialog button { display:block;width:100%;box-sizing:border-box;min-height:60px;margin:0 0 10px;padding:12px 20px;border:2px solid transparent;border-radius:12px;background:#292930;color:#fff;font:22px Arial,sans-serif;text-align:left;overflow-wrap:break-word; }
+.artwork-dialog button:focus { outline:none; }
+.artwork-dialog button.focused { border-color:#d5baff;background:#513c75; }
+.glass-ui .artwork-dialog { background:linear-gradient(145deg,#454d5d,#1e2635);border:1px solid rgba(255,255,255,.3); }
+.glass-ui .artwork-dialog button { background:rgba(255,255,255,.08); }
+.glass-ui .artwork-dialog button.focused { border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.25); }
+.artwork-dialog-preview { flex:0 0 300px;min-height:0;display:flex;align-items:center;justify-content:center;margin:0 auto;max-width:100%; }
+.artwork-dialog-preview img { display:block;width:100%;height:100%;object-fit:contain; }
+.artwork-dialog-preview.preview-square { width:300px;height:300px; }
+.artwork-dialog-preview.preview-rectangle { width:534px;height:300px; }

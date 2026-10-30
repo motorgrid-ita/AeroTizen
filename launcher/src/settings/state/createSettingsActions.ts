@@ -11,6 +11,11 @@ export const createSettingsActions = (
     settings.refresh();
   });
   return {
+    setArtworkStyle: artworkStyle => commit({ artworkStyle }),
+    setArtworkOverride(id, enabled) {
+      const disabled = settings.getSnapshot().artworkDisabled;
+      commit({ artworkDisabled: enabled ? disabled.filter(value => value !== id) : [...new Set([...disabled, id])] });
+    },
     setGlassSettings: glassSettings => commit({ glassSettings }),
     setWeatherPhoto: weatherPhoto => commit({ weatherPhoto }, () => {
       services.applyWeatherVisibility();

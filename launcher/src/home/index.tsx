@@ -1,3 +1,5 @@
+import { createUsbArtwork } from '../shared/artwork/usbArtwork';
+import type { ArtworkFilesystem } from '../shared/artwork/usbArtwork';
 import { createRef, render } from 'preact';
 import { flushSync } from 'preact/compat';
 import { createStore } from '../shared/state/createStore';
@@ -12,7 +14,9 @@ if (!mount) {throw new Error('Home mount point is missing.');}
 const settings = createSettingsStore(runtime.settings, { ...runtime.config.DEFAULTS, home: [], tempUnit: 'C', timeFormat: '12' });
 const inventory = createStore<Inventory>({ apps: [], inputs: [], items: [], ready: false });
 const rows = createRef<HTMLElement>();
-const environment = createHomeController({ runtime, settings, inventory, rows, nodes: new Map(),
+const filesystem = (window as unknown as { tizen?: { filesystem?: ArtworkFilesystem } }).tizen?.filesystem;
+const artwork = createUsbArtwork(filesystem, { getItem: key => { try { return localStorage.getItem(key); } catch { return null; } }, setItem: (key, value) => localStorage.setItem(key, value) });
+const environment = createHomeController({ artwork, runtime, settings, inventory, rows, nodes: new Map(),
   translate: value => runtime.i18n?.t(value) || value,
   describe: app => runtime.tiles.describe(app),
   columns: values => [3,4,5].includes(Number(values.homeCardColumns)) ? Number(values.homeCardColumns) : runtime.config.CARD_COLUMNS[values.cardSize === 'small' ? 'small' : 'big']

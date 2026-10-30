@@ -1,0 +1,78 @@
+{
+  "created": "2026-10-30",
+  "origin": "Original code-native geometric compositions contributed to AeroTizen; no third-party logo or photo source.",
+  "files": [
+    {
+      "file": "cinema-rectangle.png",
+      "source": "cinema-rectangle.svg",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 578222,
+      "sha256": "6a3d5793f0c3e03cca313eec198ee331bbbf451373b1cd282096610a7c715699",
+      "source_sha256": "84b76e66d23182125e6cf3400b49d00d373cc9e5ddaae64ba0891a970da2cab1",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    },
+    {
+      "file": "cinema-square.png",
+      "source": "cinema-square.svg",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 322953,
+      "sha256": "55e68e34e014b5207aa32d4f5cf0f39d20208ce9abc22236335aaba0b0dacd2a",
+      "source_sha256": "baa2a7af2d48861659c58d14fe678e37ddceccffd225eb58959b05dfe97dc355",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    },
+    {
+      "file": "games-rectangle.png",
+      "source": "games-rectangle.svg",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 917366,
+      "sha256": "9c5a180e55d43dc865e7033bc00c4df93f0bcbe6a7379d950fb724b9d1dae1be",
+      "source_sha256": "455a845dee41808d599923c37c58c9d1dce4f05ef98b8f0777c3853ce2eb10d5",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    },
+    {
+      "file": "games-square.png",
+      "source": "games-square.svg",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 484524,
+      "sha256": "93b3374e88540171d2253772d903d50dfb8d84b0b5d4df94ba99d7e419148407",
+      "source_sha256": "fd38829ec06d2400650921daaeed9c861dc4a5cfc712700a67feeef9a3ba4094",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    },
+    {
+      "file": "music-rectangle.png",
+      "source": "music-rectangle.svg",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 863334,
+      "sha256": "69b43584db3bb1a6c7c931a617848cd29a4dc94ca787b6d47753477b1185057a",
+      "source_sha256": "f079b12148a817dc86254f29bf8504864e43b88edc2110061af1b17a94c31c6b",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    },
+    {
+      "file": "music-square.png",
+      "source": "music-square.svg",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 503291,
+      "sha256": "222c875f3bc38057646819f00bdbbb998f93a437e03dea75488150183f4352fe",
+      "source_sha256": "c343c79bfa85a47a575367990e9903332d069b2dc8cd4e38f34eb8bbd26e377e",
+      "classification": "A-original",
+      "license": "MIT",
+      "third_party_marks": false
+    }
+  ]
+}

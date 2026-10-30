@@ -21,6 +21,10 @@ for (const glassSettings of [false, true]) {
       await expect.poll(async()=>(await measure()).gap).toBeGreaterThan(35);
       expect((await measure()).centre).toBeCloseTo(960,0);
       const headerHeight = await page.locator('.topbar').evaluate(n=>Math.floor(Math.min(n.getBoundingClientRect().height-1,350)));
+      // Compare settled states: the initial Glass focus paint can still be transitioning.
+      // Keep the exact pixel guard; do not disable motion or loosen the comparison.
+      await expect.poll(() => page.locator('.topbar').evaluate(node => node.getAnimations({subtree:true})
+        .filter(animation => animation.playState === 'running' && animation.effect.getComputedTiming().endTime !== Infinity).length)).toBe(0);
       // Compare settled header pixels, not an incidental initial text-colour transition.
       // Motion behavior is asserted separately; the scroll comparison stays pixel-exact.
       await page.locator('.topbar').evaluate(async node => {

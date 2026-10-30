@@ -10,7 +10,7 @@ const harness = () => {
   const listeners = new Set();
   let saves = 0;
   const defaults = { background: 'black', home: ['one'], inputNames: {}, speed: 1,
-    cardSize: 'big', weatherPhoto: false, showWeather: true, showTime: true, showNetwork: true, tempUnit: 'C',
+    artworkStyle:'native', artworkDisabled:[], cardSize: 'big', weatherPhoto: false, showWeather: true, showTime: true, showNetwork: true, tempUnit: 'C',
     weatherLocation: null, weatherShowLocation: true, dateFormat: 'short', timeFormat: '24',
     continueWatching: false, continueWatchingApps: [],
     showLiveTv: true, hideDisconnectedHdmi: false };
@@ -148,4 +148,10 @@ test('Continue Watching selection is persisted with immutable snapshots', () => 
   assert.deepEqual(h.source.continueWatchingApps, ['video.app'], 'off retains the chosen apps');
   h.actions.toggleContinueApp('video.app');
   assert.deepEqual(h.source.continueWatchingApps, []);
+});
+
+test('artwork mode and per-app opt-outs persist without invoking native services',()=>{
+ const h=harness();h.actions.setArtworkStyle('studio');h.actions.setArtworkOverride('demo0',false);h.actions.setArtworkOverride('demo0',false);
+ const snapshot=h.settings.getSnapshot();assert.equal(snapshot.artworkStyle,'studio');assert.deepEqual([...snapshot.artworkDisabled],['demo0']);assert.ok(Object.isFrozen(snapshot.artworkDisabled));
+ h.actions.setArtworkOverride('demo0',true);assert.deepEqual([...h.settings.getSnapshot().artworkDisabled],[]);assert.deepEqual([...snapshot.artworkDisabled],['demo0']);assert.deepEqual(h.calls,[]);
 });

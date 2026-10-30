@@ -4,10 +4,10 @@ import type { HomeEnvironment, HomeState, Page } from '../types';
 
 // Remote transactions publish state synchronously; Preact owns every rendered node.
 // No app/service commands are reimplemented here.
-export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'state' | 'select' | 'activate' | 'showPage' | 'choose' | 'dismiss' | 'menuChoices'>,
+export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'state' | 'select' | 'activate' | 'showPage' | 'choose' | 'dismiss' | 'menuChoices' | 'closeArtwork'>,
   transaction: (action: () => void) => void) => {
   const { runtime: A, settings, inventory, nodes } = env;
-  const state = createStore<HomeState>({ page: 'home', selected: '', active: true, moving: null, draft: null, menu: null });
+  const state = createStore<HomeState>({ page: 'home', selected: '', active: true, moving: null, draft: null, menu: null, artworkApp: null });
   let timer: number | undefined, enterDown = false, scroll = 0, started = false;
   const cancelPress = () => {
     if (timer !== undefined) { window.clearTimeout(timer); }
@@ -37,6 +37,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   const focus = () => {
     if (document.hidden || A.settingsUi?.isOpen()) { update({ active: false }); return; }
     const pending = state.getSnapshot();
+    if (pending.artworkApp) { return; }
     if (pending.moving && !ids().includes(pending.moving)) {
       update({ moving: null, draft: null }); A.hideToast(); cancelPress();
     }
@@ -99,12 +100,19 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
       if (source) {A.inputs.show(source);}
     }
   };
-  const menuChoices = () => state.getSnapshot().page === 'home' ? [{ action: 'move', label: 'Move' }, { action: 'remove', label: 'Remove from Home' }] :
-    [{ action: homeIds().includes(state.getSnapshot().menu?.id || '') ? 'remove' : 'add', label: homeIds().includes(state.getSnapshot().menu?.id || '') ? 'Remove from Home' : 'Add to Home' }];
+  const menuChoices = () => {
+    const current = state.getSnapshot();
+    const choices = current.page === 'home' ? [{ action: 'move', label: 'Move' }, { action: 'remove', label: 'Remove from Home' }] :
+      [{ action: homeIds().includes(current.menu?.id || '') ? 'remove' : 'add', label: homeIds().includes(current.menu?.id || '') ? 'Remove from Home' : 'Add to Home' }];
+    if (env.artwork && inventory.getSnapshot().ready && current.menu && A.apps.byId(current.menu.id)) { choices.push({ action: 'artwork', label: 'Custom artwork' }); }
+    return choices;
+  };
+  const closeArtwork = () => { cancelPress(); update({ artworkApp: null }); focus(); };
   const choose = (index: number) => {
     const menu = state.getSnapshot().menu, choice = menuChoices()[index];
     if (!menu || !choice) {return;}
     update({ menu: null });
+    if (choice.action === 'artwork') { cancelPress(); update({ artworkApp: menu.id }); return; }
     if (choice.action === 'move') { update({ moving: menu.id, draft: [...homeIds()] }); A.toast(env.translate('Use the arrows to move it, OK to drop')); return; }
     const before = ids(), at = before.indexOf(menu.id), home = [...homeIds()];
     settings.update({ home: choice.action === 'add' ? [...home, menu.id] : home.filter(id => id !== menu.id) });
@@ -118,6 +126,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   const K = A.config.KEY;
   const keydown = (code: number, event: Pick<KeyboardEvent, 'preventDefault'>) => transaction(() => {
     const current = state.getSnapshot();
+    if (current.artworkApp) { return; }
     const delta = code === K.LEFT || code === K.UP ? -1 : 1;
     if (![K.LEFT, K.RIGHT, K.UP, K.DOWN, K.BACK, K.ESC, K.ENTER].includes(code)) {return;}
     event.preventDefault();
@@ -172,12 +181,13 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
   });
   const keyup = (code: number) => {
     if (code !== K.ENTER) {return;}
+    if (state.getSnapshot().artworkApp) { cancelPress(); return; }
     enterDown = false;
     if (timer === undefined) {return;}
     window.clearTimeout(timer); timer = undefined;
     if (!state.getSnapshot().menu && !state.getSnapshot().moving) {activate(state.getSnapshot().selected);}
   };
   const bridge = { render: focus, buildRows: focus, refreshApps: focus, focus,
-    blur() { cancelPress(); update({ active: false, menu: null }); }, keydown, keyup };
-  return { ...env, state, bridge, select, activate, showPage, choose, dismiss, menuChoices };
+    blur() { cancelPress(); update({ active: false, menu: null, artworkApp: null }); }, keydown, keyup };
+  return { ...env, state, bridge, select, activate, showPage, choose, dismiss, menuChoices, closeArtwork };
 };

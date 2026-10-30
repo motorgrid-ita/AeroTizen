@@ -28,10 +28,11 @@ const glassMenu = createRef<HTMLDivElement>(), glassContent = createRef<HTMLDivE
 const navigation = createNavigation(element => {
   // A command can restore browser focus without changing the selected key (IME Done).
   focusControl(element);
-  if (glassScroll.current?.contains(element)) {
-    const item = element.getBoundingClientRect(), clip = glassScroll.current.getBoundingClientRect();
-    if (item.bottom > clip.bottom - 30) { glassScroll.current.scrollTop += item.bottom - clip.bottom + 30; }
-    else if (item.top < clip.top + 10) { glassScroll.current.scrollTop += item.top - clip.top - 10; }
+  const scroll = [glassScroll.current, glassMenu.current].find(host => host?.contains(element));
+  if (scroll) {
+    const item = element.getBoundingClientRect(), clip = scroll.getBoundingClientRect();
+    if (item.bottom > clip.bottom - 30) { scroll.scrollTop += item.bottom - clip.bottom + 30; }
+    else if (item.top < clip.top + 10) { scroll.scrollTop += item.top - clip.top - 10; }
   } else if (root.current) { root.current.scrollTop = Math.max(0, element.offsetTop - 640); }
 });
 const environment: SettingsEnvironment = { settings, inventory, view, services, actions, bridge, navigation, root, glass, glassMenu, glassContent, glassScroll };

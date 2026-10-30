@@ -1,3 +1,4 @@
+import type { UsbArtwork } from '../shared/artwork/usbArtwork';
 import type { RefObject } from 'preact';
 import type { MutableStore } from '../shared/state/createStore';
 import type { InstalledApp, AppPresentation, SettingsSnapshot, SettingsStore } from '../settings/types';
@@ -19,8 +20,9 @@ export interface HomeRuntime extends Omit<LauncherRuntime, 'apps' | 'inputs' | '
 export interface HomeBridge { render(): void; buildRows(): void; refreshApps(): void; focus(): void; blur(): void; keydown(code: number, event: Pick<KeyboardEvent, 'preventDefault'>): void; keyup(code: number): void }
 export interface Inventory { apps: readonly InstalledApp[]; inputs: readonly Source[]; items: readonly ContinueItem[]; ready: boolean }
 export type Page = 'home' | 'apps';
-export interface HomeState { page: Page; selected: string; active: boolean; moving: string | null; draft: readonly string[] | null; menu: { id: string; selected: number } | null }
+export interface HomeState { page: Page; selected: string; active: boolean; moving: string | null; draft: readonly string[] | null; menu: { id: string; selected: number } | null; artworkApp: string | null }
 export interface HomeEnvironment {
+  artwork?: UsbArtwork; closeArtwork(): void;
   runtime: HomeRuntime; settings: SettingsStore; inventory: MutableStore<Inventory>; state: MutableStore<HomeState>;
   nodes: Map<string, HTMLElement>; rows: RefObject<HTMLElement>; bridge: HomeBridge;
   describe(app: InstalledApp): AppPresentation; translate(value: string): string;

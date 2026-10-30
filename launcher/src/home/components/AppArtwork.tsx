@@ -1,10 +1,23 @@
+import type { selectArtwork } from '../../shared/artwork/selectArtwork';
 import { useImageSequence } from '../../shared/hooks/useImageSequence';
 import { AppLogoIcon } from '../../shared/icons/AppLogoIcon';
 import type { InstalledApp, AppPresentation } from '../../settings/types';
 
-export const AppArtwork = ({ app, brand, active }: { app: InstalledApp; brand: AppPresentation; active: boolean }) => {
-  const artwork = useImageSequence(brand.artwork, active);
-  const icon = useImageSequence(brand.useAppIcon && app.icon ? [app.icon] : [], active);
+export const AppArtwork = ({ app, brand, active, selection, studio = false }: { app: InstalledApp; brand: AppPresentation; active: boolean; selection?: ReturnType<typeof selectArtwork>; studio?: boolean }) => {
+  const artwork = useImageSequence(selection?.sources || brand.artwork, active);
+  const icon = useImageSequence((studio ? !artwork.src : brand.useAppIcon) && app.icon ? [app.icon] : [], active);
+  const banner = artwork.loaded && artwork.src === selection?.preferred?.src && selection?.shape === 'rectangle' &&
+    Boolean(selection.preferred && selection.preferred.width / selection.preferred.height >= 1.4);
+  const canvas = artwork.loaded && selection?.shape === 'square';
+  // Stable decorative palettes identify cards without reproducing brand artwork.
+  const palette = [...app.id].reduce((hash, char) => (hash * 31 + char.charCodeAt(0)) >>> 0, 0) % 6;
+  if (studio) { return <div class="studio-surface" data-studio-palette={palette} data-artwork-composition={banner ? 'banner' : canvas ? 'canvas' : 'icon'} data-artwork-loaded={artwork.loaded || icon.loaded} data-artwork-origin={artwork.loaded && artwork.src === selection?.preferred?.src ? selection?.origin : artwork.loaded ? 'samsung' : 'generic'}>
+    <div class="studio-orbit" aria-hidden="true" />
+    {!artwork.loaded && !icon.src ? <div class="studio-initial" aria-hidden="true">{brand.title.slice(0, 1).toUpperCase()}</div> : null}
+    {artwork.src ? <img key={artwork.src} class="studio-image" alt="" src={artwork.src} hidden={!artwork.loaded}
+      onLoad={artwork.onLoad} onError={artwork.onError} /> : icon.src ? <img key={icon.src} class="studio-image" alt="" src={icon.src} onLoad={icon.onLoad} onError={icon.onError} /> : null}
+    <div class="studio-name">{brand.title}</div>
+  </div>; }
   return <>
     <div class={'app-fallback' + (!brand.label ? ' logo-only' : '') + (brand.largeLogo ? ' logo-big' : '')} hidden={artwork.loaded}>
       {brand.logoPath ? <AppLogoIcon path={brand.logoPath} colour={brand.logoColour} /> : icon.src ?

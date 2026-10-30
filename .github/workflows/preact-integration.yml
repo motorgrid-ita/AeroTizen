@@ -26,7 +26,7 @@ jobs:
           node-version: 20
       - run: npm ci --no-audit --no-fund
       - run: npm run build
-      - run: python tools/build_release.py launcher --output dist/release-check
+      - run: python tools/build_release.py launcher --reviewed-artwork --output dist/release-check
       - name: Record exact unsigned source and package
         run: |
           python - <<'PY'

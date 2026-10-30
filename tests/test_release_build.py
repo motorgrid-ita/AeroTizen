@@ -258,3 +258,36 @@ def test_weather_release_refuses_missing_runtime_asset_or_provenance(launcher, t
     with pytest.raises(ValueError, match="Runtime file"):
         build.build_launcher(launcher, tmp_path / "output")
     assert not (tmp_path / "output").exists()
+
+
+@pytest.mark.parametrize("directory", ["assets/brands", "assets/artwork-local", "assets/artwork-verified"])
+def test_public_release_rejects_unreviewed_artwork_packs(launcher, tmp_path, directory):
+    folder = launcher / "dist/launcher" / directory
+    folder.mkdir(parents=True)
+    (folder / "unapproved.png").write_bytes(b"unapproved")
+    with pytest.raises(ValueError, match="reviewed allowlist"):
+        build.build_launcher(launcher, tmp_path / "release")
+
+
+def test_public_release_rejects_private_or_appended_profile_code(launcher, tmp_path):
+    profile = launcher / "dist/launcher/js/artwork-profile.js"
+    profile.write_text("window.AeroTizen.artworkProfile = {}; window.privateData = true;")
+    with pytest.raises(ValueError, match="empty artwork profile"):
+        build.build_launcher(launcher, tmp_path / "release")
+
+
+def test_reviewed_artwork_package_excludes_legacy_logo_paths_without_mutating_source(launcher, tmp_path):
+    runtime = launcher / "dist/launcher"
+    logos = runtime / "js/logos.js"
+    logos.write_text('window.LOGOS = {uncleared: "path"};')
+    index = runtime / "index.html"
+    original = index.read_text() + '\n  <script src="js/logos.js"></script>\n'
+    index.write_text(original)
+    package = build.build_launcher(launcher, tmp_path / "release", reviewed_artwork=True)
+    with zipfile.ZipFile(package) as archive:
+        assert "js/logos.js" not in archive.namelist()
+        assert b"js/logos.js" not in archive.read("index.html")
+    assert index.read_text() == original
+    assert logos.is_file()
+    metadata = json.loads((tmp_path / "release/launcher-release.json").read_text())
+    assert metadata["artwork_policy"] == "device-local-and-original"

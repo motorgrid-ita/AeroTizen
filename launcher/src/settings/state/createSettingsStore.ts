@@ -13,8 +13,10 @@ export const createSettingsStore = (source: SettingsSource, defaults: SettingsVa
     const inputNames = values.inputNames || {};
     const hdmiKeepVisible = values.hdmiKeepVisible || {};
     const weatherLocation = values.weatherLocation;
+    const artworkDisabled = values.artworkDisabled || [];
     const next = Object.freeze({
       ...values,
+      artworkDisabled: previous && equalRecord(previous.artworkDisabled, artworkDisabled) ? previous.artworkDisabled : Object.freeze([...artworkDisabled]),
       hdmiKeepVisible: previous && equalRecord(previous.hdmiKeepVisible, hdmiKeepVisible) ? previous.hdmiKeepVisible : Object.freeze({ ...hdmiKeepVisible }),
       continueWatchingApps: previous && equalRecord(previous.continueWatchingApps, continueApps) ?
         previous.continueWatchingApps : Object.freeze([...continueApps]),
