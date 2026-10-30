@@ -104,7 +104,7 @@ export const createHomeController = (env: Omit<HomeEnvironment, 'bridge' | 'stat
     const current = state.getSnapshot();
     const choices = current.page === 'home' ? [{ action: 'move', label: 'Move' }, { action: 'remove', label: 'Remove from Home' }] :
       [{ action: homeIds().includes(current.menu?.id || '') ? 'remove' : 'add', label: homeIds().includes(current.menu?.id || '') ? 'Remove from Home' : 'Add to Home' }];
-    if (env.artwork && current.menu && A.apps.byId(current.menu.id)) { choices.push({ action: 'artwork', label: 'Custom artwork' }); }
+    if (env.artwork && inventory.getSnapshot().ready && current.menu && A.apps.byId(current.menu.id)) { choices.push({ action: 'artwork', label: 'Custom artwork' }); }
     return choices;
   };
   const closeArtwork = () => { cancelPress(); update({ artworkApp: null }); focus(); };

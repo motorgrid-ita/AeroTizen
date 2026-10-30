@@ -11,7 +11,7 @@ export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; l
   const app = apps.find(app => app.id === appId);
   const [view, setView] = useState<BrowserState>({ screen: 'choices', shape: 'square', items: [], busy: false, message: '', selected: 0 });
   const root = useRef<HTMLDivElement>(null), generation = useRef(0);
-  const installed = () => env.inventory.getSnapshot().apps.some(item => item.id === appId);
+  const installed = () => env.inventory.getSnapshot().ready && env.inventory.getSnapshot().apps.some(item => item.id === appId);
   const close = () => { generation.current++; env.closeArtwork(); };
   const run = (task: (current: () => boolean) => Promise<Partial<BrowserState>>) => {
     const token = ++generation.current;
@@ -60,7 +60,7 @@ export const ArtworkDialog = ({ env, library, appId }: { env: HomeEnvironment; l
     ...view.items.map(item => ({ label: (item.directory ? '▸ ' : '') + item.name, action: () => open(item) }))
   ];
   useLayoutEffect(() => {
-    if (ready && !app) { generation.current++; env.closeArtwork(); }
+    if (!ready || !app) { generation.current++; env.closeArtwork(); }
   }, [ready, app, env]);
   useLayoutEffect(() => () => { generation.current++; }, []);
   useLayoutEffect(() => {

@@ -82,3 +82,16 @@ test('dialog D-pad focus is bounded and native launch keys cannot leak into Home
  await page.keyboard.press('ArrowUp');await expect(page.getByRole('button',{name:'Reset Rectangle to Samsung',exact:true})).toBeFocused();
  await page.keyboard.press('Escape');await expect(page.locator('#grid [data-id="demo0"]')).toHaveClass(/focused/);
 });
+
+test('cached inventory cannot authorize USB import before installed-app discovery completes',async({page})=>{
+ await start(page);
+ await page.evaluate(()=>{AeroTizen.apps.ready=false;AeroTizen.homeScreen.refreshApps();});
+ await page.keyboard.down('Enter');await expect(page.getByRole('menu')).toBeVisible();await page.keyboard.up('Enter');
+ await expect(page.getByRole('menuitem').filter({hasText:'Custom artwork'})).toHaveCount(0);
+ await page.keyboard.press('Escape');
+ await page.evaluate(()=>{AeroTizen.apps.ready=true;AeroTizen.homeScreen.refreshApps();});
+ await open(page);
+ await page.evaluate(()=>{AeroTizen.apps.ready=false;AeroTizen.homeScreen.refreshApps();});
+ await expect(page.getByRole('dialog')).toHaveCount(0);
+ expect(await page.evaluate(()=>localStorage.getItem('aerotizen.artwork.usb.v1'))).toBeNull();
+});
