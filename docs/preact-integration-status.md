@@ -1,7 +1,7 @@
 # Preact contribution integration
 
 This is a validation branch, not a replacement for the focused upstream PRs.
-Upstream baseline: `c9a05719dff4f86836a44000b47f22c8636e7c7f`.
+Upstream baseline: `64574228cee973095af590cd9ff387467e84d3b7`.
 The fork main matches that baseline. Existing reference and native-handoff
 integration branches are preserved without changes or history rewrites.
 
@@ -10,7 +10,7 @@ integration branches are preserved without changes or history rewrites.
 | Core Home | Merged #73 | Preact/TypeScript owns header, grids, menus and Continue Watching cards; existing services remain adapters. |
 | Custom clocks | #28 | Four reference styles and original preference keys; optional clock mount, shared clock tick and weather. |
 | Recognised HDMI | #29 | Existing recognition/deduplication plus typed per-port overrides and Preact Settings. |
-| Square/Rectangle cards | #34 | Original geometry and 3/4/5 columns; Samsung artwork pipeline retained at original resolution. |
+| Square/Rectangle cards | Merged #34 | Original geometry and 3/4/5 columns; Samsung artwork pipeline retained at original resolution. |
 | Optional Glass | #30, using merged #73 | Actual Preact categories, scoped remote navigation, moving focus plates, header and source dock. Classic remains default. |
 | Weather photos | Merged #35 | Existing assets, provenance and shared weather service preserved. |
 | Native HOME | Merged #49 | Native helper, settings policy and watcher protocol unchanged. |
@@ -92,3 +92,5 @@ Earlier native Home/handoff/weather passes remain scoped to their earlier builds
 See [the S90C procedure](s90c-preact-validation.md) for additional owner-run checks.
 No TV operation was performed by the contributor automation. Reference and previous
 integration branches, native bindings and owner backups remain preserved.
+
+Latest upstream follow-up: #34 was merged as `91a7dbe6`, followed by tested-TV documentation `64574228`. The combined and artwork runtime files are byte-for-byte unchanged by this merge; only README/status documentation changes. The existing complete runtime validation remains applicable.

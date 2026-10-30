@@ -1,7 +1,7 @@
 # Contribution status after upstream refresh — 2026-10-30
 
-Upstream and fork main were synchronized by a nine-commit fast-forward to
-`c9a05719dff4f86836a44000b47f22c8636e7c7f`. No shared history was rewritten.
+Upstream and fork main were synchronized by safe fast-forwards totaling eleven commits to
+`64574228cee973095af590cd9ff387467e84d3b7`. No shared history was rewritten.
 Launcher is 2.5.0; CLI is 2.5.0. The old reference and native-handoff integration
 branches were not moved.
 
@@ -13,7 +13,7 @@ branches were not moved.
 | #28 clocks | Existing branch refreshed and tested | Upstream review; focused hardware cases remain scoped |
 | #29 HDMI standby | Existing branch refreshed and tested | Upstream review; physical standby/hot-plug validation |
 | #30 Classic/Glass | Four conflicts with current Home resolved; real Preact categories/themes retained | Requested-changes review still needs maintainer approval; not merged |
-| #34 card shapes/columns | Preferences wired directly to merged Preact Home | Upstream review; all six physical geometries/artwork sharpness |
+| #34 card shapes/columns | Merged upstream through `91a7dbe6`; current main retained | Physical geometries/artwork sharpness remain owner checks |
 | Fork #12 artwork/USB | Continues as a draft against the combined branch | Actual USB permissions, private-file URI rendering, drive removal/restart persistence, performance and owner visual acceptance |
 | Fork #11 older combined QA | Historical independent QA, not a current release candidate | Retained for history; do not install or merge it as the current Preact/artwork build |
 
@@ -43,3 +43,5 @@ Earlier S90C acceptance belongs to the exact 2.4.0 signed build documented in
 `s90c-preact-acceptance-2026-10-29.md`. It must not be transferred to these 2.5.0
 sources. No contributor automation connected to the TV or accessed owner signing
 keys. The owner must personally sign, update and verify any new hardware build.
+
+Latest upstream follow-up: #34 was merged as `91a7dbe6`, followed by tested-TV documentation `64574228`. The combined and artwork runtime files are byte-for-byte unchanged by this merge; only README/status documentation changes. The existing complete runtime validation remains applicable.
