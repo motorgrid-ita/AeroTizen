@@ -59,7 +59,10 @@ for (const glass of [false, true]) for (const height of [720, 1080]) {
     });
     expect(bounds.sides).toEqual(['0px', '0px', '0px', '0px']);
     expect(bounds.width).toBe(height === 720 ? 1280 : 1920); expect(bounds.height).toBe(height);
-    for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowDown');
+    const sourceIndex = await page.locator('.aero-section-entry').evaluateAll(items =>
+      items.findIndex(item => item.getAttribute('data-key') === 'section:sources'));
+    expect(sourceIndex).toBeGreaterThanOrEqual(0);
+    for (let i = 0; i < sourceIndex; i++) await page.keyboard.press('ArrowDown');
     await expect(page.locator('[data-key="section:sources"]')).toHaveClass(/focused/);
     await page.keyboard.press('ArrowRight');
     for (let i = 0; i < 20; i++) await page.keyboard.press('ArrowDown');

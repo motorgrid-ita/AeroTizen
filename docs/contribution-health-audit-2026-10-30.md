@@ -137,3 +137,15 @@ tested sources. The new Glass compatibility fix, other TV models, real standby,
 remote latency, reboot persistence and post-uninstall restore are not certified
 by browser tests. No TV connection, installation, HOME/startup or firmware change
 was performed by the development/automated validation work.
+
+
+## Artwork-category test adaptation
+
+The initial artwork merge CI 41057109252 passed the Python matrix, Windows HOME
+and the existing 99 browser cases, but failed the four new sidebar cases: the
+artwork preview appends an App artwork category after Inputs, so a fixed eight
+Down presses ended on that additional category. The regression now derives the
+Inputs index from the rendered sidebar and navigates there with the same remote
+keys. Viewport longhands, focus visibility and Back assertions remain intact.
+This is a test-navigation correction, not evidence that physical TV validation
+has passed. The new commit must pass its own complete CI.
