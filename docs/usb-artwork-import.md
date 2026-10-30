@@ -26,6 +26,16 @@ release packaging, not a parallel USB artwork implementation. This contribution
 continues against the existing combined Preact dependency, without rewriting those
 unrelated services or advancing reference/integration branches.
 
+A final refresh found upstream `c9a05719dff4f86836a44000b47f22c8636e7c7f`:
+#73 was merged as `9058965726365c140acef65adf1410191363ce88` and the official
+launcher is now 2.5.0. The pre-USB controller and Home types in our combined base
+match the merged core; its remaining Home differences are the existing #34 layout
+and #30 Glass composition. This extends that renderer, not a competing migration.
+The fork preview still targets the preserved combined dependency snapshot, so its
+package version remains 2.4.0. It does not claim to include every new 2.5.0 release,
+store-launch or native-policy change. Refreshing that integration baseline and
+retargeting upstream remains separate from this focused artwork diff.
+
 ## Owner flow
 
 1. Put **static PNG** files on a USB drive. A small `Art` folder is convenient;
