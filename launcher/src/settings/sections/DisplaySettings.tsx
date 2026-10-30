@@ -1,3 +1,4 @@
+import { TranslatedText } from '../../shared/TranslatedText';
 import { Choice } from '../components/Choice';
 import { Pill } from '../components/Pill';
 import type { Clock, SettingsSectionProps } from '../types';
@@ -10,15 +11,15 @@ export const DisplaySettings = ({ settings, actions, clock, openedAt, section }:
   return (
     <>
       {!section || section === 'status' ? <>
-      <h3>Clock layout</h3>
+      <h3><TranslatedText>Clock layout</TranslatedText></h3>
       <Choice id="clock-layouts" label="Clock layout" value={settings.clockLayout}
         options={[['classic', 'Compact clock'], ['custom', 'Custom clock']]} onSelect={actions.setClockLayout} />
       <div hidden={settings.clockLayout !== 'custom'}>
-        <h3>Clock style</h3>
+        <h3><TranslatedText>Clock style</TranslatedText></h3>
         <Choice id="clock-styles" label="Clock style" value={settings.aeroClockStyle}
           options={[['vertical', 'Large Vertical'], ['horizontal', 'Horizontal'], ['minimal', 'Thin'], ['bold', 'Bold']]} onSelect={actions.setClockStyle} />
       </div>
-      <h3>Date &amp; time</h3>
+      <h3><TranslatedText>Date &amp; time</TranslatedText></h3>
       <div id="time-formats" class="units">
         {(['12', '24'] as const).map(format => (
           <Pill key={format} id={'time:' + format} selected={settings.showTime !== false && settings.timeFormat === format}
@@ -36,21 +37,21 @@ export const DisplaySettings = ({ settings, actions, clock, openedAt, section }:
       </div>
       </> : null}
       {!section || section === 'appearance' ? <>
-      <h3>Interface appearance</h3>
+      <h3><TranslatedText>Interface appearance</TranslatedText></h3>
       <Choice id="settings-appearance" label="Interface appearance" value={settings.glassSettings === true}
         options={[[false, 'Classic'], [true, 'Glass']]} onSelect={actions.setGlassSettings} />
-      <h3>Network indicator</h3>
+      <h3><TranslatedText>Network indicator</TranslatedText></h3>
       <Choice id="network-visibility" label="Network indicator visibility" value={settings.showNetwork !== false}
         options={[[true, 'Show'], [false, 'Hide']]} onSelect={actions.setNetworkVisible} />
       </> : null}
       {!section || section === 'sources' ? <>
-      <h3>Live TV</h3>
+      <h3><TranslatedText>Live TV</TranslatedText></h3>
       <p class="hint">Show the Live TV tile in Inputs.</p>
       <Choice id="live-tv-visibility" label="Live TV visibility" value={settings.showLiveTv}
         options={[[true, 'Show'], [false, 'Hide']]} onSelect={actions.setLiveTvVisible} />
       </> : null}
       {!section || section === 'appearance' ? <>
-      <h3>App cards</h3>
+      <h3><TranslatedText>App cards</TranslatedText></h3>
       <Choice id="home-card-mode" label="Home tile layout" value={settings.homeCardMode}
         options={[['square', 'Square'], ['rectangle', 'Rectangle']]} onSelect={actions.setHomeCardMode} />
       <Choice id="home-card-columns" label="Apps per row" value={String(settings.homeCardColumns || 'auto')}

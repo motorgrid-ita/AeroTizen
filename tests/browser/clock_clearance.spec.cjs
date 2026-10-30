@@ -21,6 +21,13 @@ for (const glassSettings of [false, true]) {
       await expect.poll(async()=>(await measure()).gap).toBeGreaterThan(35);
       expect((await measure()).centre).toBeCloseTo(960,0);
       const headerHeight = await page.locator('.topbar').evaluate(n=>Math.floor(Math.min(n.getBoundingClientRect().height-1,350)));
+      // Compare settled header pixels, not an incidental initial text-colour transition.
+      // Motion behavior is asserted separately; the scroll comparison stays pixel-exact.
+      await page.locator('.topbar').evaluate(async node => {
+        await Promise.all(node.getAnimations({subtree:true})
+          .filter(animation => animation.effect.getComputedTiming().iterations !== Infinity)
+          .map(animation => animation.finished.catch(() => {})));
+      });
       const headerBefore = await page.screenshot();
       await page.screenshot({path:info.outputPath('clock-clearance.png')});
       await expect(page.locator('.content-viewport')).not.toHaveClass(/is-scrolled/);

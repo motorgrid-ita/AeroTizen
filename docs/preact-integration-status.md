@@ -1,22 +1,36 @@
 # Preact contribution integration
 
 This is a validation branch, not a replacement for the focused upstream PRs.
-Upstream baseline: `c4b649b4fa22a43e19842f0f6d52acdfa69cc1d3`.
+Upstream baseline: `c9a05719dff4f86836a44000b47f22c8636e7c7f`.
 The fork main matches that baseline. Existing reference and native-handoff
 integration branches are preserved without changes or history rewrites.
 
 | Contribution | Review unit | Integration decision |
 | --- | --- | --- |
-| Core Home | #73 | Preact/TypeScript owns header, grids, menus and Continue Watching cards; existing services remain adapters. |
+| Core Home | Merged #73 | Preact/TypeScript owns header, grids, menus and Continue Watching cards; existing services remain adapters. |
 | Custom clocks | #28 | Four reference styles and original preference keys; optional clock mount, shared clock tick and weather. |
 | Recognised HDMI | #29 | Existing recognition/deduplication plus typed per-port overrides and Preact Settings. |
 | Square/Rectangle cards | #34 | Original geometry and 3/4/5 columns; Samsung artwork pipeline retained at original resolution. |
-| Optional Glass | #30, depends on #73 | Actual Preact categories, scoped remote navigation, moving focus plates, header and source dock. Classic remains default. |
+| Optional Glass | #30, using merged #73 | Actual Preact categories, scoped remote navigation, moving focus plates, header and source dock. Classic remains default. |
 | Weather photos | Merged #35 | Existing assets, provenance and shared weather service preserved. |
 | Native HOME | Merged #49 | Native helper, settings policy and watcher protocol unchanged. |
 | Native handoffs | Merged #64 | Existing acknowledged Samsung escape, Live TV, YouTube and Prime Video commands reused. |
-| WGT weather assets | #74 | Include all nine scene JPEGs and both provenance files; fail if incomplete. |
-| Solar cache | Open #72, `ad12b59f68007b80f41d7534b63a6481bf94d159` | Exact fix included for combined testing; not duplicated in the feature PRs. |
+| WGT weather assets | Merged #74 | Include all nine scene JPEGs and both provenance files; fail if incomplete. |
+| Solar cache | Merged #72 | Current upstream fix retained; no independent weather client. |
+
+## Upstream refresh — 2026-10-30
+
+Launcher version is now 2.5.0. The current main includes #72, #73, #74, the
+per-device native HOME backup correction (#79), store discovery before cached-label
+merging (#81), and the current device documentation. The #27 automatic IT/EN
+contribution is also composed here: locale subscriptions update Preact labels and
+remeasure focus geometry without rewriting application names. Untranslated newer
+strings retain English fallback. There is no additional locale polling timer.
+
+Focused #27/#28/#29/#30/#34 branches remain independently reviewable. This refresh
+preserves their history and resolves the composed Settings/runtime contracts.
+The owner acceptance below belongs to the older pinned 2.4.0 build; it does not
+certify the refreshed 2.5.0 source or USB artwork behavior on hardware.
 
 ## Conflict resolutions and parity
 
