@@ -91,3 +91,7 @@ No rights requests have been sent and no binding brand terms accepted. To promot
 ### Retrieval limits
 
 The EU copyright directive's direct ELI view returned a verification wall; the official EUR-Lex indexed full text and summary supplied the cited rights. A US Code direct query failed; the official Ninth Circuit model instructions provide the nominative-use discussion (a circuit-specific framework, not universal statutory clearance). The Amazon general-help page could not be fetched; the cited Amazon Pay/Associates program examples establish only their stated restricted scopes, not Luna-specific permissions.
+
+## USB and original complete-card follow-up — 2026-10-30
+
+The nine brand-file decisions above are unchanged. The new USB mechanism does not grant image rights or permit public repackaging of private imports. Three pairs of original, unbranded complete-card templates are classified A-original under MIT, with [exact-file provenance and previews](artwork/examples/README.md). They contain original geometric artwork and ordinary text, not traced logos or embedded brand fonts. They are optional examples outside the launcher WGT, not a verified brand catalogue. The public verified-brand registry remains empty.

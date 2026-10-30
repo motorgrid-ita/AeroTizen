@@ -17,7 +17,7 @@ export const TileMenu = ({ env }: { env: HomeEnvironment }) => {
       <div class="tile-actions-glider" aria-hidden="true" style={{ transform: 'translate3d(0,' + menu.selected * 64 + 'px,0)' }} />
       {env.menuChoices().map((choice, i) => <div key={choice.action} class={'tile-actions-option' + (menu.selected === i ? ' selected' : '')}
         role="menuitem" aria-selected={menu.selected === i} onClick={() => env.choose(i)}>
-        <span class="tile-actions-icon" aria-hidden="true"><svg viewBox="0 0 24 24">{choice.action !== 'move' ? <rect x="4" y="4" width="16" height="16" rx="4" /> : null}<path d={choice.action === 'add' ? 'M12 8v8M8 12h8' : choice.action === 'move' ? 'M12 3v18M3 12h18M8 6.5 12 3l4 3M8 18l4 3 4-3M6 8l-3 4 3 4M18 8l3 4-3 4' : 'M8 12h8'} /></svg></span>
+        <span class="tile-actions-icon" aria-hidden="true"><svg viewBox="0 0 24 24">{choice.action !== 'move' ? <rect x="4" y="4" width="16" height="16" rx="4" /> : null}<path d={choice.action === 'artwork' ? 'M5 17l5-5 3 3 3-4 3 6M8 8h.01' : choice.action === 'add' ? 'M12 8v8M8 12h8' : choice.action === 'move' ? 'M12 3v18M3 12h18M8 6.5 12 3l4 3M8 18l4 3 4-3M6 8l-3 4 3 4M18 8l3 4-3 4' : 'M8 12h8'} /></svg></span>
         <span class="tile-actions-label">{env.translate(choice.label)}</span></div>)}
     </div></>;
 };

@@ -57,3 +57,28 @@ SOFTWARE.
 
 .cards-rectangle .artwork-studio [data-artwork-composition="banner"] .studio-image { top:0;left:0;width:100%;height:100%; }
 .cards-rectangle .artwork-studio [data-artwork-composition="banner"] .studio-name { top:auto;bottom:5%;left:4%;right:auto;transform:none; }
+
+/* Complete artwork is the composition: never shrink it into an icon/name row. */
+.artwork-studio [data-artwork-composition="canvas"] .studio-image,
+.cards-rectangle .artwork-studio [data-artwork-loaded="true"] .studio-image { top:0;left:0;width:100%;height:100%;object-fit:contain;filter:none; }
+.artwork-studio [data-artwork-loaded="true"] .studio-name,
+.artwork-studio [data-artwork-loaded="true"] .studio-orbit { display:none; }
+
+.artwork-dialog-backdrop { position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.78);display:flex;align-items:center;justify-content:center; }
+.artwork-dialog { box-sizing:border-box;width:1020px;max-width:calc(100% - 80px);max-height:calc(100% - 80px);padding:32px 40px;border-radius:22px;color:#f7f8fa;background:#17171c;display:flex;flex-direction:column;box-shadow:0 18px 60px rgba(0,0,0,.6);font:24px Arial,sans-serif; }
+.artwork-dialog-heading span { font-size:16px;letter-spacing:3px;color:#bdb8d2; }
+.artwork-dialog-heading h2 { margin:8px 0 14px;font-size:34px; }
+.artwork-dialog-hint { font-size:20px;line-height:1.4;margin:0 0 14px;color:#d3d4df; }
+.artwork-dialog-path { font-size:18px;overflow-wrap:break-word;margin:0 0 8px; }
+.artwork-dialog-status { font-size:20px;line-height:1.35;min-height:28px;margin:10px 0; }
+.artwork-dialog-options { overflow-y:auto;min-height:0;flex:1 1 auto;padding:8px; }
+.artwork-dialog button { display:block;width:100%;box-sizing:border-box;min-height:60px;margin:0 0 10px;padding:12px 20px;border:2px solid transparent;border-radius:12px;background:#292930;color:#fff;font:22px Arial,sans-serif;text-align:left;overflow-wrap:break-word; }
+.artwork-dialog button:focus { outline:none; }
+.artwork-dialog button.focused { border-color:#d5baff;background:#513c75; }
+.glass-ui .artwork-dialog { background:linear-gradient(145deg,#454d5d,#1e2635);border:1px solid rgba(255,255,255,.3); }
+.glass-ui .artwork-dialog button { background:rgba(255,255,255,.08); }
+.glass-ui .artwork-dialog button.focused { border-color:rgba(255,255,255,.7);background:rgba(255,255,255,.25); }
+.artwork-dialog-preview { flex:0 1 300px;min-height:0;display:flex;align-items:center;justify-content:center;margin:0 auto;max-width:100%; }
+.artwork-dialog-preview img { display:block;width:100%;height:100%;object-fit:contain; }
+.artwork-dialog-preview.preview-square { width:300px;height:300px; }
+.artwork-dialog-preview.preview-rectangle { width:534px;height:300px; }

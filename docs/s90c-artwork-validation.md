@@ -61,3 +61,39 @@ palettes. Test long personal-override lists through the final control with the
 D-pad. Recheck full-canvas personal landscape images and native icon proportions.
 The new appearance still requires owner review; no additional brand logo rights
 are implied and no new third-party images are bundled.
+
+## USB import follow-up — owner-only acceptance
+
+No TV installation or native binding change was performed for this follow-up.
+Prepare the reviewed unsigned CI WGT for the exact new PR head, verify its hash,
+then sign with the existing local `tools/prepare_signed_launcher.py` procedure.
+The existing immutable original ZIP, stock HOME JSON and owner-confirmed Motion
+rollback WGT remain prerequisites; do not replace those files. Signed WGT hash
+cannot be supplied before the owner's certificates sign the new artifact.
+
+After reviewing the previews, the owner may perform the same guarded in-place
+update described in `s90c-preact-validation.md`, pinned to the new manifest/head/hash.
+Read and save `home status --json` before and after, compare native Home/startup
+values and the original baseline hash, and stop if they change. Do not run
+`uninstall`, `home apply`, `home restore` or boot changes for this artwork test.
+
+1. Put original example PNGs in a small `Art` folder on a supported USB drive.
+2. In Home hold OK on an installed app, choose Custom artwork, import Square,
+   inspect the preview and confirm. Verify no added label, clipping or distortion.
+3. In All Apps import a different Rectangle for the same app; verify both views
+   and 3/4/5 columns, Classic/Glass, correct launch and focus restoration.
+4. Remove USB after confirmation; re-open Settings and app menus, restart the
+   launcher and then reboot the TV. Confirm private images and shape choices persist.
+5. Reset one shape to Samsung and ensure the other stays selected; restart again.
+6. Test no USB, read-only USB, absent PNGs, nested folders, removal during browsing
+   and reading, Cancel/Back in preview, oversized/corrupt/animated PNG and storage errors.
+   Never fill the TV deliberately; real storage-full testing is optional.
+7. Recheck physical HOME, Live TV/channel switching, YouTube/Prime return,
+   Continue Watching, weather backgrounds and HDMI. Existing earlier confirmations
+   do not certify this new runtime or USB permissions.
+
+Rollback: first use the per-shape Samsung reset. If the new runtime misbehaves,
+owner-authorized in-place reinstall of the known-good Motion WGT remains the
+software rollback; re-read native bindings afterwards. It does not require
+uninstalling or resetting native HOME. New private image bytes/preferences are
+not used by the old runtime; rollback does not promise to preserve new USB choices.
